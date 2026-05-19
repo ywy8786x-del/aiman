@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">INFINITY MATH SYSTEM PRO</title>
     <!-- Tailwind CSS & Google Fonts -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,7 +14,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+        // التصحيح الأساسي: استيراد Firestore من المسار الصحيح
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCFHLZgG6-SBhYh5gq83WmZJktDDngKoRU",
@@ -29,6 +31,7 @@
         const storage = getStorage(app);
         const db = getFirestore(app);
 
+        // تعريض الدوال للاستخدام العام
         window.firebaseStorage = storage;
         window.firebaseDB = db;
         window.storageRef = ref;
