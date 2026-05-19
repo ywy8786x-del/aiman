@@ -4,25 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">INFINITY MATH SYSTEM PRO</title>
-    <!-- Tailwind CSS & Google Fonts -->
-    <script src="https://cdn.tailwindcss.com">
-    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-        // استيراد Firestore من المسار الصحيح (Firestore وليس Storage)
+        // التصحيح الأهم: استيراد Firestore من المسار الصحيح
         import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCFHLZgG6-SBhYh5gq83WmZJktDDngKoRU",
             authDomain: "aiman-6f132.firebaseapp.com",
             projectId: "aiman-6f132",
-            // التصحيح الحاسم: اسم Bucket الصحيح لتخزين الملفات
-            storageBucket: "aiman-6f132.appspot.com",
+            // اسم الحاوية كما هو موجود في مشروعك على Firebase (لا تغيّره)
+            storageBucket: "aiman-6f132.firebasestorage.app",
             messagingSenderId: "1089902227369",
             appId: "1:1089902227369:web:9d2bbc7663381b1acf9eb8",
             measurementId: "G-NBWCHGZ5FK"
@@ -32,7 +28,6 @@
         const storage = getStorage(app);
         const db = getFirestore(app);
 
-        // تعريض الدوال العامة
         window.firebaseStorage = storage;
         window.firebaseDB = db;
         window.storageRef = ref;
@@ -74,7 +69,6 @@
 </head>
 <body class="min-h-screen pb-12">
 
-    <!-- الخلفية الشبكية -->
     <div class="fixed inset-0 pointer-events-none opacity-10 bg-[linear-gradient(to_right,#38bdf8_1px,transparent_1px),linear-gradient(to_bottom,#38bdf8_1px,transparent_1px)] bg-[size:30px_30px]"></div>
     <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity"></div>
 
@@ -208,7 +202,6 @@
         <div id="videosGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- نوافذ الأكواد والنجاح والخروج والإدارة (نفس الكود السابق مع الحفاظ على الهيكل) -->
     <!-- نافذة كود التفعيل -->
     <div id="passwordModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center z-50 p-4">
         <div class="cyber-modal w-full max-w-md p-6 rounded-3xl text-center animate-scale-up">
@@ -239,7 +232,7 @@
         <div class="cyber-modal-danger w-full max-w-md p-6 rounded-3xl text-center animate-scale-up">
             <div class="w-16 h-16 bg-rose-500/10 border-2 border-rose-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_15px_rgba(244,63,94,0.3)] animate-pulse"><i class="fas fa-exclamation-triangle text-rose-500 text-2xl"></i></div>
             <h3 class="text-lg font-bold text-white mb-2">إشارة خطر: تسجيل الخروج</h3>
-            <p class="text-xs text-slate-400 mb-6 leading-relaxed">هل أنت متأكد تماماً من رغبتك في تسجيل الخروج؟ ستحتاج إلى إعادة إدخال وثائق التوثيق الخاصة بك يدويًا عند العودة مجددًا.</p>
+            <p class="text-xs text-slate-400 mb-6 leading-relaxed">هل أنت متأكد تماماً من رغبتك في تسجيل الخروج؟</p>
             <div class="flex gap-3">
                 <button onclick="closeLogoutModal()" class="w-1/2 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 text-sm font-bold hover:bg-slate-800 transition">إلغاء والتراجع</button>
                 <button onclick="confirmLogoutStudent()" class="w-1/2 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 text-white text-sm font-bold hover:from-rose-500 hover:to-red-500 shadow-lg shadow-rose-500/30 transition">نعم، اقطع الاتصال</button>
@@ -310,16 +303,16 @@
                 </div>
             </div>
             <div class="mt-6 border-t border-slate-800 pt-6">
-                <h3 class="text-sm font-bold text-slate-200 mb-3"><i class="fas fa-users-cog text-emerald-400 ml-1"></i> إدارة بيانات الطلاب والتحكم بالحظر ومزامنة الأجهزة</h3>
+                <h3 class="text-sm font-bold text-slate-200 mb-3"><i class="fas fa-users-cog text-emerald-400 ml-1"></i> إدارة بيانات الطلاب والتحكم بالحظر</h3>
                 <div class="overflow-x-auto max-h-[400px] border border-slate-800 rounded-xl">
                     <table class="w-full text-right border-collapse whitespace-nowrap">
-                        <thead><tr class="bg-slate-900 text-slate-400 text-[11px] border-b border-slate-800"><th class="p-3">الاسم الرباعي الكامل</th><th class="p-3">رقم الهاتف</th><th class="p-3">البريد الإلكتروني</th><th class="p-3">كلمة المرور</th><th class="p-3">بصمة الجهاز المسجلة</th><th class="p-3">حظر الأجهزة (82 س)</th><th class="p-3">الحالة العامة</th><th class="p-3">لوحة التحكم الفورية بالحظر</th></tr></thead>
+                        <thead><tr class="bg-slate-900 text-slate-400 text-[11px] border-b border-slate-800"><th class="p-3">الاسم الرباعي</th><th class="p-3">رقم الهاتف</th><th class="p-3">البريد الإلكتروني</th><th class="p-3">كلمة المرور</th><th class="p-3">بصمة الجهاز</th><th class="p-3">الحالة</th><th class="p-3">حظر</th></tr></thead>
                         <tbody id="studentsTableBody" class="text-[11px] divide-y divide-slate-800 text-slate-300"></tbody>
                     </table>
                 </div>
             </div>
             <div class="mt-8 cyber-panel p-6 rounded-2xl border-slate-800">
-                <h3 class="text-sm font-bold text-slate-200 mb-4"><i class="fas fa-video-slash text-rose-400 ml-1"></i> التحكم بالدروس المرفوعة (عداد المشاهدات الفعلي)</h3>
+                <h3 class="text-sm font-bold text-slate-200 mb-4"><i class="fas fa-video-slash text-rose-400 ml-1"></i> التحكم بالدروس المرفوعة</h3>
                 <div id="adminVideosList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
         </div>
@@ -328,7 +321,6 @@
     <video id="durationReader" class="hidden" preload="metadata" muted playsinline></video>
 
     <script type="module">
-        // ---------- دوال الإشعارات والمساعدات ----------
         window.showCyberToast = function(title, msg, type = 'info') {
             const toastModal = document.getElementById('cyberToastModal');
             const toastCard = document.getElementById('cyberToastCard');
@@ -377,22 +369,17 @@
             return `${os} (${screenW}x${screenH})`;
         };
         const myDeviceFingerprint = window.getDeviceSpecs();
-
         let userDetectedIP = "192.168.1.100";
         let userDetectedLocation = "جاري الكشف...";
         fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
             userDetectedIP = data.ip || "192.168.1.100";
             userDetectedLocation = `${data.country_name || ''}، ${data.region || ''}، ${data.city || ''}`;
-        }).catch(() => {
-            userDetectedLocation = "تعذر تحديد الموقع الجغرافي";
-        });
+        }).catch(() => { userDetectedLocation = "تعذر تحديد الموقع الجغرافي"; });
 
-        // ---------- المتغيرات العامة ----------
         let videos = [], keys = [], students = [], uiConfig = {};
         const adminBackdoorToken = "12344321@1";
         const adminEmailBypass = "admin_bypass@infinity.com";
 
-        // ---------- تحميل البيانات من Firebase ----------
         async function loadVideos() {
             try {
                 const db = window.firebaseDB;
@@ -401,9 +388,7 @@
                 videos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 renderPlatform();
                 renderAdminPanel();
-            } catch (e) {
-                console.error("فشل تحميل الفيديوهات:", e);
-            }
+            } catch (e) { console.error("فشل تحميل الفيديوهات:", e); }
         }
         async function loadKeys() {
             try {
@@ -412,9 +397,7 @@
                 const snap = await window.firestoreGetDocs(col);
                 keys = snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 renderAdminPanel();
-            } catch (e) {
-                console.error("فشل تحميل المفاتيح:", e);
-            }
+            } catch (e) { console.error("فشل تحميل المفاتيح:", e); }
         }
         async function loadStudents() {
             try {
@@ -424,18 +407,15 @@
                 students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 checkLoginState();
                 renderAdminPanel();
-            } catch (e) {
-                console.error("فشل تحميل الطلاب:", e);
-            }
+            } catch (e) { console.error("فشل تحميل الطلاب:", e); }
         }
         async function loadUIConfig() {
             try {
                 const db = window.firebaseDB;
                 const docRef = window.firestoreDoc(db, "config", "uiConfig");
                 const snap = await window.firestoreGetDoc(docRef);
-                if (snap.exists()) {
-                    uiConfig = snap.data();
-                } else {
+                if (snap.exists()) uiConfig = snap.data();
+                else {
                     uiConfig = {
                         mainTitle: "INFINITY MATH PRO",
                         subTitle: "نظام ذكي متكامل للمحاضرات عالية الدقة",
@@ -446,9 +426,7 @@
                     await window.firestoreSetDoc(docRef, uiConfig);
                 }
                 applyUIConfiguration();
-            } catch (e) {
-                console.error("فشل تحميل إعدادات الواجهة:", e);
-            }
+            } catch (e) { console.error("فشل تحميل إعدادات الواجهة:", e); }
         }
 
         window.applyUIConfiguration = function() {
@@ -465,7 +443,6 @@
             document.getElementById('cfgColor').value = uiConfig.themeColor;
         };
 
-        // ---------- إدارة جلسة المستخدم ----------
         window.checkLoginState = async function() {
             const activeUser = localStorage.getItem('active_student');
             const localToken = localStorage.getItem('active_session_token');
@@ -479,84 +456,51 @@
                 const userObj = students.find(s => s.email === activeUser || s.phone === activeUser);
                 if (userObj) {
                     const now = Date.now();
-                    if (userObj.banType === 'permanent') {
-                        showCyberToast("🚨 تم حظر الحساب", "تم حظر حسابك الرقمي بشكل نهائي من النظام بالكامل لمخالفة الشروط!", "danger");
-                        forceLogout();
-                        return;
-                    }
+                    if (userObj.banType === 'permanent') { showCyberToast("🚨 تم حظر الحساب", "تم حظر حسابك الرقمي بشكل نهائي.", "danger"); forceLogout(); return; }
                     if (userObj.deviceBanUntil && now < userObj.deviceBanUntil) {
                         const diffMs = userObj.deviceBanUntil - now;
                         const hours = Math.floor(diffMs / (1000*60*60));
                         const minutes = Math.floor((diffMs % (1000*60*60)) / (1000*60));
-                        showCyberToast("⏳ حظر الأجهزة النشط", `تم قفل حسابك الرقمي لمدّة 82 ساعة كاملة.\nالمتبقي: ${hours} ساعة و ${minutes} دقيقة.`, "danger");
-                        forceLogout();
-                        return;
+                        showCyberToast("⏳ حظر الأجهزة النشط", `متبقي: ${hours} ساعة و ${minutes} دقيقة.`, "danger");
+                        forceLogout(); return;
                     }
                     if (userObj.banType === 'temporary' && userObj.banUntil && now < userObj.banUntil) {
                         const remaining = Math.round((userObj.banUntil - now) / 60000);
-                        showCyberToast("⏳ تعليق مؤقت", `حسابك قيد التعليق المؤقت! متبقي ${remaining} دقيقة.`, "info");
-                        forceLogout();
-                        return;
+                        showCyberToast("⏳ تعليق مؤقت", `متبقي ${remaining} دقيقة.`, "info");
+                        forceLogout(); return;
                     }
                     document.getElementById('loginOverlay').classList.add('hidden');
                     document.getElementById('currentStudentDisplay').innerText = userObj.fullName;
-                } else {
-                    document.getElementById('loginOverlay').classList.remove('hidden');
-                }
-            } else {
-                document.getElementById('loginOverlay').classList.remove('hidden');
-            }
+                } else document.getElementById('loginOverlay').classList.remove('hidden');
+            } else document.getElementById('loginOverlay').classList.remove('hidden');
         };
-        window.forceLogout = function() {
-            localStorage.removeItem('active_student');
-            localStorage.removeItem('active_session_token');
-            document.getElementById('loginOverlay').classList.remove('hidden');
-        };
+        window.forceLogout = function() { localStorage.removeItem('active_student'); localStorage.removeItem('active_session_token'); document.getElementById('loginOverlay').classList.remove('hidden'); };
 
-        // ---------- المصادقة ----------
         window.handleStudentLogin = async function() {
             const userKey = document.getElementById('loginUserKey').value.trim();
             const pass = document.getElementById('loginPassword').value.trim();
             document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
             if (userKey === adminBackdoorToken && pass === adminBackdoorToken) {
-                localStorage.setItem('active_student', adminEmailBypass);
-                localStorage.setItem('active_session_token', "backdoor_pass");
-                document.getElementById('loginOverlay').classList.add('hidden');
-                document.getElementById('currentStudentDisplay').innerText = "مسؤول النظام المعزز (تخطي)";
-                renderPlatform();
-                return;
+                localStorage.setItem('active_student', adminEmailBypass); localStorage.setItem('active_session_token', "backdoor_pass");
+                document.getElementById('loginOverlay').classList.add('hidden'); document.getElementById('currentStudentDisplay').innerText = "مسؤول النظام المعزز (تخطي)"; renderPlatform(); return;
             }
             if (!userKey) { document.getElementById('err_loginUserKey').style.display = 'block'; return; }
             if (!pass) { document.getElementById('err_loginPassword').style.display = 'block'; return; }
             await loadStudents();
             let student = students.find(s => s.email === userKey || s.phone === userKey);
-            if (!student || student.password !== pass) {
-                document.getElementById('err_loginPassword').innerText = "❌ معطيات الدخول غير متطابقة مع السيرفر.";
-                document.getElementById('err_loginPassword').style.display = 'block';
-                return;
-            }
-            if (student.banType === 'permanent') {
-                showCyberToast("🚫 الحساب مجمد", "هذا الحساب مجمّد نهائياً.", "danger");
-                return;
-            }
+            if (!student || student.password !== pass) { document.getElementById('err_loginPassword').innerText = "❌ معطيات الدخول غير متطابقة."; document.getElementById('err_loginPassword').style.display = 'block'; return; }
+            if (student.banType === 'permanent') { showCyberToast("🚫 الحساب مجمد", "هذا الحساب مجمّد نهائياً.", "danger"); return; }
             const now = Date.now();
             if (student.fingerprint && student.fingerprint !== myDeviceFingerprint) {
                 student.deviceBanUntil = now + (82 * 60 * 60 * 1000);
                 await window.firestoreUpdateDoc(window.firestoreDoc(window.firebaseDB, "students", student.id), { deviceBanUntil: student.deviceBanUntil });
-                showCyberToast("🚨 خرق أمني حرج", "تم كشف تسجيل دخول من هاتف آخر! تم حظر الحماية 82 ساعة.", "danger");
-                renderAdminPanel();
-                return;
+                showCyberToast("🚨 خرق أمني حرج", "تم حظر الحماية 82 ساعة.", "danger"); renderAdminPanel(); return;
             }
-            if (!student.fingerprint) {
-                student.fingerprint = myDeviceFingerprint;
-                await window.firestoreUpdateDoc(window.firestoreDoc(window.firebaseDB, "students", student.id), { fingerprint: myDeviceFingerprint });
-            }
+            if (!student.fingerprint) { student.fingerprint = myDeviceFingerprint; await window.firestoreUpdateDoc(window.firestoreDoc(window.firebaseDB, "students", student.id), { fingerprint: myDeviceFingerprint }); }
             const newSessionToken = "sess_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
             await window.firestoreUpdateDoc(window.firestoreDoc(window.firebaseDB, "students", student.id), { deviceSessionToken: newSessionToken, ip: userDetectedIP, location: userDetectedLocation });
-            localStorage.setItem('active_student', student.email);
-            localStorage.setItem('active_session_token', newSessionToken);
-            checkLoginState();
-            renderPlatform();
+            localStorage.setItem('active_student', student.email); localStorage.setItem('active_session_token', newSessionToken);
+            checkLoginState(); renderPlatform();
         };
 
         window.handleStudentRegister = async function() {
@@ -567,96 +511,52 @@
             const password = document.getElementById('studentPassword').value.trim();
             document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
             if (fullName === adminBackdoorToken && phone === adminBackdoorToken && email === adminBackdoorToken && password === adminBackdoorToken) {
-                localStorage.setItem('active_student', adminEmailBypass);
-                localStorage.setItem('active_session_token', "backdoor_pass");
-                document.getElementById('loginOverlay').classList.add('hidden');
-                document.getElementById('currentStudentDisplay').innerText = "مسؤول النظام المعزز (تخطي)";
-                renderPlatform();
-                return;
+                localStorage.setItem('active_student', adminEmailBypass); localStorage.setItem('active_session_token', "backdoor_pass");
+                document.getElementById('loginOverlay').classList.add('hidden'); document.getElementById('currentStudentDisplay').innerText = "مسؤول النظام المعزز (تخطي)"; renderPlatform(); return;
             }
             let hasError = false;
             const arabicPattern = /^[\u0600-\u06FF\s]+$/;
-            if (!fullName || !arabicPattern.test(fullName) || fullName.split(/\s+/).length < 4) {
-                document.getElementById('err_studentFullName').style.display = 'block';
-                hasError = true;
-            }
-            if (country === "+963") {
-                if (phone.startsWith('09')) phone = phone.substring(1);
-                if (!phone.startsWith('9') || phone.length !== 9) {
-                    document.getElementById('err_studentPhone').style.display = 'block';
-                    hasError = true;
-                }
-            } else if (!phone) {
-                document.getElementById('err_studentPhone').style.display = 'block';
-                hasError = true;
-            }
+            if (!fullName || !arabicPattern.test(fullName) || fullName.split(/\s+/).length < 4) { document.getElementById('err_studentFullName').style.display = 'block'; hasError = true; }
+            if (country === "+963") { if (phone.startsWith('09')) phone = phone.substring(1); if (!phone.startsWith('9') || phone.length !== 9) { document.getElementById('err_studentPhone').style.display = 'block'; hasError = true; } } else if (!phone) { document.getElementById('err_studentPhone').style.display = 'block'; hasError = true; }
             const fullPhoneNumber = country + phone;
-            if (!email || !email.includes('@') || !email.includes('.')) {
-                document.getElementById('err_studentEmail').style.display = 'block';
-                hasError = true;
-            }
-            if (!password) {
-                document.getElementById('err_studentPassword').style.display = 'block';
-                hasError = true;
-            }
+            if (!email || !email.includes('@') || !email.includes('.')) { document.getElementById('err_studentEmail').style.display = 'block'; hasError = true; }
+            if (!password) { document.getElementById('err_studentPassword').style.display = 'block'; hasError = true; }
             if (hasError) return;
             await loadStudents();
-            if (students.some(s => s.email.toLowerCase() === email.toLowerCase())) {
-                document.getElementById('err_studentEmail').innerText = "❌ هذا الحساب مسجل بالفعل!";
-                document.getElementById('err_studentEmail').style.display = 'block';
-                return;
-            }
-            if (students.some(s => s.phone === fullPhoneNumber)) {
-                document.getElementById('err_studentPhone').innerText = "❌ هذا الرقم مسجل بالفعل!";
-                document.getElementById('err_studentPhone').style.display = 'block';
-                return;
-            }
+            if (students.some(s => s.email.toLowerCase() === email.toLowerCase())) { document.getElementById('err_studentEmail').innerText = "❌ هذا الحساب مسجل بالفعل!"; document.getElementById('err_studentEmail').style.display = 'block'; return; }
+            if (students.some(s => s.phone === fullPhoneNumber)) { document.getElementById('err_studentPhone').innerText = "❌ هذا الرقم مسجل بالفعل!"; document.getElementById('err_studentPhone').style.display = 'block'; return; }
             const newSessionToken = "sess_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
-            const newStudent = {
-                fullName, phone: fullPhoneNumber, email, password,
-                banType: "none", banUntil: null,
-                fingerprint: myDeviceFingerprint,
-                deviceBanUntil: null,
-                ip: userDetectedIP, location: userDetectedLocation,
-                deviceSessionToken: newSessionToken
-            };
-            const db = window.firebaseDB;
-            const col = window.firestoreCollection(db, "students");
-            await window.firestoreAddDoc(col, newStudent);
-            localStorage.setItem('active_student', email);
-            localStorage.setItem('active_session_token', newSessionToken);
-            checkLoginState();
-            renderPlatform();
+            const newStudent = { fullName, phone: fullPhoneNumber, email, password, banType: "none", banUntil: null, fingerprint: myDeviceFingerprint, deviceBanUntil: null, ip: userDetectedIP, location: userDetectedLocation, deviceSessionToken: newSessionToken };
+            const db = window.firebaseDB; const col = window.firestoreCollection(db, "students"); await window.firestoreAddDoc(col, newStudent);
+            localStorage.setItem('active_student', email); localStorage.setItem('active_session_token', newSessionToken);
+            checkLoginState(); renderPlatform();
         };
 
-        // ---------- واجهة عامة ----------
-        window.openLogoutModal = () => { const m = document.getElementById('logoutModal'); m.classList.remove('hidden'); m.classList.add('flex'); };
-        window.closeLogoutModal = () => { const m = document.getElementById('logoutModal'); m.classList.add('hidden'); m.classList.remove('flex'); };
+        window.openLogoutModal = () => { document.getElementById('logoutModal').classList.remove('hidden'); document.getElementById('logoutModal').classList.add('flex'); };
+        window.closeLogoutModal = () => { document.getElementById('logoutModal').classList.add('hidden'); document.getElementById('logoutModal').classList.remove('flex'); };
         window.confirmLogoutStudent = () => { localStorage.removeItem('active_student'); localStorage.removeItem('active_session_token'); closeLogoutModal(); checkLoginState(); };
         window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('translate-x-full'); document.getElementById('sidebarOverlay').classList.toggle('hidden'); };
         window.closeAdminPanel = () => { document.getElementById('adminPanel').classList.add('hidden'); };
 
         window.handleSearchInput = function(query) {
-            const suggestionsBox = document.getElementById('searchSuggestions');
-            suggestionsBox.innerHTML = '';
-            if (!query.trim()) { suggestionsBox.classList.add('hidden'); renderPlatform(videos); return; }
+            const box = document.getElementById('searchSuggestions');
+            box.innerHTML = '';
+            if (!query.trim()) { box.classList.add('hidden'); renderPlatform(videos); return; }
             const filtered = videos.filter(v => v.title.toLowerCase().includes(query.toLowerCase()));
             if (filtered.length > 0 && query.trim() !== adminBackdoorToken) {
-                suggestionsBox.classList.remove('hidden');
+                box.classList.remove('hidden');
                 filtered.forEach(vid => {
                     const item = document.createElement('div');
-                    item.className = 'p-2.5 text-xs text-slate-200 hover:bg-sky-600/30 cursor-pointer border-b border-slate-800/50 transition-all';
+                    item.className = 'p-2.5 text-xs text-slate-200 hover:bg-sky-600/30 cursor-pointer border-b border-slate-800/50';
                     item.innerText = vid.title;
-                    item.onclick = () => { document.getElementById('searchInput').value = vid.title; suggestionsBox.classList.add('hidden'); renderPlatform([vid]); };
-                    suggestionsBox.appendChild(item);
+                    item.onclick = () => { document.getElementById('searchInput').value = vid.title; box.classList.add('hidden'); renderPlatform([vid]); };
+                    box.appendChild(item);
                 });
-            } else {
-                suggestionsBox.classList.add('hidden');
-            }
+            } else box.classList.add('hidden');
             if (query.trim() !== adminBackdoorToken) renderPlatform(filtered);
         };
-        window.handleSearchKeyDown = function(event) {
-            if (event.key === 'Enter') {
+        window.handleSearchKeyDown = function(e) {
+            if (e.key === 'Enter') {
                 const val = document.getElementById('searchInput').value.trim();
                 if (val === adminBackdoorToken) {
                     document.getElementById('searchSuggestions').classList.add('hidden');
@@ -667,26 +567,21 @@
             }
         };
 
-        // ---------- عرض الفيديوهات للمستخدم ----------
         window.renderPlatform = function(targetVideos = videos) {
             const grid = document.getElementById('videosGrid');
             grid.innerHTML = '';
-            if (targetVideos.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 text-sm">لا توجد محاضرات منشورة حالياً.</div>`;
-            }
+            if (targetVideos.length === 0) grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 text-sm">لا توجد محاضرات منشورة حالياً.</div>`;
             targetVideos.forEach(video => {
                 const isUnlocked = localStorage.getItem(`unlocked_${video.id}`) === 'true';
                 grid.innerHTML += `<div class="cyber-panel rounded-3xl overflow-hidden group hover:border-sky-400 transition-all duration-300 flex flex-col justify-between">
                     <div class="relative bg-black aspect-video flex items-center justify-center overflow-hidden w-full">
-                        ${isUnlocked ? `<video src="${video.url}" controls class="w-full h-full object-contain" playsinline preload="auto" controlsList="nodownload" crossorigin="anonymous"></video>` : 
-                        `<div class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-4"><div class="w-12 h-12 bg-purple-500/10 border border-purple-500/30 rounded-full flex items-center justify-center mb-2"><i class="fas fa-lock text-purple-400 text-lg"></i></div><p class="text-xs text-purple-400 font-bold">الدرس محمي بقفل التشفير</p></div>`}
+                        ${isUnlocked ? `<video src="${video.url}" controls class="w-full h-full object-contain" playsinline preload="auto" controlsList="nodownload" crossorigin="anonymous"></video>` : `<div class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-4"><div class="w-12 h-12 bg-purple-500/10 border border-purple-500/30 rounded-full flex items-center justify-center mb-2"><i class="fas fa-lock text-purple-400 text-lg"></i></div><p class="text-xs text-purple-400 font-bold">الدرس محمي بقفل التشفير</p></div>`}
                         <span class="absolute bottom-3 left-3 bg-slate-950/90 text-sky-400 font-mono text-xs px-2 py-1 rounded-md border border-slate-800"><i class="fas fa-clock ml-1"></i> ${video.duration}</span>
                     </div>
                     <div class="p-5">
                         <h3 class="font-bold text-sm text-slate-100 line-clamp-2">${video.title}</h3>
                         <div class="flex justify-end items-center mt-4 pt-3 border-t border-slate-800/80 text-xs">
-                            ${isUnlocked ? `<span class="text-emerald-400 font-bold"><i class="fas fa-check-circle ml-1"></i> تم تفعيل الترخيص</span>` : 
-                            `<button onclick="openPasswordModal('${video.id}')" class="px-4 py-2 bg-purple-600 text-white rounded-xl transition-all font-bold text-xs shadow-lg shadow-purple-600/20">تفعيل بمفتاح الأمان</button>`}
+                            ${isUnlocked ? `<span class="text-emerald-400 font-bold"><i class="fas fa-check-circle ml-1"></i> تم تفعيل الترخيص</span>` : `<button onclick="openPasswordModal('${video.id}')" class="px-4 py-2 bg-purple-600 text-white rounded-xl transition-all font-bold text-xs shadow-lg shadow-purple-600/20">تفعيل بمفتاح الأمان</button>`}
                         </div>
                     </div>
                 </div>`;
@@ -698,11 +593,10 @@
             renderAdminPanel();
         };
 
-        // ---------- إجراءات التفعيل ----------
-        window.openPasswordModal = function(videoId) { document.getElementById('targetVideoId').value = videoId; document.getElementById('videoKeyInput').value = ''; const m = document.getElementById('passwordModal'); m.classList.remove('hidden'); m.classList.add('flex'); };
-        window.closePasswordModal = () => { const m = document.getElementById('passwordModal'); m.classList.add('hidden'); m.classList.remove('flex'); };
-        window.triggerKeySuccessUI = () => { const m = document.getElementById('successKeyModal'); m.classList.remove('hidden'); m.classList.add('flex'); };
-        window.closeSuccessKeyModal = () => { const m = document.getElementById('successKeyModal'); m.classList.add('hidden'); m.classList.remove('flex'); };
+        window.openPasswordModal = function(videoId) { document.getElementById('targetVideoId').value = videoId; document.getElementById('videoKeyInput').value = ''; document.getElementById('passwordModal').classList.remove('hidden'); document.getElementById('passwordModal').classList.add('flex'); };
+        window.closePasswordModal = () => { document.getElementById('passwordModal').classList.add('hidden'); document.getElementById('passwordModal').classList.remove('flex'); };
+        window.triggerKeySuccessUI = () => { document.getElementById('successKeyModal').classList.remove('hidden'); document.getElementById('successKeyModal').classList.add('flex'); };
+        window.closeSuccessKeyModal = () => { document.getElementById('successKeyModal').classList.add('hidden'); document.getElementById('successKeyModal').classList.remove('flex'); };
         window.verifyVideoKey = async function() {
             const videoId = document.getElementById('targetVideoId').value;
             const enteredKey = document.getElementById('videoKeyInput').value.trim();
@@ -719,31 +613,24 @@
             } else { showCyberToast("❌ رمز تالف", "رمز التفعيل غير صحيح.", "danger"); }
         };
 
-        // ---------- لوحة الإدارة (ريندر) ----------
         window.renderAdminPanel = function() {
-            const tbodyKeys = document.getElementById('keysTableBody');
-            tbodyKeys.innerHTML = '';
+            document.getElementById('keysTableBody').innerHTML = '';
             keys.forEach(k => {
                 const whatsappMsg = encodeURIComponent(`كود التفعيل لمحاضرة (${k.targetVideoTitle}):\n🔑 ${k.key}`);
-                const sendUrl = `https://wa.me/?text=${whatsappMsg}`;
-                tbodyKeys.innerHTML += `<tr class="border-b border-slate-800/60"><td class="p-3 font-mono text-amber-400">${k.key}</td><td class="p-3">${k.targetVideoTitle}</td><td class="p-3">${k.active ? '🔒 مقيد' : '🔓 جاهز'}</td><td class="p-3">${k.deviceId || 'فارغ'}</td><td class="p-3"><a href="${sendUrl}" target="_blank" class="bg-green-600 text-white px-2 py-1 rounded text-[10px]"><i class="fab fa-whatsapp"></i> إرسال</a> <button onclick="deleteKey('${k.id}')" class="text-rose-400"><i class="fas fa-trash-alt"></i></button></td></tr>`;
+                document.getElementById('keysTableBody').innerHTML += `<tr><td class="p-3 font-mono text-amber-400">${k.key}</td><td class="p-3">${k.targetVideoTitle}</td><td class="p-3">${k.active ? '🔒 مقيد' : '🔓 جاهز'}</td><td class="p-3">${k.deviceId || '—'}</td><td class="p-3"><a href="https://wa.me/?text=${whatsappMsg}" target="_blank" class="bg-green-600 text-white px-2 py-1 rounded text-[10px]"><i class="fab fa-whatsapp"></i> إرسال</a> <button onclick="deleteKey('${k.id}')" class="text-rose-400"><i class="fas fa-trash-alt"></i></button></td></tr>`;
             });
-            const tbodyStudents = document.getElementById('studentsTableBody');
-            tbodyStudents.innerHTML = '';
+            document.getElementById('studentsTableBody').innerHTML = '';
             students.forEach(s => {
                 let status = "✅ نشط";
-                if (s.banType === 'permanent') status = "🚫 محظور نهائي";
-                else if (s.deviceBanUntil && Date.now() < s.deviceBanUntil) status = "⏳ محظور أجهزة";
-                tbodyStudents.innerHTML += `<tr><td class="p-3">${s.fullName}</td><td class="p-3">${s.phone}</td><td class="p-3">${s.email}</td><td class="p-3">${s.password}</td><td class="p-3">${s.fingerprint || '—'}</td><td class="p-3">${s.deviceBanUntil || '—'}</td><td class="p-3">${status}</td><td class="p-3"><button onclick="deleteStudent('${s.id}')" class="text-rose-400"><i class="fas fa-trash"></i></button></td></tr>`;
+                if (s.banType === 'permanent') status = "🚫 محظور";
+                document.getElementById('studentsTableBody').innerHTML += `<tr><td class="p-3">${s.fullName}</td><td class="p-3">${s.phone}</td><td class="p-3">${s.email}</td><td class="p-3">${s.password}</td><td class="p-3">${s.fingerprint || '—'}</td><td class="p-3">${status}</td><td class="p-3"><button onclick="deleteStudent('${s.id}')" class="text-rose-400"><i class="fas fa-trash"></i></button></td></tr>`;
             });
-            const adminVidList = document.getElementById('adminVideosList');
-            adminVidList.innerHTML = '';
+            document.getElementById('adminVideosList').innerHTML = '';
             videos.forEach(v => {
-                adminVidList.innerHTML += `<div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center"><span class="text-sm">${v.title}</span> <span class="text-xs text-slate-400">${v.duration} | 👁 ${v.views||0}</span> <button onclick="deleteVideo('${v.id}')" class="text-rose-400 hover:text-rose-600"><i class="fas fa-trash-alt"></i></button></div>`;
+                document.getElementById('adminVideosList').innerHTML += `<div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center"><span class="text-sm">${v.title}</span> <span class="text-xs text-slate-400">${v.duration} | 👁 ${v.views||0}</span> <button onclick="deleteVideo('${v.id}')" class="text-rose-400"><i class="fas fa-trash-alt"></i></button></div>`;
             });
         };
 
-        // ---------- إضافة فيديو جديد (الزر الذي لم يكن يعمل) ----------
         window.addNewVideo = async function() {
             const title = document.getElementById('newVideoTitle').value.trim();
             const urlInput = document.getElementById('newVideoUrl').value.trim();
@@ -765,55 +652,43 @@
                 const reader = document.getElementById('durationReader');
                 reader.src = finalUrl;
 
-                const handleMetadata = async () => {
+                const save = async (dur) => {
+                    try {
+                        const newVideo = { title, url: finalUrl, duration: dur, views: 0 };
+                        const db = window.firebaseDB;
+                        const col = window.firestoreCollection(db, "videos");
+                        await window.firestoreAddDoc(col, newVideo);
+                        document.getElementById('newVideoTitle').value = '';
+                        document.getElementById('newVideoUrl').value = '';
+                        document.getElementById('newVideoFile').value = '';
+                        document.getElementById('successUploadModal').classList.remove('hidden');
+                        document.getElementById('successUploadModal').classList.add('flex');
+                        await loadVideos();
+                    } catch (e) {
+                        console.error(e);
+                        showCyberToast("❌ خطأ في الحفظ", "لم نتمكن من حفظ بيانات الفيديو في قاعدة البيانات.", "danger");
+                    }
+                };
+
+                reader.onloadedmetadata = () => {
                     let minutes = Math.floor(reader.duration / 60);
                     let seconds = Math.floor(reader.duration % 60);
                     let durationStr = (minutes < 10 ? '0' : '') + minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-                    await saveVideoToFirestore(title, finalUrl, durationStr);
+                    save(durationStr);
                 };
-                const handleError = async () => {
-                    await saveVideoToFirestore(title, finalUrl, "45:00");
-                };
-
-                reader.onloadedmetadata = handleMetadata;
-                reader.onerror = handleError;
+                reader.onerror = () => save("45:00");
             } catch (error) {
-                console.error("فشل رفع الفيديو:", error);
-                showCyberToast("❌ فشل الرفع", "حدث خطأ أثناء رفع الملف أو حفظ البيانات. تأكد من الاتصال وحجم الملف.", "danger");
+                console.error(error);
+                showCyberToast("❌ فشل الرفع", "حدث خطأ أثناء رفع الملف. تأكد من الاتصال وحجم الملف.", "danger");
             }
         };
 
-        async function saveVideoToFirestore(title, url, duration) {
-            try {
-                const newVideo = { title, url, duration, views: 0 };
-                const db = window.firebaseDB;
-                const col = window.firestoreCollection(db, "videos");
-                await window.firestoreAddDoc(col, newVideo);
-                document.getElementById('newVideoTitle').value = '';
-                document.getElementById('newVideoUrl').value = '';
-                document.getElementById('newVideoFile').value = '';
-                document.getElementById('successUploadModal').classList.remove('hidden');
-                document.getElementById('successUploadModal').classList.add('flex');
-                await loadVideos(); // تحديث القائمة فوراً
-            } catch (error) {
-                console.error("فشل حفظ الفيديو:", error);
-                showCyberToast("❌ خطأ في الحفظ", "لم نتمكن من حفظ بيانات الفيديو في قاعدة البيانات.", "danger");
-            }
-        }
-
-        window.closeSuccessUploadModal = function() {
-            document.getElementById('successUploadModal').classList.add('hidden');
-            document.getElementById('successUploadModal').classList.remove('flex');
-        };
-
-        // ---------- حذف فيديو ----------
+        window.closeSuccessUploadModal = () => { document.getElementById('successUploadModal').classList.add('hidden'); document.getElementById('successUploadModal').classList.remove('flex'); };
         window.deleteVideo = async function(videoId) {
             await window.firestoreDeleteDoc(window.firestoreDoc(window.firebaseDB, "videos", videoId));
             showCyberToast("🗑️ تم الحذف", "تم حذف المحاضرة.", "success");
             loadVideos();
         };
-
-        // ---------- المفاتيح والطلاب ----------
         window.generateNewKey = async function() {
             const targetVideoId = document.getElementById('keyTargetVideoSelect').value;
             if (!targetVideoId) { showCyberToast("❌ خطأ", "اختر درساً لتوليد مفتاح له.", "danger"); return; }
@@ -837,7 +712,6 @@
             showCyberToast("🗑️ حذف الطالب", "تم حذف الحساب.", "danger");
             loadStudents();
         };
-
         window.savePlatformConfig = async function() {
             uiConfig.mainTitle = document.getElementById('cfgMainTitle').value.trim();
             uiConfig.subTitle = document.getElementById('cfgSubTitle').value.trim();
@@ -848,7 +722,6 @@
             applyUIConfiguration();
             showCyberToast("🎯 تم التحديث", "تم حفظ إعدادات المنصة.", "success");
         };
-
         window.switchAuthTab = function(tab) {
             const loginBtn = document.getElementById('tabLoginBtn'), regBtn = document.getElementById('tabRegisterBtn');
             const loginSection = document.getElementById('loginFormSection'), regSection = document.getElementById('registerFormSection');
@@ -867,7 +740,6 @@
             }
         };
 
-        // ---------- بدء التشغيل ----------
         await loadUIConfig();
         await loadVideos();
         await loadKeys();
