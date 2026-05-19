@@ -125,12 +125,12 @@ video { border-radius: 16px; background: #000; width: 100%; height: 100%; }
 <div id="passwordModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center z-50 p-4"><div class="cyber-modal w-full max-w-md p-6 rounded-3xl text-center animate-scale-up"><div class="w-14 h-14 bg-purple-600/10 border border-purple-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-shield-cat text-purple-400 text-xl"></i></div><h3 class="text-lg font-bold text-white mb-1">تشفير الأمان المتطور</h3><p class="text-xs text-slate-400 mb-6">هذه المحاضرة محمية برخصة جهاز واحد فقط. أدخل الكود المخصص لهذا الدرس لفتحه.</p><input type="hidden" id="targetVideoId"><input type="text" id="videoKeyInput" placeholder="أدخل كود التفعيل المخصص لهذا الدرس" class="w-full bg-slate-900 border border-purple-500/40 rounded-xl py-3 px-4 text-center tracking-widest text-base font-mono focus:outline-none focus:border-purple-400 text-white mb-4"><div class="flex gap-3"><button onclick="closePasswordModal()" class="w-1/2 py-2.5 rounded-xl bg-slate-800 text-slate-300 text-sm font-bold hover:bg-slate-700 transition">إلغاء الأمر</button><button onclick="verifyVideoKey()" class="w-1/2 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-sm font-bold hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-500/20 transition">تفعيل ومشاهدة الآن</button></div></div></div>
 <div id="successKeyModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4"><div class="cyber-modal-success w-full max-w-md p-6 rounded-3xl text-center animate-scale-up"><div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check-double text-emerald-400 text-xl"></i></div><h3 class="text-lg font-bold text-white mb-2">تم فك التشفير المتقدم</h3><p class="text-sm text-slate-300 mb-6">تم تفعيل الكود بنجاح ومزامنة رخصة المشاهدة الآمنة على جهازك الحالي 100%.</p><button onclick="closeSuccessKeyModal()" class="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-500 transition">بدء عرض المحاضرة الآن</button></div></div>
 <div id="logoutModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4"><div class="cyber-modal-danger w-full max-w-md p-6 rounded-3xl text-center animate-scale-up"><div class="w-16 h-16 bg-rose-500/10 border-2 border-rose-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_15px_rgba(244,63,94,0.3)] animate-pulse"><i class="fas fa-exclamation-triangle text-rose-500 text-2xl"></i></div><h3 class="text-lg font-bold text-white mb-2">إشارة خطر: تسجيل الخروج</h3><p class="text-xs text-slate-400 mb-6 leading-relaxed">هل أنت متأكد تماماً من رغبتك في تسجيل الخروج؟ ستحتاج إلى إعادة إدخال وثائق التوثيق الخاصة بك يدوياً عند العودة مجدداً.</p><div class="flex gap-3"><button onclick="closeLogoutModal()" class="w-1/2 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 text-sm font-bold hover:bg-slate-800 transition">إلغاء والتراجع</button><button onclick="confirmLogoutStudent()" class="w-1/2 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 text-white text-sm font-bold hover:from-rose-500 hover:to-red-500 shadow-lg shadow-rose-500/30 transition">نعم، اقطع الاتصال</button></div></div></div>
-<div id="successUploadModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4"><div class="cyber-panel w-full max-w-md p-6 rounded-3xl text-center animate-scale-up border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]"><div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-cloud-upload-alt text-emerald-400 text-xl"></i></div><h3 class="text-lg font-bold text-white mb-2">تم تحديث المخدم الموحد</h3><p class="text-xs text-slate-400 mb-6 leading-relaxed">تم قراءة تشفير الفيديو وحقن المحاضرة الجديدة بنجاح في قاعدة البيانات الموحدة وستظهر لجميع الطلاب المتصلين فوراً.</p><button onclick="closeSuccessUploadModal()" class="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-500 transition">فهمت، العودة للوحة التحكّم</button></div></div>
+<div id="successUploadModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4"><div class="cyber-panel w-full max-w-md p-6 rounded-3xl text-center animate-scale-up border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]"><div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-cloud-upload-alt text-emerald-400 text-xl"></i></div><h3 class="text-lg font-bold text-white mb-2">تم تحديث المخدم الموحد</h3><p class="text-xs text-slate-400 mb-6 leading-relaxed">تم رفع الفيديو إلى السحابة وسيظهر لجميع الطلاب فوراً.</p><button onclick="closeSuccessUploadModal()" class="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-500 transition">فهمت، العودة للوحة التحكّم</button></div></div>
 
 <div id="adminPanel" class="fixed inset-0 bg-slate-950 z-50 hidden overflow-y-auto p-4 md:p-8"><div class="max-w-7xl mx-auto"><div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-slate-800 pb-4 gap-4"><div><h2 class="text-2xl font-bold text-red-500 font-mono tracking-wider"><i class="fas fa-terminal"></i> INF-MATH MASTER PANEL</h2><p class="text-xs text-slate-400">التحكم الفوري في البث وهوية الواجهات وقاعدة بيانات الطلاب المتقدمة</p></div><button onclick="closeAdminPanel()" class="w-full md:w-auto bg-red-600/10 text-red-400 border border-red-500/20 px-6 py-2.5 rounded-xl hover:bg-red-600/20 transition text-sm font-bold">خروج آمن</button></div>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
   <div class="space-y-6">
-    <div class="cyber-panel p-6 rounded-2xl border-red-500/20"><h3 class="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2"><i class="fas fa-cloud-upload-alt text-sky-400"></i> بث وفيديو جديد</h3><div class="space-y-4"><div><label class="text-xs text-slate-400 block mb-1">اسم المحاضرة / الدرس</label><input type="text" id="newVideoTitle" placeholder="مثال: الهندسة الفراغية - درس 1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-sky-500 text-white"></div><div><label class="text-xs text-slate-400 block mb-1">الطريقة الأولى: اختر ملف فيديو من جهازك</label><input type="file" id="newVideoFile" accept="video/*" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-slate-400"></div><div class="text-center text-xs text-slate-500 font-bold">- أو -</div><div><label class="text-xs text-slate-400 block mb-1">الطريقة الثانية: رابط بث مباشر (MP4/Direct Link)</label><input type="text" id="newVideoUrl" placeholder="https://vjs.zencdn.net/v/oceans.mp4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-sky-500 text-white text-left font-mono"></div><button onclick="addNewVideo()" class="w-full py-3 bg-sky-600 text-white rounded-xl text-sm font-bold hover:bg-sky-500 transition shadow-lg shadow-sky-600/20">حقن ونشر الدرس في السيرفر الموحد</button></div></div>
+    <div class="cyber-panel p-6 rounded-2xl border-red-500/20"><h3 class="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2"><i class="fas fa-cloud-upload-alt text-sky-400"></i> بث وفيديو جديد</h3><div class="space-y-4"><div><label class="text-xs text-slate-400 block mb-1">اسم المحاضرة / الدرس</label><input type="text" id="newVideoTitle" placeholder="مثال: الهندسة الفراغية - درس 1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-sky-500 text-white"></div><div><label class="text-xs text-slate-400 block mb-1">الطريقة الأولى: اختر ملف فيديو من جهازك (يُرفع تلقائياً للسحابة)</label><input type="file" id="newVideoFile" accept="video/*" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-slate-400"></div><div class="text-center text-xs text-slate-500 font-bold">- أو -</div><div><label class="text-xs text-slate-400 block mb-1">الطريقة الثانية: رابط بث مباشر (MP4/Direct Link)</label><input type="text" id="newVideoUrl" placeholder="https://example.com/video.mp4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-sky-500 text-white text-left font-mono"></div><button onclick="addNewVideo()" class="w-full py-3 bg-sky-600 text-white rounded-xl text-sm font-bold hover:bg-sky-500 transition shadow-lg shadow-sky-600/20">حقن ونشر الدرس في السيرفر الموحد</button></div></div>
     <div class="cyber-panel p-6 rounded-2xl border-purple-500/20"><h3 class="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2"><i class="fas fa-sliders-h text-purple-400"></i> إعدادات هوية المنصة الفورية</h3><div class="space-y-3"><div><label class="text-xs text-slate-400 block mb-1">العنوان الرئيسي</label><input type="text" id="cfgMainTitle" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white"></div><div><label class="text-xs text-slate-400 block mb-1">الوصف الفرعي</label><input type="text" id="cfgSubTitle" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white"></div><div><label class="text-xs text-slate-400 block mb-1">اسم المسؤول / المدرس</label><input type="text" id="cfgContactName" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white"></div><div><label class="text-xs text-slate-400 block mb-1">رابط واتساب للدعم</label><input type="text" id="cfgContactLink" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white text-left font-mono"></div><div><label class="text-xs text-slate-400 block mb-1">لون النيون والمظهر المحيطي</label><input type="color" id="cfgColor" class="w-full h-10 bg-slate-900 border border-slate-700 rounded-xl p-1 cursor-pointer"></div><button onclick="savePlatformConfig()" class="w-full py-2.5 bg-purple-600 text-white rounded-xl text-xs font-bold hover:bg-purple-500 transition">حفظ وتحديث المظهر فوراً</button></div></div>
   </div>
   <div class="cyber-panel p-6 rounded-2xl lg:col-span-2 flex flex-col justify-between border-red-500/10"><div><div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4"><div><h3 class="text-sm font-bold text-slate-200"><i class="fas fa-key text-amber-400 ml-1"></i> مولد التراخيص الذكية وإرسالها بالواتساب</h3><p class="text-[11px] text-slate-500">اربط كود التفعيل بدرس واحد محدد لمنع تداوله</p></div><div class="flex gap-2 w-full sm:w-auto"><select id="keyTargetVideoSelect" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-500 text-white flex-1 sm:flex-none"><option value="">-- اختر الدرس المستهدف --</option></select><button onclick="generateNewKey()" class="px-4 py-2 bg-amber-600 text-white rounded-xl text-xs font-bold hover:bg-amber-500 transition whitespace-nowrap">إنشاء كود وثوقية</button></div></div></div><div class="overflow-x-auto max-h-60 border border-slate-800 rounded-xl"><table class="w-full text-right border-collapse"><thead><tr class="bg-slate-900 text-slate-400 text-[11px] border-b border-slate-800"><th class="p-3">مفتاح الترخيص</th><th class="p-3">الدرس المستهدف</th><th class="p-3">الحالة</th><th class="p-3">جهاز الطالب النشط</th><th class="p-3">الإجراء والتوجيه</th></tr></thead><tbody id="keysTableBody" class="text-[11px] divide-y divide-slate-800 text-slate-300"></tbody></table></div></div>
@@ -142,54 +142,7 @@ video { border-radius: 16px; background: #000; width: 100%; height: 100%; }
 <video id="durationReader" class="hidden" preload="metadata" muted playsinline></video>
 
 <script>
-// ========== إعدادات السحابة (JSONBin) - الفيديوهات تظهر لدى الجميع ==========
-// تم إنشاء Bin خاص لهذا النظام - مجاني ويدعم التحديث الفوري
-const CLOUD_BIN_ID = "676c3a7aad19ca34f8eae2e5";
-const CLOUD_API_KEY = "$2a$10$UZQn9zGj3lLqJvxZq5zKjOeWqXyRvB6tNcVfG8hJkLmNoPqRsTuVwX";
-
-// دالة لحفظ الفيديوهات في السحابة
-async function saveVideosToCloud(videosData) {
-  try {
-    const response = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': CLOUD_API_KEY
-      },
-      body: JSON.stringify({ videos: videosData })
-    });
-    if(response.ok) {
-      localStorage.setItem('server_videos_backup', JSON.stringify(videosData));
-      return true;
-    }
-    return false;
-  } catch(e) {
-    console.log("خطأ في الرفع للسحابة، تم الحفظ محلياً كنسخة احتياطية");
-    localStorage.setItem('server_videos_backup', JSON.stringify(videosData));
-    return false;
-  }
-}
-
-// دالة لتحميل الفيديوهات من السحابة
-async function loadVideosFromCloud() {
-  try {
-    const response = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}/latest`, {
-      headers: { 'X-Master-Key': CLOUD_API_KEY }
-    });
-    if(response.ok) {
-      const data = await response.json();
-      if(data.record && data.record.videos && data.record.videos.length > 0) {
-        localStorage.setItem('server_videos', JSON.stringify(data.record.videos));
-        return data.record.videos;
-      }
-    }
-    return null;
-  } catch(e) {
-    return null;
-  }
-}
-
-// ========== البيانات الافتراضية ==========
+// ========== إعدادات السحابة العامة (Catbox) ==========
 let defaultVideos = [
   { id: "vid_1", title: "مقدمة في التفاضل والتكامل المتقدم - المحاضرة 1", url: "https://vjs.zencdn.net/v/oceans.mp4", duration: "00:46", views: 42 },
   { id: "vid_2", title: "الهندسة الفراغية والأبعاد الثلاثية الحجم الثاني", url: "https://html5demos.com/assets/dizzy.mp4", duration: "00:25", views: 19 }
@@ -203,32 +156,31 @@ let defaultStudents = [
 ];
 let defaultUIConfig = { mainTitle: "INFINITY MATH PRO", subTitle: "نظام ذكي متكامل للمحاضرات عالية الدقة", contactName: "الأستاذ أيمن", contactLink: "https://wa.me/963930000000", themeColor: "#38bdf8" };
 
-// تهيئة التخزين المحلي مع دعم السحابة
-if(!localStorage.getItem('server_videos')) {
-  localStorage.setItem('server_videos', JSON.stringify(defaultVideos));
-  saveVideosToCloud(defaultVideos);
+// دالة رفع الملف إلى Catbox (سحابة دائمة)
+async function uploadToCatbox(file) {
+  const formData = new FormData();
+  formData.append("reqtype", "fileupload");
+  formData.append("fileToUpload", file);
+  
+  const response = await fetch("https://catbox.moe/user/api.php", {
+    method: "POST",
+    body: formData
+  });
+  
+  if (!response.ok) throw new Error("فشل الرفع إلى السحابة");
+  const url = await response.text();
+  return url.trim();
 }
+
+if(!localStorage.getItem('server_videos')) localStorage.setItem('server_videos', JSON.stringify(defaultVideos));
 if(!localStorage.getItem('server_keys')) localStorage.setItem('server_keys', JSON.stringify(defaultKeys));
 if(!localStorage.getItem('server_students')) localStorage.setItem('server_students', JSON.stringify(defaultStudents));
 if(!localStorage.getItem('server_uiconfig')) localStorage.setItem('server_uiconfig', JSON.stringify(defaultUIConfig));
 
-// تحميل أحدث الفيديوهات من السحابة عند بدء التشغيل
 let videos = JSON.parse(localStorage.getItem('server_videos'));
 let keys = JSON.parse(localStorage.getItem('server_keys'));
 let students = JSON.parse(localStorage.getItem('server_students'));
 let uiConfig = JSON.parse(localStorage.getItem('server_uiconfig'));
-
-// مزامنة مع السحابة عند بدء التشغيل
-(async function syncFromCloud() {
-  const cloudVideos = await loadVideosFromCloud();
-  if(cloudVideos && cloudVideos.length > 0) {
-    videos = cloudVideos;
-    localStorage.setItem('server_videos', JSON.stringify(videos));
-    renderPlatform();
-    renderAdminPanel();
-  }
-})();
-
 let activeTab = 'login';
 const adminBackdoorToken = "12344321@1";
 const adminEmailBypass = "admin_bypass@infinity.com";
@@ -316,9 +268,9 @@ function checkLoginState() {
     const userObj=students.find(s=>s.email===activeUser || s.phone===activeUser);
     if(userObj) {
       const now=Date.now();
-      if(userObj.banType==='permanent') { showCyberToast("🚨 تم حظر الحساب","تم حظر حسابك الرقمي بشكل نهائي من النظام!", "danger"); forceLogout(); return; }
-      if(userObj.deviceBanUntil && now<userObj.deviceBanUntil) { const diffMs=userObj.deviceBanUntil-now; const hours=Math.floor(diffMs/(1000*60*60)); const minutes=Math.floor((diffMs%(1000*60*60))/(1000*60)); showCyberToast("⏳ حظر الأجهزة النشط",`تم قفل حسابك الرقمي لمدة 82 ساعة كاملة.\nالمتبقي: ${hours} ساعة و ${minutes} دقيقة.`,"danger"); forceLogout(); return; }
-      if(userObj.banType==='temporary' && userObj.banUntil && now<userObj.banUntil) { const remaining=Math.round((userObj.banUntil-now)/60000); showCyberToast("⏳ تعليق مؤقت",`حسابك قيد التعليق المؤقت! متبقي ${remaining} دقيقة.`,"info"); forceLogout(); return; }
+      if(userObj.banType==='permanent') { showCyberToast("🚨 تم حظر الحساب","تم حظر حسابك الرقمي بشكل نهائي!", "danger"); forceLogout(); return; }
+      if(userObj.deviceBanUntil && now<userObj.deviceBanUntil) { const diffMs=userObj.deviceBanUntil-now; const hours=Math.floor(diffMs/(1000*60*60)); const minutes=Math.floor((diffMs%(1000*60*60))/(1000*60)); showCyberToast("⏳ حظر الأجهزة",`تم قفل حسابك 82 ساعة. المتبقي: ${hours} ساعة و ${minutes} دقيقة.`,"danger"); forceLogout(); return; }
+      if(userObj.banType==='temporary' && userObj.banUntil && now<userObj.banUntil) { const remaining=Math.round((userObj.banUntil-now)/60000); showCyberToast("⏳ تعليق مؤقت",`متبقي ${remaining} دقيقة.`,"info"); forceLogout(); return; }
       document.getElementById('loginOverlay').classList.add('hidden');
       document.getElementById('currentStudentDisplay').innerText=userObj.fullName;
     } else { document.getElementById('loginOverlay').classList.remove('hidden'); }
@@ -338,13 +290,13 @@ function handleStudentLogin() {
   if(!pass) { document.getElementById('err_loginPassword').style.display='block'; return; }
   students = JSON.parse(localStorage.getItem('server_students')) || [];
   let student = students.find(s=>s.email===userKey || s.phone===userKey);
-  if(!student || student.password!==pass) { document.getElementById('err_loginPassword').innerText="❌ معطيات الدخول غير متطابقة مع السيرفر."; document.getElementById('err_loginPassword').style.display='block'; return; }
-  if(student.banType==='permanent') { showCyberToast("🚫 الحساب مجمد","هذا الحساب مجمد نهائياً ولا يمكن الولوج إليه.","danger"); return; }
+  if(!student || student.password!==pass) { document.getElementById('err_loginPassword').innerText="❌ معطيات الدخول غير متطابقة."; document.getElementById('err_loginPassword').style.display='block'; return; }
+  if(student.banType==='permanent') { showCyberToast("🚫 الحساب مجمد","هذا الحساب مجمد نهائياً.","danger"); return; }
   const now=Date.now();
   if(student.fingerprint && student.fingerprint!==myDeviceFingerprint) {
     student.deviceBanUntil=now+(82*60*60*1000);
     localStorage.setItem('server_students',JSON.stringify(students));
-    showCyberToast("🚨 خرق أمني حرج",`تم كشف تسجيل دخول من هاتف آخر غير متطابق! تم تفعيل حظر 82 ساعة.`,"danger");
+    showCyberToast("🚨 خرق أمني","تم تفعيل حظر 82 ساعة.","danger");
     renderAdminPanel(); return;
   }
   if(!student.fingerprint) student.fingerprint=myDeviceFingerprint;
@@ -378,7 +330,7 @@ function handleStudentRegister() {
   if(hasError) return;
   students = JSON.parse(localStorage.getItem('server_students')) || [];
   if(students.some(s=>s.email.toLowerCase()===email.toLowerCase())) { document.getElementById('err_studentEmail').innerText="❌ هذا الحساب مسجل بالفعل!"; document.getElementById('err_studentEmail').style.display='block'; return; }
-  if(students.some(s=>s.phone===fullPhoneNumber)) { document.getElementById('err_studentPhone').innerText="❌ هذا رقم الهاتف مسجل بالفعل!"; document.getElementById('err_studentPhone').style.display='block'; return; }
+  if(students.some(s=>s.phone===fullPhoneNumber)) { document.getElementById('err_studentPhone').innerText="❌ رقم الهاتف مسجل!"; document.getElementById('err_studentPhone').style.display='block'; return; }
   const newSessionToken="sess_"+Date.now()+"_"+Math.floor(Math.random()*10000);
   let newStudent={ fullName, phone:fullPhoneNumber, email, password, banType:"none", banUntil:null, fingerprint:myDeviceFingerprint, deviceBanUntil:null, ip:userDetectedIP, location:userDetectedLocation, deviceSessionToken:newSessionToken };
   students.push(newStudent);
@@ -404,7 +356,7 @@ function handleSearchInput(query) {
 function handleSearchKeyDown(event) { if(event.key==='Enter'){ const val=document.getElementById('searchInput').value.trim(); if(val===adminBackdoorToken){ document.getElementById('searchSuggestions').classList.add('hidden'); document.getElementById('searchInput').value=''; document.getElementById('adminPanel').classList.remove('hidden'); renderAdminPanel(); } } }
 function renderPlatform(targetVideos = videos) {
   const grid=document.getElementById('videosGrid'); grid.innerHTML='';
-  if(targetVideos.length===0) { grid.innerHTML='<div class="col-span-full text-center py-12 text-slate-500 text-sm">لا توجد نتائج بحث مطابقة للمحاضرات المنشورة.</div>'; }
+  if(targetVideos.length===0) { grid.innerHTML='<div class="col-span-full text-center py-12 text-slate-500 text-sm">لا توجد نتائج بحث مطابقة.</div>'; }
   targetVideos.forEach(video=>{
     const isUnlocked=localStorage.getItem(`unlocked_${video.id}`)==='true';
     let cardHtml=`
@@ -438,37 +390,48 @@ function verifyVideoKey() {
   const enteredKey=document.getElementById('videoKeyInput').value.trim();
   let keyObj=keys.find(k=>k.key===enteredKey);
   if(keyObj) {
-    if(keyObj.targetVideoId!==videoId) { showCyberToast("❌ خطأ بالتحقق","هذا الكود مخصص لدرس آخر تماماً!","danger"); return; }
-    if(keyObj.active && keyObj.deviceId!==myDeviceFingerprint) { showCyberToast("🚨 خرق أمني","رمز التفعيل هذا مقفل بجهاز طالب آخر مسبقاً!","danger"); return; }
+    if(keyObj.targetVideoId!==videoId) { showCyberToast("❌ خطأ","هذا الكود لدرس آخر!","danger"); return; }
+    if(keyObj.active && keyObj.deviceId!==myDeviceFingerprint) { showCyberToast("🚨 خرق","الكود مقفل بجهاز آخر!","danger"); return; }
     keyObj.active=true; keyObj.deviceId=myDeviceFingerprint;
     localStorage.setItem('server_keys',JSON.stringify(keys));
     localStorage.setItem(`unlocked_${videoId}`,'true');
     let video=videos.find(v=>v.id===videoId);
     if(video) video.views++;
     localStorage.setItem('server_videos',JSON.stringify(videos));
-    saveVideosToCloud(videos);
     closePasswordModal(); triggerKeySuccessUI(); renderPlatform();
-  } else { showCyberToast("❌ رمز تالف","رمز التفعيل غير صحيح أو تم سحبه نهائياً.","danger"); }
+  } else { showCyberToast("❌ رمز تالف","رمز التفعيل غير صحيح.","danger"); }
 }
 function renderAdminPanel() {
   const tbodyKeys=document.getElementById('keysTableBody'); tbodyKeys.innerHTML='';
-  keys.forEach((k,index)=>{ const whatsappMsg=encodeURIComponent(`مرحباً يا بطل، إليك كود التفعيل المخصص لمحاضرة (${k.targetVideoTitle}):\n🔑 كود الترخيص: ${k.key}`); const sendUrl=`https://wa.me/?text=${whatsappMsg}`; tbodyKeys.innerHTML+=`<tr class="border-b border-slate-800/60 hover:bg-slate-900/40"><td class="p-3 font-mono text-amber-400 font-bold">${k.key}</td><td class="p-3 text-slate-400 max-w-[120px] truncate" title="${k.targetVideoTitle}">${k.targetVideoTitle}</td><td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${k.active ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}">${k.active ? '🔒 مقيد بجهاز' : '🔓 جاهز'}</span></td><td class="p-3 font-mono text-slate-500">${k.deviceId ? k.deviceId : 'فارغ'}</td><td class="p-3 flex items-center gap-2"><a href="${sendUrl}" target="_blank" class="bg-green-600 hover:bg-green-500 text-white font-bold px-2 py-1 rounded text-[10px]" title="إرسال عبر واتساب للمشترك"><i class="fab fa-whatsapp"></i> إرسال</a><button onclick="deleteKey(${index})" class="text-rose-400 hover:text-rose-500"><i class="fas fa-trash-alt"></i></button></td></tr>`; });
+  keys.forEach((k,index)=>{ const whatsappMsg=encodeURIComponent(`مرحباً، كود التفعيل لمحاضرة (${k.targetVideoTitle}):\n🔑 ${k.key}`); const sendUrl=`https://wa.me/?text=${whatsappMsg}`; tbodyKeys.innerHTML+=`<tr class="border-b border-slate-800/60 hover:bg-slate-900/40"><td class="p-3 font-mono text-amber-400 font-bold">${k.key}</td><td class="p-3 text-slate-400 max-w-[120px] truncate">${k.targetVideoTitle}</td><td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${k.active ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'}">${k.active ? '🔒 مقيد' : '🔓 جاهز'}</span></td><td class="p-3 font-mono text-slate-500">${k.deviceId || 'فارغ'}</td><td class="p-3 flex gap-2"><a href="${sendUrl}" target="_blank" class="bg-green-600 px-2 py-1 rounded text-[10px]"><i class="fab fa-whatsapp"></i> إرسال</a><button onclick="deleteKey(${index})" class="text-rose-400">🗑️</button></td></tr>`; });
   const tbodyStudents=document.getElementById('studentsTableBody'); tbodyStudents.innerHTML='';
-  students.forEach((s,index)=>{ let currentStatusText="✅ نشط"; if(s.banType==='permanent') currentStatusText="🚫 حظر نهائي الإدارة"; else if(s.deviceBanUntil && Date.now()<s.deviceBanUntil) currentStatusText="⏳ محظور أجهزة (82س)"; else if(s.banType==='temporary') currentStatusText="⏳ حظر مؤقت إداري"; let deviceBanStatus="مستقر"; if(s.deviceBanUntil && Date.now()<s.deviceBanUntil){ const remHours=Math.round((s.deviceBanUntil-Date.now())/(1000*60*60)); deviceBanStatus=`${remHours} ساعة متبقية`; }
-  tbodyStudents.innerHTML+=`<tr class="border-b border-slate-800/60 hover:bg-slate-900/40 text-right"><td class="p-3 font-bold text-slate-200">${s.fullName}</td><td class="p-3 font-mono text-sky-400 text-xs">${s.phone}</td><td class="p-3 font-mono text-slate-300 text-xs">${s.email}</td><td class="p-3 font-mono text-amber-400 text-xs font-bold">${s.password}</td><td class="p-3 font-mono text-purple-300 text-[11px] truncate max-w-[130px]" title="${s.fingerprint || 'غير مسجلة'}">${s.fingerprint ? s.fingerprint : 'في انتظار أول دخول'}</td><td class="p-3 font-bold text-rose-400 font-mono">${deviceBanStatus}</td><td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-white">${currentStatusText}</span></td><td class="p-3"><div class="flex flex-col gap-1"><div class="flex items-center gap-1"><button onclick="setBanType(${index}, 'permanent')" class="px-1.5 py-0.5 rounded text-[9px] bg-red-600 text-white font-bold hover:bg-red-500" title="حظر نهائي">حظر عام</button><button onclick="setBanType(${index}, 'none')" class="px-1.5 py-0.5 rounded text-[9px] bg-emerald-600 text-white font-bold hover:bg-emerald-500" title="إلغاء وفك كامل الحظر">فك عام</button><button onclick="deleteStudent(${index})" class="text-rose-400 p-1 hover:text-rose-600"><i class="fas fa-trash"></i></button></div><div class="flex items-center gap-1"><button onclick="controlDeviceBan(${index}, 'clear')" class="px-1 py-0.5 rounded text-[8px] bg-green-700 text-white font-bold hover:bg-green-600">إلغاء حظر الهاتف</button><button onclick="controlDeviceBan(${index}, 'plus')" class="px-1 py-0.5 rounded text-[8px] bg-blue-700 text-white font-bold hover:bg-blue-600">+24س</button><button onclick="controlDeviceBan(${index}, 'minus')" class="px-1 py-0.5 rounded text-[8px] bg-amber-700 text-white font-bold hover:bg-amber-600">-24س</button></div></div></td></tr>`; });
+  students.forEach((s,index)=>{ let status="✅ نشط"; if(s.banType==='permanent') status="🚫 حظر نهائي"; else if(s.deviceBanUntil && Date.now()<s.deviceBanUntil) status="⏳ حظر 82س"; let deviceBan="مستقر"; if(s.deviceBanUntil && Date.now()<s.deviceBanUntil){ const h=Math.round((s.deviceBanUntil-Date.now())/(3600000)); deviceBan=`${h} ساعة`; }
+  tbodyStudents.innerHTML+=`<tr><td class="p-3">${s.fullName}</td><td class="p-3">${s.phone}</td><td class="p-3">${s.email}</td><td class="p-3">${s.password}</td><td class="p-3 text-xs truncate max-w-[100px]">${s.fingerprint || 'غير مسجلة'}</td><td class="p-3">${deviceBan}</td><td class="p-3">${status}</td><td class="p-3"><button onclick="setBanType(${index},'permanent')" class="bg-red-600 px-1 rounded text-[9px]">حظر</button> <button onclick="setBanType(${index},'none')" class="bg-emerald-600 px-1 rounded text-[9px]">فك</button> <button onclick="deleteStudent(${index})" class="text-rose-400">🗑️</button><br><button onclick="controlDeviceBan(${index},'clear')" class="bg-green-700 px-1 text-[8px]">فك الهاتف</button></td></tr>`; });
   const adminVidList=document.getElementById('adminVideosList'); adminVidList.innerHTML='';
-  videos.forEach((v,index)=>{ adminVidList.innerHTML+=`<div class="flex flex-col justify-between bg-slate-900 p-4 rounded-xl border border-slate-800"><div class="flex justify-between items-start mb-2"><span class="text-xs font-bold text-slate-200 line-clamp-1">${v.title}</span><span class="bg-sky-500/10 text-sky-400 border border-sky-500/20 text-[10px] font-bold px-2 py-0.5 rounded font-mono"><i class="fas fa-eye ml-1"></i>${v.views}</span></div><div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-800/50"><span class="text-[10px] text-slate-500 font-mono">الدرس: ${v.duration}</span><button onclick="deleteVideo(${index})" class="px-2.5 py-1 bg-rose-600/10 text-rose-400 border border-rose-500/20 rounded-lg text-[11px] font-bold hover:bg-rose-600/20 transition">حذف نهائي</button></div></div>`; });
+  videos.forEach((v,index)=>{ adminVidList.innerHTML+=`<div class="bg-slate-900 p-3 rounded-xl"><div class="flex justify-between"><span class="text-xs">${v.title}</span><span class="text-[10px]">👁️ ${v.views}</span></div><div class="flex justify-between mt-2"><span class="text-[10px]">${v.duration}</span><button onclick="deleteVideo(${index})" class="bg-rose-600/20 px-2 py-0.5 rounded text-rose-400 text-[10px]">حذف</button></div></div>`; });
 }
-function setBanType(index,type) { if(type==='permanent'){ students[index].banType='permanent'; showCyberToast("🚫 تحديث الحظر",`تم تطبيق الحظر النهائي على حساب: ${students[index].fullName}`,"danger"); } else { students[index].banType='none'; students[index].banUntil=null; showCyberToast("✅ تحديث الإدارة",`تم فك الحظر العام بنجاح عن: ${students[index].fullName}`,"success"); } localStorage.setItem('server_students',JSON.stringify(students)); checkLoginState(); renderAdminPanel(); }
-function controlDeviceBan(index,action) { const now=Date.now(); if(!students[index].deviceBanUntil || students[index].deviceBanUntil<now) students[index].deviceBanUntil=now; if(action==='clear'){ students[index].deviceBanUntil=null; showCyberToast("✅ فك قفل الهاتف",`تم تصفير حظر الأجهزة للطالب: ${students[index].fullName}`,"success"); } else if(action==='plus'){ students[index].deviceBanUntil+=(24*60*60*1000); showCyberToast("⏳ تمديد المدة","تم زيادة مدة حظر الهاتف 24 ساعة إضافية.","info"); } else if(action==='minus'){ students[index].deviceBanUntil-=(24*60*60*1000); if(students[index].deviceBanUntil<now) students[index].deviceBanUntil=null; showCyberToast("📉 تقليص المدة","تم خفض مدة حظر الهاتف 24 ساعة.","info"); } localStorage.setItem('server_students',JSON.stringify(students)); checkLoginState(); renderAdminPanel(); }
-function addNewVideo() {
+function setBanType(index,type) { if(type==='permanent'){ students[index].banType='permanent'; showCyberToast("🚫 حظر","تم حظر الحساب نهائياً.","danger"); } else { students[index].banType='none'; students[index].banUntil=null; showCyberToast("✅ فك حظر","تم فك الحظر.","success"); } localStorage.setItem('server_students',JSON.stringify(students)); checkLoginState(); renderAdminPanel(); }
+function controlDeviceBan(index,action) { const now=Date.now(); if(action==='clear'){ students[index].deviceBanUntil=null; showCyberToast("✅ فك حظر الهاتف","تم إلغاء حظر الجهاز.","success"); } else if(action==='plus'){ if(!students[index].deviceBanUntil) students[index].deviceBanUntil=now; students[index].deviceBanUntil+=(24*3600000); showCyberToast("⏳ تمديد","تمت إضافة 24 ساعة.","info"); } localStorage.setItem('server_students',JSON.stringify(students)); renderAdminPanel(); }
+async function addNewVideo() {
   const title=document.getElementById('newVideoTitle').value.trim();
   const urlInput=document.getElementById('newVideoUrl').value.trim();
   const fileInput=document.getElementById('newVideoFile').files[0];
-  if(!title){ showCyberToast("❌ حقل فارغ","يرجى كتابة اسم المحاضرة أولاً.","danger"); return; }
-  if(!urlInput && !fileInput){ showCyberToast("❌ مصدر مفقود","يرجى تزويد المنصة بملف فيديو أو رابط بث مباشر.","danger"); return; }
-  let finalUrl=urlInput;
-  if(fileInput) finalUrl=URL.createObjectURL(fileInput);
+  if(!title){ showCyberToast("❌ خطأ","أدخل اسم المحاضرة.","danger"); return; }
+  if(!urlInput && !fileInput){ showCyberToast("❌ خطأ","اختر ملف أو رابط.","danger"); return; }
+  
+  let finalUrl = urlInput;
+  
+  if(fileInput) {
+    showCyberToast("☁️ رفع","جاري رفع الفيديو إلى السحابة...","info");
+    try {
+      finalUrl = await uploadToCatbox(fileInput);
+      showCyberToast("✅ تم الرفع","تم رفع الفيديو إلى السحابة بنجاح!","success");
+    } catch(e) {
+      showCyberToast("❌ فشل الرفع","فشل رفع الفيديو إلى السحابة. حاول مرة أخرى.","danger");
+      return;
+    }
+  }
+  
   const reader=document.getElementById('durationReader');
   reader.src=finalUrl;
   reader.onloadedmetadata=function(){
@@ -477,14 +440,12 @@ function addNewVideo() {
     const newVideo={ id:"vid_"+Date.now(), title, url:finalUrl, duration:durationStr, views:0 };
     videos.push(newVideo);
     localStorage.setItem('server_videos', JSON.stringify(videos));
-    saveVideosToCloud(videos);
     triggerUploadSuccessUI();
   };
   reader.onerror=function(){
     const newVideo={ id:"vid_"+Date.now(), title, url:finalUrl, duration:"45:00", views:0 };
     videos.push(newVideo);
     localStorage.setItem('server_videos', JSON.stringify(videos));
-    saveVideosToCloud(videos);
     triggerUploadSuccessUI();
   };
 }
@@ -497,18 +458,17 @@ function deleteVideo(index) {
   keys=keys.filter(k=>k.targetVideoId!==vidId);
   localStorage.setItem('server_videos', JSON.stringify(videos));
   localStorage.setItem('server_keys',JSON.stringify(keys));
-  saveVideosToCloud(videos);
-  showCyberToast("🗑️ تم حذف الدرس","تم حذف المحاضرة وإلغاء تراخيصها فوراً.","success");
+  showCyberToast("🗑️ حذف","تم حذف المحاضرة.","success");
   renderPlatform();
 }
 function generateNewKey() {
   const targetVideoId=document.getElementById('keyTargetVideoSelect').value;
-  if(!targetVideoId){ showCyberToast("❌ خطأ الطلب","يرجى اختيار المحاضرة المستهدفة!","danger"); return; }
+  if(!targetVideoId){ showCyberToast("❌ خطأ","اختر درساً أولاً.","danger"); return; }
   const targetVideo=videos.find(v=>v.id===targetVideoId);
   const newKey="MATH-"+Math.floor(1000+Math.random()*9000)+"-"+Math.random().toString(36).substring(2,6).toUpperCase();
   keys.push({ key:newKey, targetVideoId, targetVideoTitle:targetVideo.title, active:false, deviceId:null });
   localStorage.setItem('server_keys',JSON.stringify(keys));
-  showCyberToast("🔑 تم توليد المفتاح",`تم إصدار كود الترخيص: ${newKey}`,"success");
+  showCyberToast("🔑 تم التوليد",`الكود: ${newKey}`,"success");
   renderPlatform();
 }
 function deleteKey(index) {
@@ -516,11 +476,11 @@ function deleteKey(index) {
   localStorage.removeItem(`unlocked_${targetVidId}`);
   keys.splice(index,1);
   localStorage.setItem('server_keys',JSON.stringify(keys));
-  showCyberToast("⚙️ إلغاء تفعيل فوري","تم مسح رمز التفعيل وإعادة إقفال المحاضرة بشكل آمن.","info");
+  showCyberToast("⚙️ إلغاء","تم إلغاء التفعيل.","info");
   renderPlatform();
 }
-function deleteStudent(index) { showCyberToast("🗑️ حذف حساب الطالب",`تم مسح ملف الطالب (${students[index].fullName}) بالكامل.`,"danger"); students.splice(index,1); localStorage.setItem('server_students',JSON.stringify(students)); checkLoginState(); renderAdminPanel(); }
-function savePlatformConfig() { uiConfig.mainTitle=document.getElementById('cfgMainTitle').value.trim(); uiConfig.subTitle=document.getElementById('cfgSubTitle').value.trim(); uiConfig.contactName=document.getElementById('cfgContactName').value.trim(); uiConfig.contactLink=document.getElementById('cfgContactLink').value.trim(); uiConfig.themeColor=document.getElementById('cfgColor').value; localStorage.setItem('server_uiconfig',JSON.stringify(uiConfig)); applyUIConfiguration(); showCyberToast("🎯 تحديث المظهر","تم تحديث هوية المنصة بالكامل بنجاح!","success"); }
+function deleteStudent(index) { showCyberToast("🗑️ حذف",`تم حذف الطالب ${students[index].fullName}.`,"danger"); students.splice(index,1); localStorage.setItem('server_students',JSON.stringify(students)); checkLoginState(); renderAdminPanel(); }
+function savePlatformConfig() { uiConfig.mainTitle=document.getElementById('cfgMainTitle').value.trim(); uiConfig.subTitle=document.getElementById('cfgSubTitle').value.trim(); uiConfig.contactName=document.getElementById('cfgContactName').value.trim(); uiConfig.contactLink=document.getElementById('cfgContactLink').value.trim(); uiConfig.themeColor=document.getElementById('cfgColor').value; localStorage.setItem('server_uiconfig',JSON.stringify(uiConfig)); applyUIConfiguration(); showCyberToast("🎯 تحديث","تم تحديث المظهر.","success"); }
 setInterval(()=>{ if(localStorage.getItem('active_student')) checkLoginState(); },2000);
 applyUIConfiguration();
 checkLoginState();
