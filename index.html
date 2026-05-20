@@ -3,258 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الأستاذ أيمن الرفاعي التعليمية - الإصدار الفاخر v4.0</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <title>أكاديمية الأستاذ أيمن الرفاعي المتقدمة - v5.0</title>
+    <!-- الخطوط والأيقونات -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --primary: #6c5ce7;
-            --primary-dark: #5a4bd1;
-            --accent: #00cec9;
-            --bg: #05050a;
-            --surface: #0f0f1e;
-            --surface-light: #16162d;
-            --text: #ffffff;
-            --text-secondary: #8f8fa8;
-            --danger: #ff4757;
-            --success: #2ed573;
-            --warning: #ffa502;
-            --radius: 18px;
-            --shadow: 0 15px 50px rgba(0,0,0,0.8);
-            --border: rgba(255,255,255,0.06);
-            --glow: 0 0 20px rgba(108, 92, 231, 0.2);
+            --dark-core: #030308;
+            --card-bg: rgba(18, 18, 36, 0.65);
+            --neon-magenta: #ff007f;
+            --neon-cyan: #00f3ff;
+            --neon-violet: #8a2be2;
+            --text-main: #ffffff;
+            --text-muted: #a0a0c0;
+            --safe-green: #00ff87;
+            --alert-red: #ff3366;
+            --glass-border: rgba(255, 255, 255, 0.05);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Tajawal', sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            background: var(--dark-core);
+            color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 10% 10%, rgba(108,92,231,0.15) 0%, transparent 45%),
-                              radial-gradient(circle at 90% 90%, rgba(0,206,201,0.1) 0%, transparent 45%);
+            background-image: 
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 127, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(0, 243, 255, 0.08) 0%, transparent 50%);
         }
 
-        /* تحسينات المدخلات */
-        input, select, textarea {
-            width: 100%; padding: 15px 22px; border-radius: 30px; margin: 10px 0;
-            border: 1px solid var(--border); background: var(--surface-light);
-            color: white; font-family: 'Tajawal'; font-size: 0.95rem; transition: all 0.25s ease;
+        /* محرك المدخلات الذكي */
+        .form-control {
+            width: 100%; padding: 16px 25px; border-radius: 16px; margin-bottom: 15px;
+            border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03);
+            color: #fff; font-size: 0.95rem; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        input:focus, select:focus, textarea:focus { 
-            outline: none; border-color: var(--accent); 
-            box-shadow: 0 0 15px rgba(0,206,201,0.25); transform: translateY(-1px);
+        .form-control:focus {
+            outline: none; border-color: var(--neon-cyan);
+            background: rgba(255,255,255,0.06);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            transform: scale(1.01);
         }
-        .focused-field { border-color: var(--primary) !important; box-shadow: 0 0 12px rgba(108,92,231,0.3); }
+        select.form-control { color: #fff; cursor: pointer; }
+        select.form-control option { background: #121224; color: #fff; }
 
-        .btn {
-            padding: 14px 28px; border-radius: 30px; font-weight: 700; border: none;
-            cursor: pointer; transition: all 0.25s ease; font-family: 'Tajawal';
-            display: inline-flex; align-items: center; gap: 10px; font-size: 0.95rem; justify-content: center;
+        /* الأزرار المطورة */
+        .master-btn {
+            padding: 16px 32px; border-radius: 16px; font-weight: 700; border: none;
+            cursor: pointer; transition: all 0.3s ease; display: inline-flex;
+            align-items: center; justify-content: center; gap: 12px; font-size: 1rem;
+            position: relative; overflow: hidden;
         }
-        .btn-primary { background: linear-gradient(45deg, var(--primary), var(--accent)); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(108,92,231,0.4); }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-        .btn-outline:hover { background: var(--surface-light); border-color: var(--text-secondary); }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-danger:hover { box-shadow: 0 5px 15px rgba(255,71,87,0.3); }
-        .btn-sm { padding: 8px 16px; font-size: 0.8rem; border-radius: 20px; }
+        .btn-neon-primary {
+            background: linear-gradient(135deg, var(--neon-violet), var(--neon-magenta));
+            color: white; box-shadow: 0 4px 20px rgba(138, 43, 226, 0.4);
+        }
+        .btn-neon-primary:hover {
+            transform: translateY(-3px); box-shadow: 0 6px 25px rgba(255, 0, 127, 0.6);
+        }
+        .btn-outline-neon {
+            background: transparent; border: 1px solid var(--neon-cyan); color: var(--neon-cyan);
+        }
+        .btn-outline-neon:hover {
+            background: rgba(0, 243, 255, 0.1); box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
 
-        /* ================== شاشات المصادقة (Auth) ================== */
-        .auth-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-        .auth-card {
-            background: rgba(15, 15, 30, 0.75); backdrop-filter: blur(25px);
-            padding: 50px 40px; border-radius: 28px; width: 100%; max-width: 500px;
-            border: 1px solid var(--border); box-shadow: var(--shadow);
-            animation: fadeIn 0.4s ease-out;
+        /* بوابات تسجيل الدخول والإنشاء */
+        .gateway-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 25px; }
+        .gateway-shield {
+            background: var(--card-bg); backdrop-filter: blur(30px);
+            padding: 50px 45px; border-radius: 24px; width: 100%; max-width: 520px;
+            border: 1px solid var(--glass-border); box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .auth-card h2 {
-            text-align: center; margin-bottom: 8px; font-size: 2.2rem; font-weight: 900;
-            background: linear-gradient(45deg, #ffffff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        .gateway-shield h2 {
+            font-size: 2.4rem; font-weight: 900; text-align: center; margin-bottom: 5px;
+            background: linear-gradient(45deg, #fff, var(--neon-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .auth-subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 35px; font-size: 0.95rem; }
+        .gateway-tag { text-align: center; color: var(--text-muted); margin-bottom: 35px; font-size: 0.95rem; }
 
-        /* ================== تصميم النظام الداخلي ================== */
-        .sidebar {
-            position: fixed; top: 0; right: 0; width: 290px; height: 100vh;
-            background: var(--surface); border-left: 1px solid var(--border);
-            padding: 35px 20px; display: flex; flex-direction: column; z-index: 1000;
-        }
-        .sidebar-logo {
-            font-size: 1.6rem; font-weight: 900; text-align: center; margin-bottom: 45px;
-            background: linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-        .sidebar-nav a {
-            display: flex; align-items: center; gap: 14px; padding: 15px 20px; border-radius: var(--radius);
-            color: var(--text-secondary); text-decoration: none; font-weight: 600; transition: all 0.25s;
-        }
-        .sidebar-nav a:hover, .sidebar-nav a.active { background: var(--primary); color: white; box-shadow: var(--glow); }
-        .whatsapp-btn { background: #25D366; color: white; width: 100%; text-decoration: none; border-radius: var(--radius); padding: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 15px rgba(37,211,102,0.2); transition: 0.25s; }
-        .whatsapp-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,211,102,0.4); }
-
-        .main-content { margin-right: 290px; padding: 45px; min-height: 100vh; }
+        /* تقسيم الشاشات الداخلية */
+        .workspace { display: grid; grid-template-columns: 300px 1fr; min-height: 100vh; }
         
-        .header {
+        .dock-sidebar {
+            background: rgba(8, 8, 16, 0.9); border-left: 1px solid var(--glass-border);
+            padding: 40px 24px; display: flex; flex-direction: column; gap: 40px;
+        }
+        .dock-brand { font-size: 1.8rem; font-weight: 900; text-align: center; color: #fff; letter-spacing: 1px; }
+        .dock-brand span { color: var(--neon-cyan); }
+        
+        .dock-menu { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+        .dock-link {
+            display: flex; align-items: center; gap: 15px; padding: 16px 20px; border-radius: 14px;
+            color: var(--text-muted); text-decoration: none; font-weight: 600; transition: all 0.3s;
+        }
+        .dock-link:hover, .dock-link.active {
+            background: linear-gradient(90deg, rgba(0, 243, 255, 0.15), transparent);
+            color: var(--neon-cyan); border-right: 4px solid var(--neon-cyan);
+        }
+
+        .action-hub { padding: 45px; overflow-y: auto; }
+        
+        .navbar-top {
             display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;
-            background: var(--surface); padding: 22px 35px; border-radius: var(--radius); border: 1px solid var(--border);
+            background: var(--card-bg); padding: 20px 35px; border-radius: 20px; border: 1px solid var(--glass-border);
         }
-        .search-container { position: relative; flex: 1; max-width: 420px; }
-        .search-container input { margin: 0; padding: 14px 50px 14px 20px; border-radius: 30px; }
-        .search-container i { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); color: var(--text-secondary); }
-        .user-panel { display: flex; align-items: center; gap: 18px; }
-        .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; box-shadow: var(--glow); }
+        .search-shell { position: relative; width: 100%; max-width: 400px; }
+        .search-shell input { margin-bottom: 0; padding-right: 50px; }
+        .search-shell i { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        /* شبكة المحاضرات والكروت */
-        .lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 30px; margin-top: 20px; }
-        .lesson-card {
-            background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; position: relative;
+        .profile-badge { display: flex; align-items: center; gap: 15px; }
+        .profile-glow-avatar {
+            width: 48px; height: 48px; border-radius: 14px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-violet));
+            display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
         }
-        .lesson-card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: var(--shadow); }
-        .lesson-card .thumb {
-            height: 170px; background: linear-gradient(135deg, #14142b, #0f0f1e); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; color: var(--accent); position: relative;
+
+        /* شبكة بطاقات الدروس */
+        .cards-cluster { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-top: 25px; }
+        .nexus-card {
+            background: var(--card-bg); border-radius: 20px; overflow: hidden;
+            border: 1px solid var(--glass-border); transition: all 0.35s ease; cursor: pointer; position: relative;
         }
-        .lesson-card .info { padding: 22px; }
-        .lesson-card .title { font-size: 1.15rem; font-weight: 800; margin-bottom: 14px; line-height: 1.4; }
-        .lesson-card .meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-secondary); }
+        .nexus-card:hover {
+            transform: translateY(-8px) scale(1.02); border-color: var(--neon-magenta);
+            box-shadow: 0 15px 35px rgba(255, 0, 127, 0.2);
+        }
+        .nexus-card .cover-zone {
+            height: 180px; background: rgba(255,255,255,0.01); display: flex;
+            align-items: center; justify-content: center; font-size: 4rem; position: relative;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .nexus-card .details { padding: 25px; }
+        .nexus-card .title-text { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; line-height: 1.5; }
         
-        .badge { padding: 5px 12px; border-radius: 20px; font-weight: 700; font-size: 0.75rem; }
-        .badge-active { background: rgba(46,213,115,0.12); color: var(--success); }
-        .badge-lock { background: rgba(255,71,87,0.12); color: var(--danger); }
+        .status-pill { padding: 6px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
+        .pill-unlocked { background: rgba(0, 255, 135, 0.1); color: var(--safe-green); }
+        .pill-locked { background: rgba(255, 51, 102, 0.1); color: var(--alert-red); }
 
-        /* ================== لوحة التحكم الإدارية الفاخرة ================== */
-        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; margin-bottom: 35px; }
-        .stat-card { background: var(--surface); padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); text-align: center; position: relative; overflow: hidden; }
-        .stat-card h3 { font-size: 2.3rem; color: var(--accent); margin-top: 8px; font-weight: 900; }
-        .admin-sections { display: grid; grid-template-columns: 1fr; gap: 35px; }
-        .admin-block { background: var(--surface); padding: 35px; border-radius: var(--radius); border: 1px solid var(--border); }
-        .admin-block h3 { margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 12px; color: var(--accent); display: flex; align-items: center; gap: 12px; font-size: 1.3rem; }
+        /* لوحة التحكم والبيانات الإحصائية */
+        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin-bottom: 35px; }
+        .metric-cube {
+            background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border);
+            text-align: center; position: relative;
+        }
+        .metric-cube h4 { font-size: 2.5rem; font-weight: 900; margin-top: 10px; color: var(--neon-cyan); }
         
-        .table-responsive { overflow-x: auto; margin-top: 20px; border-radius: 12px; border: 1px solid var(--border); }
-        .admin-table { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.95rem; }
-        .admin-table th, .admin-table td { padding: 16px; border-bottom: 1px solid var(--border); white-space: nowrap; }
-        .admin-table th { background: var(--surface-light); color: var(--text); font-weight: 700; }
+        .control-block-box { background: var(--card-bg); padding: 35px; border-radius: 24px; border: 1px solid var(--glass-border); margin-bottom: 35px; }
+        .control-block-box h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 25px; color: var(--neon-magenta); border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; }
 
-        .live-codes-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 20px; max-height: 280px; overflow-y: auto; padding: 5px; }
-        .live-code-badge { padding: 10px; border-radius: 10px; font-family: monospace; font-size: 0.9rem; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.04); }
-        .code-avail { background: rgba(46,213,115,0.08); color: var(--success); border-color: rgba(46,213,115,0.2); }
-        .code-used-up { background: rgba(255,71,87,0.08); color: var(--danger); border-color: rgba(255,71,87,0.2); text-decoration: line-through; }
+        .responsive-data-table { overflow-x: auto; border-radius: 14px; border: 1px solid var(--glass-border); }
+        .modern-table { width: 100%; border-collapse: collapse; text-align: right; }
+        .modern-table th, .modern-table td { padding: 18px; border-bottom: 1px solid var(--glass-border); white-space: nowrap; }
+        .modern-table th { background: rgba(255,255,255,0.02); font-weight: 700; color: var(--neon-cyan); }
 
-        /* ================== نظام الرسائل والنوافذ الفاخر بمنتصف الشاشة ================== */
-        .center-popup-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(12px); z-index: 5000; display: flex; align-items: center; justify-content: center;
-            animation: fadeIn 0.25s ease-out;
-        }
-        .center-popup {
-            background: var(--surface); border-radius: 24px; padding: 40px; width: 90%; max-width: 460px;
-            border: 1px solid var(--border); text-align: center; box-shadow: var(--shadow);
-            animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .center-popup .icon-box {
-            width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 20px;
-            display: flex; align-items: center; justify-content: center; font-size: 2rem;
-        }
-        .icon-success { background: rgba(46,213,115,0.15); color: var(--success); }
-        .icon-error { background: rgba(255,71,87,0.15); color: var(--danger); }
-        .icon-warning { background: rgba(255,71,87,0.15); color: var(--warning); }
-        .center-popup h4 { font-size: 1.4rem; font-weight: 800; margin-bottom: 12px; }
-        .center-popup p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px; }
+        .scroll-codes-panel { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; max-height: 250px; overflow-y: auto; padding: 10px; }
+        .code-pill-item { padding: 12px; border-radius: 12px; text-align: center; font-family: monospace; font-size: 0.95rem; font-weight: 700; }
+        .code-ready { background: rgba(0, 243, 255, 0.08); color: var(--neon-cyan); border: 1px solid rgba(0, 243, 255, 0.2); }
+        .code-consumed { background: rgba(255,255,255,0.03); color: var(--text-muted); text-decoration: line-through; border: 1px solid var(--glass-border); }
 
-        /* مشغل الفيديوهات المحمي الفاخر */
-        .video-player-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #000; z-index: 4000; display: flex; align-items: center; justify-content: center; }
-        .video-wrap { width: 92%; max-width: 1000px; position: relative; background: #000; border-radius: 16px; overflow: hidden; box-shadow: 0 0 60px rgba(0,0,0,0.9); }
-        .video-wrap video, .video-wrap iframe { width: 100%; height: 560px; border: none; display: block; background: #000; }
+        /* ================== نظام الرسائل المنبثقة المطور بمنتصف الشاشة ================== */
+        .neon-alert-backdrop {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 3, 8, 0.85);
+            backdrop-filter: blur(15px); z-index: 10000; display: flex; align-items: center; justify-content: center;
+            animation: fadeInBlur 0.3s ease;
+        }
+        .neon-alert-center {
+            background: #0f0f20; border-radius: 24px; padding: 40px; width: 90%; max-width: 480px;
+            border: 1px solid rgba(255, 0, 127, 0.3); text-align: center; box-shadow: 0 0 40px rgba(255, 0, 127, 0.2);
+            animation: popZoom 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .neon-alert-center.type-success { border-color: var(--safe-green); box-shadow: 0 0 40px rgba(0, 255, 135, 0.15); }
+        .neon-alert-center.type-warning { border-color: var(--neon-cyan); box-shadow: 0 0 40px rgba(0, 243, 255, 0.15); }
         
-        .video-watermark { 
-            position: absolute; color: rgba(255, 255, 255, 0.15); font-size: 0.9rem; pointer-events: none; 
-            background: rgba(0, 0, 0, 0.5); padding: 6px 14px; border-radius: 8px; z-index: 4100; font-weight: 700; 
-            direction: ltr; bottom: 20px; left: 20px; border: 1px solid rgba(255,255,255,0.04); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .video-watermark.hint-center { bottom: 50% !important; left: 50% !important; transform: translate(-50%, 50%) scale(1.4); color: rgba(255, 255, 255, 0.5); background: rgba(0, 0, 0, 0.85); box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+        .alert-vector-icon { width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 25px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; }
+        .alert-vector-icon.success { background: rgba(0, 255, 135, 0.1); color: var(--safe-green); }
+        .alert-vector-icon.error { background: rgba(255, 51, 102, 0.1); color: var(--alert-red); }
+        .alert-vector-icon.warning { background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); }
+        
+        .neon-alert-center h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 15px; letter-spacing: 0.5px; }
+        .neon-alert-center p { color: var(--text-muted); font-size: 1rem; line-height: 1.6; margin-bottom: 30px; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        /* مشغل العرض الآمن للفيديوهات */
+        .cinema-theater-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9000; display: flex; align-items: center; justify-content: center; }
+        .cinema-container { width: 94%; max-width: 1020px; position: relative; border-radius: 16px; overflow: hidden; background: #020202; }
+        .cinema-container video, .cinema-container iframe { width: 100%; height: 580px; border: none; display: block; }
+        
+        .dynamic-protective-watermark {
+            position: absolute; color: rgba(255, 255, 255, 0.18); font-size: 0.9rem; pointer-events: none;
+            background: rgba(0,0,0,0.6); padding: 8px 16px; border-radius: 8px; z-index: 9500; font-weight: bold;
+            direction: ltr; bottom: 30px; left: 30px; transition: all 0.5s ease-in-out;
+        }
+        .dynamic-protective-watermark.mid-stage { bottom: 50% !important; left: 50% !important; transform: translate(-50%, 50%) scale(1.3); color: rgba(255,255,255,0.45); background: rgba(0,0,0,0.9); }
+
+        .wa-floating-btn { background: #25D366; color: white; border-radius: 14px; padding: 16px; text-decoration: none; font-weight: 700; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: auto; }
+
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes popZoom { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes fadeInBlur { from { opacity: 0; backdrop-filter: blur(0px); } to { opacity: 1; backdrop-filter: blur(15px); } }
     </style>
 </head>
 <body>
 
-    <!-- ================== صفحة تسجيل الدخول وإنشاء الحساب ================== -->
-    <div id="authPage" class="auth-wrapper">
-        <div class="auth-card" id="loginBox">
-            <h2>مرحباً بك مجدداً</h2>
-            <div class="auth-subtitle">المنصة التعليمية الرسمية للأستاذ أيمن الرفاعي</div>
-            <input type="text" class="nav-input" id="loginUser" placeholder="البريد الإلكتروني أو رقم الهاتف">
-            <input type="password" class="nav-input" id="loginPass" placeholder="كلمة المرور">
-            <button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="handleLogin()">تسجيل دخول آمن <i class="fas fa-shield-alt"></i></button>
-            <p style="text-align:center; margin-top:25px; color:var(--text-secondary); font-size:0.9rem;">طالب جديد؟ <span style="color:var(--accent); cursor:pointer; font-weight:700;" onclick="switchAuth('reg')">إنشاء حساب فوري</span></p>
+    <!-- ================== بوابة التحقق والدخول (Gateway) ================== -->
+    <div id="authGateway" class="gateway-container">
+        <div class="gateway-shield" id="boxLogin">
+            <h2>مرحباً بك</h2>
+            <div class="gateway-tag">أكاديمية الأستاذ أيمن الرفاعي للعلوم والتعليم</div>
+            <input type="text" class="form-control key-nav" id="inpUser" placeholder="اسم المستخدم أو البريد الإلكتروني">
+            <input type="password" class="form-control key-nav" id="inpPass" placeholder="كلمة المرور الحصرية">
+            <button class="master-btn btn-neon-primary" style="width:100%; margin-top:10px;" onclick="executeLogin()">دخول آمن للمنصة <i class="fas fa-fingerprint"></i></button>
+            <p style="text-align:center; margin-top:30px; color:var(--text-muted); font-size:0.9rem;">طالب غير مسجل؟ <span style="color:var(--neon-cyan); cursor:pointer; font-weight:700;" onclick="toggleGatewayView('reg')">إنشاء ملف طالب جديد</span></p>
         </div>
 
-        <div class="auth-card" id="regBox" style="display:none;">
-            <h2>توثيق حساب طالب</h2>
-            <div class="auth-subtitle">يرجى إدخال البيانات الشخصية بدقة كاملة وموثوقة</div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <input type="text" class="nav-input" id="rFirst" placeholder="الاسم الأول">
-                <input type="text" class="nav-input" id="rFather" placeholder="اسم الأب">
-                <input type="text" class="nav-input" id="rGrand" placeholder="اسم الجد">
-                <input type="text" class="nav-input" id="rFamily" placeholder="العائلة">
+        <div class="gateway-shield" id="boxRegister" style="display:none;">
+            <h2>توثيق طالب جديد</h2>
+            <div class="gateway-tag">الرجاء تزويد النظام ببياناتك الرسمية الدقيقة</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                <input type="text" class="form-control key-nav" id="regF" placeholder="الاسم الأول">
+                <input type="text" class="form-control key-nav" id="regP" placeholder="اسم الأب">
+                <input type="text" class="form-control key-nav" id="regG" placeholder="اسم الجد">
+                <input type="text" class="form-control key-nav" id="regL" placeholder="الكنية / العائلة">
             </div>
-            <select class="nav-input" id="rCountry">
+            <select class="form-control key-nav" id="regCountryCode">
                 <option value="+963" selected>سوريا 🇸🇾 (+963)</option>
-                <option value="+20">مصر 🇪🇬 (+20)</option>
                 <option value="+966">السعودية 🇸🇦 (+966)</option>
+                <option value="+20">مصر 🇪🇬 (+20)</option>
                 <option value="+962">الأردن 🇯🇴 (+962)</option>
             </select>
-            <input type="tel" class="nav-input" id="rPhone" placeholder="رقم الهاتف">
-            <input type="email" class="nav-input" id="rEmail" placeholder="البريد الإلكتروني (Gmail)">
-            <input type="text" class="nav-input" id="rCity" placeholder="المحافظة / المدينة">
-            <input type="password" class="nav-input" id="rPass" placeholder="كلمة مرور قوية للخصوصية">
-            <button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="handleRegister()">توثيق وإنشاء الحساب</button>
-            <p style="text-align:center; margin-top:25px; color:var(--text-secondary); font-size:0.9rem;">لديك حساب بالفعل؟ <span style="color:var(--accent); cursor:pointer; font-weight:700;" onclick="switchAuth('login')">تسجيل دخول</span></p>
+            <input type="tel" class="form-control key-nav" id="regPhone" placeholder="رقم الهاتف الخلوي">
+            <input type="email" class="form-control key-nav" id="regEmail" placeholder="البريد الإلكتروني الحقيقي">
+            <input type="text" class="form-control key-nav" id="regCity" placeholder="المحافظة أو المدينة">
+            <input type="password" class="form-control key-nav" id="regPass" placeholder="تعيين كلمة المرور للملف">
+            <button class="master-btn btn-neon-primary" style="width:100%; margin-top:10px;" onclick="executeRegistration()">تسجيل وتفعيل الملف فوراً</button>
+            <p style="text-align:center; margin-top:30px; color:var(--text-muted); font-size:0.9rem;">تمتلك ملفاً مسبقاً؟ <span style="color:var(--neon-cyan); cursor:pointer; font-weight:700;" onclick="toggleGatewayView('login')">تسجيل الدخول</span></p>
         </div>
     </div>
 
-    <!-- ================== الهيكل الرئيسي للمنصة الداخية ================== -->
-    <div id="appPage" style="display:none;">
-        <div class="sidebar">
-            <div class="sidebar-logo">📘 أكاديمية الرفاعي</div>
-            <div class="sidebar-nav">
-                <a href="#" class="active" id="navHome" onclick="changePage('home')"><i class="fas fa-graduation-cap"></i> أرشيف المحاضرات</a>
-                <a href="#" id="navMyLessons" onclick="changePage('mylessons')"><i class="fas fa-play-circle"></i> محاضراتي المفتوحة</a>
-                <a href="#" id="navAdmin" style="display:none;" onclick="changePage('admin')"><i class="fas fa-tools"></i> لوحة التحكم الإدارية</a>
+    <!-- ================== بيئة العمل الداخلية للمنصة (Workspace) ================== -->
+    <div id="panelWorkspace" class="workspace" style="display:none;">
+        <div class="dock-sidebar">
+            <div class="dock-brand">أكاديمية <span>أيمن</span></div>
+            <div class="dock-menu">
+                <a href="#" class="dock-link active" id="lnkHome" onclick="switchHubSection('home')"><i class="fas fa-layer-group"></i> مستودع المحاضرات</a>
+                <a href="#" class="dock-link" id="lnkUnlocked" onclick="switchHubSection('unlocked')"><i class="fas fa-circle-play"></i> موادي المفتوحة</a>
+                <a href="#" class="dock-link" id="lnkAdmin" style="display:none;" onclick="switchHubSection('admin')"><i class="fas fa-user-gear"></i> غرفة الإدارة والتحكم</a>
             </div>
-            <div class="sidebar-footer">
-                <a id="waLink" class="whatsapp-btn" href="#" target="_blank"><i class="fab fa-whatsapp"></i> طلب أكواد تفعيل</a>
-            </div>
+            <a id="floatingWa" class="wa-floating-btn" href="#" target="_blank"><i class="fab fa-whatsapp"></i> حجز أكواد المحاضرات</a>
         </div>
 
-        <div class="main-content">
-            <div class="header">
-                <div class="search-container">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchBar" placeholder="ابحث عن محاضرة معينة..." oninput="triggerSearch()">
+        <div class="action-hub">
+            <div class="navbar-top">
+                <div class="search-shell">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="text" id="platformSearch" class="form-control" placeholder="بحث ذكي في عناوين المحاضرات المطروحة..." oninput="handleSearchBroadcast()">
                 </div>
-                <div class="user-panel">
-                    <div class="avatar" id="userInitial">أ</div>
+                <div class="profile-badge">
+                    <div class="profile-glow-avatar" id="avatarLetter">أ</div>
                     <div>
-                        <div id="uNameDisplay" style="font-weight:800;">...</div>
-                        <div id="uRoleDisplay" style="font-size:0.8rem; color:var(--accent);">طالب مفعّل</div>
+                        <div id="lblProfileName" style="font-weight:700;">جاري التحميل...</div>
+                        <div id="lblProfileRole" style="font-size:0.8rem; color:var(--neon-cyan);">طالب مسجل</div>
                     </div>
-                    <button class="btn btn-outline btn-sm" style="margin-right:15px;" onclick="userLogout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
+                    <button class="master-btn btn-outline-neon" style="padding:10px 20px; font-size:0.8rem; margin-right:20px; border-radius:10px;" onclick="logoutSession()"><i class="fas fa-power-off"></i> خروج</button>
                 </div>
             </div>
 
-            <div id="pageContent"></div>
+            <div id="hubDynamicView"></div>
         </div>
     </div>
 
-    <!-- استدعاء ملفات Firebase الرسمية والمستقرة -->
+    <!-- استدعاء وتكامل خدمات Firebase الموثوقة والمستقرة -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
     <script>
-        // إعدادات Firebase الخاصة بقاعدة البيانات
+        // إعدادات وبيانات الاتصال بقاعدة بيانات السيرفر لـ Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCFHLZgG6-SBhYh5gq83WmZJktDDngKoRU",
             authDomain: "aiman-6f132.firebaseapp.com",
@@ -267,553 +293,543 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        let sessionUser = null;
-        let globalVideos = [];
-        let userUnlockedIds = [];
-        let currentActiveView = 'home';
-        let adminSelectedVideoIdForCodes = '';
+        let activeUserSession = null;
+        let cachedVideosArray = [];
+        let unlockedVideosIdList = [];
+        let currentActiveSectionId = 'home';
+        let adminFocusedVideoIdForCodes = '';
 
-        // ======================= نظام الرسائل الفاخر بمنتصف الشاشة =======================
-        function showCenterAlert(title, message, type = 'success', onConfirm = null) {
-            const existing = document.querySelector('.center-popup-overlay');
-            if (existing) existing.remove();
+        // ================== نظام الرسائل والنوافذ الفاخر بمنتصف الشاشة المطور ==================
+        function spawnCentralPopup(title, text, type = 'success', callback = null) {
+            const oldPopup = document.querySelector('.neon-alert-backdrop');
+            if (oldPopup) oldPopup.remove();
 
-            const iconMap = { success: 'fa-check', error: 'fa-times', warning: 'fa-exclamation' };
-            const overlay = document.createElement('div');
-            overlay.className = 'center-popup-overlay';
-            overlay.innerHTML = `
-                <div class="center-popup">
-                    <div class="icon-box icon-${type}"><i class="fas ${iconMap[type]}"></i></div>
-                    <h4>${title}</h4>
-                    <p>${message}</p>
-                    <button class="btn btn-primary popup-close-btn" style="padding: 10px 35px; min-width:140px;">موافق</button>
+            const iconMap = { success: 'fa-square-check', error: 'fa-rectangle-xmark', warning: 'fa-triangle-exclamation' };
+            const backdrop = document.createElement('div');
+            backdrop.className = 'neon-alert-backdrop';
+            
+            backdrop.innerHTML = `
+                <div class="neon-alert-center type-${type}">
+                    <div class="alert-vector-icon ${type}"><i class="fas ${iconMap[type]}"></i></div>
+                    <h3>${title}</h3>
+                    <p>${text}</p>
+                    <button class="master-btn btn-neon-primary btn-alert-dismiss" style="padding: 12px 40px; min-width:150px;">موافق</button>
                 </div>
             `;
-            document.body.appendChild(overlay);
+            document.body.appendChild(backdrop);
 
-            const closeBtn = overlay.querySelector('.popup-close-btn');
-            closeBtn.focus();
+            const dismissBtn = backdrop.querySelector('.btn-alert-dismiss');
+            dismissBtn.focus();
 
-            const closeAction = () => {
-                overlay.remove();
-                if(onConfirm) onConfirm();
+            const closeRoutine = () => {
+                backdrop.remove();
+                if(callback) callback();
             };
 
-            closeBtn.onclick = closeAction;
-            overlay.onclick = (e) => { if(e.target === overlay) closeAction(); };
+            dismissBtn.onclick = closeRoutine;
+            backdrop.onclick = (e) => { if(e.target === backdrop) closeRoutine(); };
         }
 
-        // ======================= هندسة لوحة المفاتيح والأسهم والإنتر =======================
-        function setupKeyboardEngine() {
+        // ================== محرك الأسهم والـ Enter الذكي للتنقل البرمجي ==================
+        function runKeyboardNavigationEngine() {
             document.addEventListener('keydown', (e) => {
-                const active = document.activeElement;
-                if (!active || !active.classList.contains('nav-input')) return;
+                const currentFocus = document.activeElement;
+                if (!currentFocus || !currentFocus.classList.contains('key-nav')) return;
 
-                const inputs = Array.from(document.querySelectorAll('.auth-card:not([style*="display: none"]) .nav-input'));
-                const index = inputs.indexOf(active);
+                const activeFormInputs = Array.from(document.querySelectorAll('.gateway-shield:not([style*="display: none"]) .key-nav'));
+                const pos = activeFormInputs.indexOf(currentFocus);
 
                 if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
                     e.preventDefault();
-                    const next = inputs[index + 1] || inputs[0];
-                    if(next) next.focus();
+                    const nextField = activeFormInputs[pos + 1] || activeFormInputs[0];
+                    if(nextField) nextField.focus();
                 } 
                 else if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
                     e.preventDefault();
-                    const prev = inputs[index - 1] || inputs[inputs.length - 1];
-                    if(prev) prev.focus();
+                    const prevField = activeFormInputs[pos - 1] || activeFormInputs[activeFormInputs.length - 1];
+                    if(prevField) prevField.focus();
                 } 
                 else if (e.key === 'Enter') {
                     e.preventDefault();
-                    if (document.getElementById('loginBox').style.display !== 'none') {
-                        handleLogin();
+                    if (document.getElementById('boxLogin').style.display !== 'none') {
+                        executeLogin();
                     } else {
-                        handleRegister();
+                        executeRegistration();
                     }
                 }
             });
 
-            // دعم تفعيل كود الدرس بواسطة الـ Enter
+            // دعم الضغط على Enter في حقل الكود لتفعيل مباشر لزر الموافقة
             document.addEventListener('keydown', (e) => {
-                if(e.key === 'Enter' && document.getElementById('cdInp') && document.activeElement === document.getElementById('cdInp')) {
+                if(e.key === 'Enter' && document.getElementById('modalCodeField') && document.activeElement === document.getElementById('modalCodeField')) {
                     e.preventDefault();
-                    const btn = document.getElementById('actBtn');
-                    if(btn) btn.click();
+                    const triggerBtn = document.getElementById('btnSubmitCodeAction');
+                    if(triggerBtn) triggerBtn.click();
                 }
             });
         }
 
-        function switchAuth(target) {
-            document.getElementById('loginBox').style.display = target === 'login' ? 'block' : 'none';
-            document.getElementById('regBox').style.display = target === 'reg' ? 'block' : 'none';
-            const visibleInputs = document.querySelectorAll(`.auth-card:not([style*="display: none"]) .nav-input`);
-            if(visibleInputs.length > 0) visibleInputs[0].focus();
+        function toggleGatewayView(target) {
+            document.getElementById('boxLogin').style.display = target === 'login' ? 'block' : 'none';
+            document.getElementById('boxRegister').style.display = target === 'reg' ? 'block' : 'none';
+            const freshFields = document.querySelectorAll(`.gateway-shield:not([style*="display: none"]) .key-nav`);
+            if(freshFields.length > 0) freshFields[0].focus();
         }
 
-        function buildFingerprint() {
-            return btoa(navigator.userAgent + screen.width).substring(0, 25);
+        function generateUniqueDeviceHash() {
+            return btoa(navigator.userAgent + screen.width + screen.height).substring(0, 26);
         }
 
-        // ======================= تسجيل الدخول وإدارة الحساب الثابت للأدمن =======================
-        async function handleLogin() {
-            const userInp = document.getElementById('loginUser').value.trim();
-            const passInp = document.getElementById('loginPass').value;
+        // ================== إدارة توثيق ومصادقة المستخدمين والطلاب ==================
+        async function executeLogin() {
+            const userRef = document.getElementById('inpUser').value.trim();
+            const passRef = document.getElementById('inpPass').value;
 
-            if (!userInp || !passInp) return showCenterAlert('تنبيه ناقص', 'الرجاء ملء حقول الدخول المعتمدة لاستمرار عملك.', 'warning');
+            if(!userRef || !passRef) return spawnCentralPopup('بيانات ناقصة', 'الرجاء كتابة اسم المستخدم وكلمة المرور لإجراء المصادقة الأمنية.', 'warning');
 
-            // حساب الأدمن ثابت ومحمي كلياً
-            if (userInp === 'admin12344321@1x' && passInp === 'admin12344321@1x') {
-                sessionUser = { uid: 'SUPER_ADMIN', fullName: 'الأستاذ أيمن الرفاعي', firstName: 'أيمن', phone: 'الإدارة العامة للمنصة', role: 'admin' };
-                localStorage.setItem('refaiSession', JSON.stringify(sessionUser));
-                initSession();
+            // حساب الإدارة الثابت المحمي
+            if (userRef === 'admin12344321@1x' && passRef === 'admin12344321@1x') {
+                activeUserSession = { uid: 'SUPER_ADMIN', fullName: 'الأستاذ أيمن الرفاعي', firstName: 'أيمن', phone: 'الإدارة العامة للمنصة', role: 'admin' };
+                localStorage.setItem('refaiSecureSessionToken', JSON.stringify(activeUserSession));
+                bootstrapSession();
                 return;
             }
 
             try {
-                let snap = await db.collection('users').where('email', '==', userInp).get();
-                if (snap.empty) snap = await db.collection('users').where('phone', '==', userInp).get();
-                if (snap.empty) return showCenterAlert('خطأ في البيانات', 'البيانات المدخلة غير مسجلة حالياً بملفات المنصة.', 'error');
+                let userQuery = await db.collection('users').where('email', '==', userRef).get();
+                if (userQuery.empty) userQuery = await db.collection('users').where('phone', '==', userRef).get();
+                if (userQuery.empty) return spawnCentralPopup('فشل الدخول', 'المعلومات المكتوبة غير متطابقة مع أي ملف طالب مسجل لدينا.', 'error');
 
-                const docRef = snap.docs[0];
-                const data = docRef.data();
+                const targetDoc = userQuery.docs[0];
+                const data = targetDoc.data();
 
-                if (data.password !== passInp) return showCenterAlert('خطأ في الدخول', 'كلمة المرور المكتوبة غير متطابقة مع هذا الحساب.', 'error');
-                if (data.blocked) return showCenterAlert('حساب مقفل', 'عذراً! تم حظر هذا الحساب لمخالفته شروط الأمان ومشاركة البيانات.', 'error');
+                if(data.password !== passRef) return spawnCentralPopup('رمز خاطئ', 'كلمة المرور الحصرية المدخلة غير صحيحة، يرجى المحاولة مجدداً.', 'error');
+                if(data.blocked) return spawnCentralPopup('الملف مقفل', 'تم إيقاف صلاحيات هذا الملف التعليمي مؤقتاً لمخالفة تعليمات الأمان المعتمدة.', 'error');
 
-                const print = buildFingerprint();
-                if (data.deviceFingerprint && data.deviceFingerprint !== print && data.role !== 'admin') {
-                    await db.collection('users').doc(docRef.id).update({ blocked: true, securityAlert: "تغيير البصمة الحصرية المعتمدة" });
-                    return showCenterAlert('🔴 حماية صارمة', 'تم إغلاق الحساب فوراً لحمايته بسبب رصد تغيير في جهاز الطالب الأصلي.', 'error');
+                const freshHash = generateUniqueDeviceHash();
+                if (data.deviceFingerprint && data.deviceFingerprint !== freshHash && data.role !== 'admin') {
+                    await db.collection('users').doc(targetDoc.id).update({ blocked: true, securityAlert: "رصد تبديل الجهاز الحصري المعتمد" });
+                    return spawnCentralPopup('تنبيه الحماية', 'تم حظر الحساب تلقائياً نظراً لمحاولة الدخول من جهاز مغاير لجهازك الأول لحماية المحتوى الخاص بك.', 'error');
                 }
 
-                await db.collection('users').doc(docRef.id).update({ deviceFingerprint: print, lastLogin: firebase.firestore.FieldValue.serverTimestamp() });
-                sessionUser = { uid: docRef.id, ...data, deviceFingerprint: print };
-                localStorage.setItem('refaiSession', JSON.stringify(sessionUser));
-                initSession();
-            } catch (err) { showCenterAlert('خطأ في السيرفر', err.message, 'error'); }
+                await db.collection('users').doc(targetDoc.id).update({ deviceFingerprint: freshHash, lastActiveTime: firebase.firestore.FieldValue.serverTimestamp() });
+                activeUserSession = { uid: targetDoc.id, ...data, deviceFingerprint: freshHash };
+                localStorage.setItem('refaiSecureSessionToken', JSON.stringify(activeUserSession));
+                bootstrapSession();
+            } catch(err) { spawnCentralPopup('خطأ اتصال', err.message, 'error'); }
         }
 
-        // ======================= توثيق الطالب الجديد ومنع أخطاء الضغط المكرر =======================
-        async function handleRegister() {
-            const first = document.getElementById('rFirst').value.trim();
-            const father = document.getElementById('rFather').value.trim();
-            const grand = document.getElementById('rGrand').value.trim();
-            const family = document.getElementById('rFamily').value.trim();
-            const phone = document.getElementById('rCountry').value + document.getElementById('rPhone').value.trim();
-            const email = document.getElementById('rEmail').value.trim();
-            const city = document.getElementById('rCity').value.trim();
-            const pass = document.getElementById('rPass').value;
+        async function executeRegistration() {
+            const first = document.getElementById('regF').value.trim();
+            const father = document.getElementById('regP').value.trim();
+            const grand = document.getElementById('regG').value.trim();
+            const last = document.getElementById('regL').value.trim();
+            const phone = document.getElementById('regCountryCode').value + document.getElementById('regPhone').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const city = document.getElementById('regCity').value.trim();
+            const password = document.getElementById('regPass').value;
 
-            if(!first || !phone || !email || !pass) return showCenterAlert('حقول ناقصة', 'يرجى إكمال الحقول الأساسية لتوثيق هوية الطالب.', 'warning');
+            if(!first || !phone || !email || !password) return spawnCentralPopup('بيانات مفقودة', 'يرجى تزويد النظام بالحقول الإلزامية الأساسية لإتمام تسجيلك.', 'warning');
 
             try {
-                // الفحص الدقيق والمحكم لمنع التكرار نهائياً
-                const checkEmail = await db.collection('users').where('email', '==', email).get();
-                if(!checkEmail.empty) return showCenterAlert('مسجل مسبقاً', 'هذا البريد الإلكتروني مستخدم بالفعل في منصة أخرى لدينا.', 'warning');
-                
-                const checkPhone = await db.collection('users').where('phone', '==', phone).get();
-                if(!checkPhone.empty) return showCenterAlert('الرقم مكرر', 'رقم الهاتف هذا مفعّل بحساب طالب آخر حالياً.', 'warning');
+                const mailCheck = await db.collection('users').where('email', '==', email).get();
+                if(!mailCheck.empty) return spawnCentralPopup('حساب متواجد', 'هذا البريد الإلكتروني مسجل مسبقاً بطالب آخر بملفات الأكاديمية.', 'warning');
 
-                const print = buildFingerprint();
-                const newUser = {
-                    firstName: first, 
-                    fullName: `${first} ${father} ${grand} ${family}`, 
-                    email: email, 
-                    phone: phone,
-                    city: city, 
-                    password: pass, 
-                    role: 'user', 
-                    deviceFingerprint: print, 
-                    blocked: false, 
+                const phoneCheck = await db.collection('users').where('phone', '==', phone).get();
+                if(!phoneCheck.empty) return spawnCentralPopup('رقم مكرر', 'رقم الهاتف المكتوب قيد الاستخدام الفعلي حالياً.', 'warning');
+
+                const currentHash = generateUniqueDeviceHash();
+                const studentPayload = {
+                    firstName: first,
+                    fullName: `${first} ${father} ${grand} ${last}`,
+                    email: email, phone: phone, city: city, password: password,
+                    role: 'user', deviceFingerprint: currentHash, blocked: false,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
 
-                const docRef = await db.collection('users').add(newUser);
-                sessionUser = { uid: docRef.id, ...newUser };
-                localStorage.setItem('refaiSession', JSON.stringify(sessionUser));
+                const savedDoc = await db.collection('users').add(studentPayload);
+                activeUserSession = { uid: savedDoc.id, ...studentPayload };
+                localStorage.setItem('refaiSecureSessionToken', JSON.stringify(activeUserSession));
                 
-                showCenterAlert('تم التوثيق بنجاح', `أهلاً بك يا ${first}، تم إنشاء ملفك التعليمي والدخول للمنصة فوراً!`, 'success', () => {
-                    initSession();
+                spawnCentralPopup('اكتمل التوثيق', `أهلاً بك يا ${first} في منصتنا التعليمية، تم تفعيل حسابك وجهازك وبدء الجلسة فوراً.`, 'success', () => {
+                    bootstrapSession();
                 });
-            } catch(e) { showCenterAlert('خطأ سيرفر', e.message, 'error'); }
+            } catch(e) { spawnCentralPopup('خطأ سيرفر', e.message, 'error'); }
         }
 
-        function userLogout() { localStorage.removeItem('refaiSession'); location.reload(); }
+        function logoutSession() { localStorage.removeItem('refaiSecureSessionToken'); location.reload(); }
 
-        function initSession() {
-            document.getElementById('authPage').style.display = 'none';
-            document.getElementById('appPage').style.display = 'block';
-            document.getElementById('userInitial').textContent = sessionUser.firstName ? sessionUser.firstName.charAt(0) : 'أ';
-            document.getElementById('uNameDisplay').textContent = sessionUser.fullName;
-            document.getElementById('uRoleDisplay').textContent = sessionUser.role === 'admin' ? 'الإدارة العامة' : 'طالب رسمي';
-            if(sessionUser.role === 'admin') document.getElementById('navAdmin').style.display = 'block';
-            startRealtimeListeners();
-            changePage('home');
+        function bootstrapSession() {
+            document.getElementById('authGateway').style.display = 'none';
+            document.getElementById('panelWorkspace').style.display = 'grid';
+            
+            document.getElementById('avatarLetter').textContent = activeUserSession.firstName ? activeUserSession.firstName.charAt(0) : 'أ';
+            document.getElementById('lblProfileName').textContent = activeUserSession.fullName;
+            document.getElementById('lblProfileRole').textContent = activeUserSession.role === 'admin' ? 'الإدارة العامة للأكاديمية' : 'طالب رسمي مفعّل';
+            
+            if(activeUserSession.role === 'admin') document.getElementById('lnkAdmin').style.display = 'flex';
+            
+            engageLiveSyncListeners();
+            switchHubSection('home');
         }
 
-        // ======================= البث الحي الفوري للمحاضرات لضمان الاستقرار التام =======================
-        function startRealtimeListeners() {
+        // ================== المزامنة الفورية وقاعدة البيانات لضمان عدم الاختفاء ==================
+        function engageLiveSyncListeners() {
             db.collection('videos').onSnapshot(snap => {
-                globalVideos = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                cachedVideosArray = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 
-                // فرز وحل اختفاء المحاضرات
-                globalVideos.sort((a, b) => {
-                    const timeA = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : a.createdAt) : Date.now();
-                    const timeB = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : b.createdAt) : Date.now();
-                    return timeB - timeA;
+                // ترتيب الدروس بحسب توقيت الرفع بشكل دقيق لحل مشاكل التكرار
+                cachedVideosArray.sort((a, b) => {
+                    const tA = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : a.createdAt) : Date.now();
+                    const tB = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : b.createdAt) : Date.now();
+                    return tB - tA;
                 });
 
-                if(sessionUser.role === 'admin') userUnlockedIds = globalVideos.map(v => v.id);
-                refreshCurrentView();
+                if(activeUserSession.role === 'admin') unlockedVideosIdList = cachedVideosArray.map(v => v.id);
+                redrawWorkspaceView();
             });
 
-            if(sessionUser.role !== 'admin') {
-                db.collection('activations').where('userId', '==', sessionUser.uid).onSnapshot(snap => {
-                    userUnlockedIds = snap.docs.map(doc => doc.data().videoId);
-                    refreshCurrentView();
+            if(activeUserSession.role !== 'admin') {
+                db.collection('activations').where('userId', '==', activeUserSession.uid).onSnapshot(snap => {
+                    unlockedVideosIdList = snap.docs.map(doc => doc.data().videoId);
+                    redrawWorkspaceView();
                 });
             }
         }
 
-        function refreshCurrentView() {
-            if(currentActiveView === 'home') buildHomeView();
-            else if(currentActiveView === 'mylessons') buildMyLessonsView();
-            else if(currentActiveView === 'admin') buildAdminDashboard();
+        function redrawWorkspaceView() {
+            if(currentActiveSectionId === 'home') buildHomeNexusGrid();
+            else if(currentActiveSectionId === 'unlocked') buildUnlockedNexusGrid();
+            else if(currentActiveSectionId === 'admin') buildAdminMasterPanel();
         }
 
-        function changePage(target) {
-            currentActiveView = target;
-            document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
-            if(target === 'home') { document.getElementById('navHome').classList.add('active'); buildHomeView(); }
-            else if(target === 'mylessons') { document.getElementById('navMyLessons').classList.add('active'); buildMyLessonsView(); }
-            else if(target === 'admin') { document.getElementById('navAdmin').classList.add('active'); buildAdminDashboard(); }
+        function switchHubSection(section) {
+            currentActiveSectionId = section;
+            document.querySelectorAll('.dock-menu .dock-link').forEach(el => el.classList.remove('active'));
+            if(section === 'home') { document.getElementById('lnkHome').classList.add('active'); buildHomeNexusGrid(); }
+            else if(section === 'unlocked') { document.getElementById('lnkUnlocked').classList.add('active'); buildUnlockedNexusGrid(); }
+            else if(section === 'admin') { document.getElementById('lnkAdmin').classList.add('active'); buildAdminMasterPanel(); }
         }
 
-        function buildHomeView() {
-            document.getElementById('pageContent').innerHTML = `<h2 style="margin-bottom:25px; font-weight:900;">📚 أرشيف المحاضرات الشامل</h2><div class="lessons-grid" id="mainGrid"></div>`;
-            renderCards(globalVideos, 'mainGrid');
+        function buildHomeNexusGrid() {
+            document.getElementById('hubDynamicView').innerHTML = `<h2 style="font-weight:900; margin-bottom:10px;">📋 مستودع المحاضرات الشامل</h2><p style="color:var(--text-muted); margin-bottom:20px;">انقر على أي مادة لبدء مشاهدتها أو إدخال كود التفعيل المخصص لها</p><div class="cards-cluster" id="divHomeCluster"></div>`;
+            renderClusterCards(cachedVideosArray, 'divHomeCluster');
         }
 
-        function buildMyLessonsView() {
-            const list = globalVideos.filter(v => userUnlockedIds.includes(v.id));
-            document.getElementById('pageContent').innerHTML = `<h2 style="margin-bottom:25px; font-weight:900;">🎥 محاضراتي المفتوحة للدراسة (${list.length})</h2><div class="lessons-grid" id="myGrid"></div>`;
-            if(list.length === 0) document.getElementById('myGrid').innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--text-secondary); padding:50px;">لا توجد محاضرات مفعلة بحسابك حتى الآن.</p>`;
-            else renderCards(list, 'myGrid');
+        function buildUnlockedNexusGrid() {
+            const items = cachedVideosArray.filter(v => unlockedVideosIdList.includes(v.id));
+            document.getElementById('hubDynamicView').innerHTML = `<h2 style="font-weight:900; margin-bottom:25px;">🔓 موادي المفتوحة والمشتركة (${items.length})</h2><div class="cards-cluster" id="divUnlockedCluster"></div>`;
+            if(items.length === 0) document.getElementById('divUnlockedCluster').innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:60px 20px;">لا يوجد حالياً أي محاضرات مفعلة على هذا الملف بشكل مباشر.</p>`;
+            else renderClusterCards(items, 'divUnlockedCluster');
         }
 
-        function renderCards(list, elementId) {
-            const target = document.getElementById(elementId);
-            if(!target) return; target.innerHTML = '';
-            list.forEach(v => {
-                const opened = userUnlockedIds.includes(v.id);
-                const el = document.createElement('div');
-                el.className = 'lesson-card';
-                el.innerHTML = `
-                    <div class="thumb"><i class="fas ${opened ? 'fa-play-circle' : 'fa-lock'}" style="${opened ? 'color:var(--accent)' : 'color:var(--danger)'}"></i></div>
-                    <div class="info">
-                        <div class="title">${v.title}</div>
-                        <div class="meta"><span><i class="far fa-clock"></i> بث مشفر</span><span class="badge ${opened ? 'badge-active' : 'badge-lock'}">${opened ? 'جاهز للمشاهدة' : 'يتطلب كود'}</span></div>
+        function renderClusterCards(dataset, elementId) {
+            const host = document.getElementById(elementId);
+            if(!host) return; host.innerHTML = '';
+            dataset.forEach(item => {
+                const isAccessible = unlockedVideosIdList.includes(item.id);
+                const card = document.createElement('div');
+                card.className = 'nexus-card';
+                card.innerHTML = `
+                    <div class="cover-zone"><i class="fas ${isAccessible ? 'fa-play-circle' : 'fa-lock'}" style="${isAccessible ? 'color:var(--neon-cyan)' : 'color:var(--neon-magenta)'}"></i></div>
+                    <div class="details">
+                        <div class="title-text">${item.title}</div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:0.8rem; color:var(--text-muted);"><i class="far fa-clock"></i> بث مشفر آمن</span>
+                            <span class="status-pill ${isAccessible ? 'pill-unlocked' : 'pill-locked'}">${isAccessible ? 'جاهز للدراسة' : 'مطلوب كود الشحن'}</span>
+                        </div>
                     </div>
                 `;
-                el.onclick = () => { if(opened) launchSecureStream(v); else displayActivationModal(v); };
-                target.appendChild(el);
+                card.onclick = () => { if(isAccessible) triggerSecureTheaterStream(item); else invokeActivationGatewayModal(item); };
+                host.appendChild(card);
             });
         }
 
-        function triggerSearch() {
-            const q = document.getElementById('searchBar').value.toLowerCase().trim();
-            const fil = globalVideos.filter(v => v.title.toLowerCase().includes(q));
-            renderCards(fil, currentActiveView === 'home' ? 'mainGrid' : 'myGrid');
+        function handleSearchBroadcast() {
+            const txt = document.getElementById('platformSearch').value.toLowerCase().trim();
+            const filtered = cachedVideosArray.filter(v => v.title.toLowerCase().includes(txt));
+            renderClusterCards(filtered, currentActiveSectionId === 'home' ? 'divHomeCluster' : 'divUnlockedCluster');
         }
 
-        function displayActivationModal(video) {
+        function invokeActivationGatewayModal(videoItem) {
             const overlay = document.createElement('div');
-            overlay.className = 'center-popup-overlay';
+            overlay.className = 'neon-alert-backdrop';
             overlay.innerHTML = `
-                <div class="center-popup" style="max-width:500px;">
-                    <div class="icon-box icon-warning"><i class="fas fa-key"></i></div>
-                    <h4>تفعيل المحاضرة المحمية</h4>
-                    <p style="margin-bottom:15px;">الرجاء تزويد المنصة بكود الحصيرة الخاص بدرس:<br><b>${video.title}</b></p>
-                    <input type="text" id="cdInp" placeholder="اكتب كودك بدقة هنا..." style="text-transform:uppercase; text-align:center; letter-spacing:2px; font-weight:bold;">
-                    <button class="btn btn-primary" style="width:100%; margin-top:10px;" id="actBtn">تأكيد شحن وتفعيل الكود</button>
-                    <button class="btn btn-outline btn-sm" style="width:100%; margin-top:8px; border:none;" onclick="this.parentElement.parentElement.remove()">إلغاء الأمر</button>
+                <div class="neon-alert-center" style="max-width:500px; border-color:var(--neon-cyan);">
+                    <div class="alert-vector-icon warning"><i class="fas fa-key"></i></div>
+                    <h3>تفعيل المادة الدراسية</h3>
+                    <p style="margin-bottom:20px;">الرجاء كتابة كود شحن الحصيرة المعتمد لفتح:<br><b style="color:#fff;">${videoItem.title}</b></p>
+                    <input type="text" id="modalCodeField" class="form-control" style="text-transform:uppercase; text-align:center; letter-spacing:3px; font-weight:900; font-size:1.2rem; color:var(--neon-cyan);" placeholder="X7Y2W9P1">
+                    <button class="master-btn btn-neon-primary" style="width:100%; margin-top:10px;" id="btnSubmitCodeAction">تأكيد الشحن والتفعيل</button>
+                    <button class="master-btn btn-outline-neon" style="width:100%; margin-top:10px; border:none;" onclick="this.parentElement.parentElement.remove()">إلغاء وتراجع</button>
                 </div>
             `;
             document.body.appendChild(overlay);
-            overlay.querySelector('#cdInp').focus();
+            overlay.querySelector('#modalCodeField').focus();
 
-            overlay.querySelector('#actBtn').onclick = async () => {
-                const code = overlay.querySelector('#cdInp').value.trim().toUpperCase();
-                if(!code) return showCenterAlert('حقل فارغ', 'الرجاء إدخال الكود أولاً ليتمكن النظام من فحصه.', 'warning');
+            overlay.querySelector('#btnSubmitCodeAction').onclick = async () => {
+                const enteredCode = overlay.querySelector('#modalCodeField').value.trim().toUpperCase();
+                if(!enteredCode) return spawnCentralPopup('حقل فارغ', 'يرجى تدوين كود شحن صالح ليتمكن النظام من فحصه وضمان فعاليته.', 'warning');
+                
                 try {
-                    const snap = await db.collection('videos').doc(video.id).collection('codes').where('code', '==', code).limit(1).get();
-                    if(snap.empty) return showCenterAlert('كود خاطئ', 'عذراً! هذا الكود غير موجود أو ربما يخص محاضرة أخرى.', 'error');
+                    const codeMatchQuery = await db.collection('videos').doc(videoItem.id).collection('codes').where('code', '==', enteredCode).limit(1).get();
+                    if(codeMatchQuery.empty) return spawnCentralPopup('كود غير متواجد', 'الكود المكتوب خاطئ، أو قد يكون خاص بمادة تعليمية أخرى في الأرشيف.', 'error');
                     
-                    const cDoc = snap.docs[0];
-                    if(cDoc.data().usedBy) return showCenterAlert('مستعمل مسبقاً', 'تم استخدام هذا الكود سابقاً من قِبل طالب آخر، الأكواد صالحة لجهاز واحد فقط.', 'error');
+                    const codeDocSnap = codeMatchQuery.docs[0];
+                    if(codeDocSnap.data().usedBy) return spawnCentralPopup('مستخدم مسبقاً', 'تم استهلاك كود الشحن هذا سابقاً من قبل طالب آخر، الأكواد تعمل لمرة واحدة ولحساب واحد فقط.', 'error');
 
-                    await db.collection('videos').doc(video.id).collection('codes').doc(cDoc.id).update({
-                        usedBy: sessionUser.uid, usedByName: sessionUser.fullName, usedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    await db.collection('videos').doc(videoItem.id).collection('codes').doc(codeDocSnap.id).update({
+                        usedBy: activeUserSession.uid, usedByName: activeUserSession.fullName, consumedAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    await db.collection('activations').add({ userId: sessionUser.uid, videoId: video.id, code: code });
+                    await db.collection('activations').add({ userId: activeUserSession.uid, videoId: videoItem.id, code: enteredCode });
                     overlay.remove();
-                    showCenterAlert('تم التفعيل الفوري', 'مبروك! تم فتح الدرس بحسابك بنجاح وسرعة كاملة.', 'success');
-                } catch(e) { showCenterAlert('خطأ', e.message, 'error'); }
+                    spawnCentralPopup('تم تفعيل المحاضرة', 'رائع! تم شحن الكود بنجاح وفتحت المادة في حسابك الشخصي بشكل دائم.', 'success');
+                } catch(err) { spawnCentralPopup('خطأ تفعيل', err.message, 'error'); }
             };
         }
 
-        function launchSecureStream(video) {
-            const p = document.createElement('div');
-            p.className = 'video-player-overlay';
+        function triggerSecureTheaterStream(video) {
+            const theater = document.createElement('div');
+            theater.className = 'cinema-theater-overlay';
             
-            let playerHtml = '';
+            let frameContent = '';
             if(video.type === 'embed') {
-                playerHtml = `<iframe src="${video.storageURL}" allowfullscreen allow="autoplay; encrypted-media" sandbox="allow-scripts allow-same-origin"></iframe>`;
+                frameContent = `<iframe src="${video.storageURL}" allowfullscreen allow="autoplay; encrypted-media" sandbox="allow-scripts allow-same-origin"></iframe>`;
             } else {
-                playerHtml = `<video src="${video.storageURL}" controls autoplay controlsList="nodownload" disablePictureInPicture></video>`;
+                frameContent = `<video src="${video.storageURL}" controls autoplay controlsList="nodownload" disablePictureInPicture></video>`;
             }
 
-            p.innerHTML = `
-                <div style="position:absolute; top:25px; left:25px; z-index:4200;"><button class="btn btn-danger btn-sm" onclick="clearInterval(window.wmInterval); this.parentElement.parentElement.remove()"><i class="fas fa-times"></i> إنهاء وإغلاق الدرس</button></div>
-                <div class="video-wrap">
-                    ${playerHtml}
-                    <div class="video-watermark" id="vWm">المشاهدة مخصصة لـ: ${sessionUser.fullName} | ${sessionUser.phone}</div>
+            theater.innerHTML = `
+                <div style="position:absolute; top:25px; left:25px; z-index:9800;"><button class="master-btn btn-neon-primary" style="background:var(--alert-red); box-shadow:none;" onclick="clearInterval(window.watermarkMotionTimer); this.parentElement.parentElement.remove()"><i class="fas fa-circle-xmark"></i> إغلاق ومغادرة قاعة الدرس</button></div>
+                <div class="cinema-container">
+                    ${frameContent}
+                    <div class="dynamic-protective-watermark" id="theaterWmark">حساب الطالب الحصري: ${activeUserSession.fullName} | ${activeUserSession.phone}</div>
                 </div>
             `;
-            document.body.appendChild(p);
+            document.body.appendChild(theater);
 
-            window.wmInterval = setInterval(() => {
-                const el = document.getElementById('vWm'); 
-                if(!el) return;
-                if(!el.classList.contains('hint-center')) {
-                    el.classList.add('hint-center');
-                    setTimeout(() => { if(el) el.classList.remove('hint-center'); }, 4500);
+            window.watermarkMotionTimer = setInterval(() => {
+                const mark = document.getElementById('theaterWmark');
+                if(!mark) return;
+                if(!mark.classList.contains('mid-stage')) {
+                    mark.classList.add('mid-stage');
+                    setTimeout(() => { if(mark) mark.classList.remove('mid-stage'); }, 4000);
                 }
-            }, 14000);
+            }, 15000);
         }
 
-        // ======================= واجهة الإمبراطور الإدارية المتطورة =======================
-        async function buildAdminDashboard() {
-            document.getElementById('pageContent').innerHTML = `
-                <h2 style="font-weight:900; margin-bottom:25px;"><i class="fas fa-crown" style="color:var(--accent)"></i> التحكم الإداري العام والرقابة الأمنية</h2>
+        // ================== نظام الإدارة الفاخر المتكامل ==================
+        function buildAdminMasterPanel() {
+            document.getElementById('hubDynamicView').innerHTML = `
+                <h2 style="font-weight:900; margin-bottom:25px;"><i class="fas fa-shield-halved" style="color:var(--neon-cyan)"></i> لوحة تحكم ورقابة المشرف العام للمنصة</h2>
                 
-                <div class="stats-row">
-                    <div class="stat-card">المحاضرات الفعالة<h3 id="stVid">0</h3></div>
-                    <div class="stat-card">الطلاب المسجلين ببياناتهم<h3 id="stUsers">0</h3></div>
-                    <div class="stat-card">الطلاب تحت الحظر والأمان<h3 id="stBlocks">0</h3></div>
+                <div class="grid-stats">
+                    <div class="metric-cube">إجمالي محاضرات الأكاديمية<h4 id="countVids">0</h4></div>
+                    <div class="metric-cube">الطلاب المسجلين بالنظام<h4 id="countUsers">0</h4></div>
+                    <div class="metric-cube">الحسابات المقفلة أمنياً<h4 id="countBlocks">0</h4></div>
                 </div>
 
-                <div style="margin-bottom: 30px;">
-                     <button class="btn btn-danger" onclick="adminResetAllDevices()"><i class="fas fa-sync-alt"></i> تصفير أجهزة كافة الطلاب (للسماح لهم بتبديل الموبايلات)</button>
+                <div style="margin-bottom: 35px;">
+                     <button class="master-btn btn-neon-primary" style="background:var(--alert-red); box-shadow:none;" onclick="adminResetAllStudentDevices()"><i class="fas fa-arrows-rotate"></i> تصفير وإعادة تهيئة أجهزة الطلاب بالكامل</button>
                 </div>
 
-                <div class="admin-sections">
-                    <div class="admin-block">
-                        <h3><i class="fas fa-upload"></i> رفع وإطلاق المحاضرات الفورية لجميع المشتركين</h3>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:15px;">
-                            <input type="text" id="admTitle" placeholder="اكتب اسم أو عنوان الدرس">
-                            <select id="admType" onchange="toggleUploadTypeHint()">
-                                <option value="direct">رابط فيديو مباشر عالي السرعة (MP4)</option>
-                                <option value="embed">تضمين كود خارجي (Vimeo / YouTube / Bunny)</option>
-                            </select>
-                        </div>
-                        <input type="url" id="admUrl" placeholder="أدخل هنا الرابط المباشر للملف...">
-                        <button class="btn btn-primary" onclick="adminPublishVideo()"><i class="fas fa-paper-plane"></i> نشر وإتاحة فورية بالموقع</button>
-
-                        <div class="table-responsive">
-                            <table class="admin-table">
-                                <thead><tr><th>اسم المحاضرة المرفوعة</th><th>النوع</th><th>تتبع الأكواد</th><th>حذف البيانات</th></tr></thead>
-                                <tbody id="admVidTable"></tbody>
-                            </table>
-                        </div>
+                <div class="control-block-box">
+                    <h3><i class="fas fa-cloud-arrow-up"></i> رفع وبث مادة دراسية جديدة فوراً</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:15px;">
+                        <input type="text" id="admVideoTitle" class="form-control" placeholder="اسم أو عنوان الدرس الجديد">
+                        <select id="admVideoType" class="form-control" onchange="adjustUploadPlaceholderText()">
+                            <option value="direct">رابط فيديو مباشر عالي الاستجابة (MP4)</option>
+                            <option value="embed">تضمين كود خارجي مشفر (Bunny / Vimeo / YouTube)</option>
+                        </select>
                     </div>
+                    <input type="url" id="admVideoUrl" class="form-control" placeholder="أدخل رابط المسار المباشر للملف...">
+                    <button class="master-btn btn-neon-primary" onclick="adminPublishNewVideo()"><i class="fas fa-check-double"></i> اعتماد ونشر الدرس بالأرشيف العام</button>
 
-                    <div class="admin-block" id="codesSectionBlock" style="display:none; border-color:var(--accent);">
-                        <h3><i class="fas fa-key"></i> إدارة وفحص الأكواد الحية لدرس: <span id="targetCodeTitle" style="color:white;"></span></h3>
-                        <div style="display:flex; gap:12px; margin-bottom:20px;">
-                            <button class="btn btn-primary btn-sm" onclick="adminGenerateMassCodes()">⚙️ توليد 50 كود عشوائي محمي</button>
-                            <button class="btn btn-outline btn-sm" onclick="adminGenerateCustomCode()">✏️ إنشاء كود باسم طالب مخصص</button>
-                        </div>
-                        <div class="live-codes-container" id="admCodesGrid"></div>
+                    <div class="responsive-data-table" style="margin-top:25px;">
+                        <table class="modern-table">
+                            <thead><tr><th>عنوان المحاضرة</th><th>النوع الفني</th><th>شحن وتتبع الأكواد</th><th>إجراءات الحذف</th></tr></thead>
+                            <tbody id="tblAdminVideosRows"></tbody>
+                        </table>
                     </div>
+                </div>
 
-                    <div class="admin-block">
-                        <h3><i class="fas fa-users"></i> قاعدة بيانات وإداريات حسابات الطلاب</h3>
-                        <div class="table-responsive">
-                            <table class="admin-table">
-                                <thead><tr><th>اسم الطالب والبريد الإلكتروني</th><th>رقم الهاتف الحقيقي</th><th>تعديل فوري للرمز</th><th>حالة الحساب</th><th>اتخاذ إجراء</th></tr></thead>
-                                <tbody id="admUsersTable"></tbody>
-                            </table>
-                        </div>
+                <div class="control-block-box" id="adminCodeModuleShell" style="display:none; border-color:var(--neon-cyan);">
+                    <h3><i class="fas fa-key"></i> إدارة وتوليد أكواد التفعيل لدرس: <span id="lblSelectedCodeTitle" style="color:#fff;"></span></h3>
+                    <div style="display:flex; gap:15px; margin-bottom:20px;">
+                        <button class="master-btn btn-neon-primary" style="padding:10px 25px; font-size:0.9rem;" onclick="adminGenerateMassCodesBatch()">✨ توليد 50 كود عشوائي محمي</button>
+                        <button class="master-btn btn-outline-neon" style="padding:10px 25px; font-size:0.9rem;" onclick="adminCreateSingleCustomCode()">✍️ صياغة كود مخصص لاسم طالب</button>
+                    </div>
+                    <div class="scroll-codes-panel" id="divAdminCodesGrid"></div>
+                </div>
+
+                <div class="control-block-box">
+                    <h3><i class="fas fa-users-viewfinder"></i> الدليل الإداري الشامل وبيانات الطلاب</h3>
+                    <div class="responsive-data-table">
+                        <table class="modern-table">
+                            <thead><tr><th>اسم الطالب الكامل / البريد الإلكتروني</th><th>رقم الهاتف الحقيقي</th><th>تعديل فوري للرمز</th><th>حالة الحساب</th><th>التحكم بالنفاذ</th></tr></thead>
+                            <tbody id="tblAdminUsersRows"></tbody>
+                        </table>
                     </div>
                 </div>
             `;
-            loadAdminDataRealtime();
+            triggerAdminRealtimeMeters();
         }
 
-        function toggleUploadTypeHint() {
-            const type = document.getElementById('admType').value;
-            const inp = document.getElementById('admUrl');
-            if(type === 'embed') inp.placeholder = "ضع رابط الـ Embed (مثال: https://www.youtube.com/embed/xxxxxx)";
-            else inp.placeholder = "ضع رابط الملف المباشر (ينتهي بـ .mp4)";
+        function adjustUploadPlaceholderText() {
+            const choice = document.getElementById('admVideoType').value;
+            const targetInp = document.getElementById('admVideoUrl');
+            if(choice === 'embed') targetInp.placeholder = "ضع رابط كود الـ Embed (مثال: https://www.youtube.com/embed/xxxxxx)";
+            else targetInp.placeholder = "ضع رابط ملف السيرفر المباشر وينتهي بـ .mp4";
         }
 
-        function loadAdminDataRealtime() {
-            document.getElementById('stVid').textContent = globalVideos.length;
+        function triggerAdminRealtimeMeters() {
+            document.getElementById('countVids').textContent = cachedVideosArray.length;
             
-            const vTable = document.getElementById('admVidTable'); vTable.innerHTML = '';
-            globalVideos.forEach(v => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
+            const vGridTable = document.getElementById('tblAdminVideosRows'); vGridTable.innerHTML = '';
+            cachedVideosArray.forEach(v => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
                     <td><b>${v.title}</b></td>
-                    <td><span class="badge badge-active">${v.type || 'direct'}</span></td>
-                    <td>
-                        <button class="btn btn-outline btn-sm" style="color:var(--accent); border-color:var(--accent);" onclick="selectVideoForCodesTracking('${v.id}','${v.title}')"><i class="fas fa-eye"></i> تتبع الأكواد</button>
-                    </td>
-                    <td><button class="btn btn-danger btn-sm" onclick="adminDeleteVideo('${v.id}')">مسح المحاضرة</button></td>
+                    <td><span class="status-pill pill-unlocked">${v.type || 'direct'}</span></td>
+                    <td><button class="master-btn btn-outline-neon" style="padding:8px 16px; font-size:0.8rem; border-radius:10px;" onclick="loadCodesModuleForTargetVideo('${v.id}','${v.title}')"><i class="fas fa-eye-low-vision"></i> الأكواد</button></td>
+                    <td><button class="master-btn" style="background:var(--alert-red); padding:8px 16px; font-size:0.8rem; border-radius:10px;" onclick="adminDeleteVideoRecord('${v.id}')">حذف</button></td>
                 `;
-                vTable.appendChild(tr);
+                vGridTable.appendChild(row);
             });
 
             db.collection('users').orderBy('createdAt','desc').onSnapshot(snap => {
-                document.getElementById('stUsers').textContent = snap.size;
-                const uTable = document.getElementById('admUsersTable'); uTable.innerHTML = '';
-                let blockCount = 0;
+                document.getElementById('countUsers').textContent = snap.size;
+                const uGridTable = document.getElementById('tblAdminUsersRows'); uGridTable.innerHTML = '';
+                let blocksSum = 0;
 
                 snap.forEach(doc => {
-                    const u = doc.data();
-                    if(u.role === 'admin') return;
-                    if(u.blocked) blockCount++;
+                    const student = doc.data();
+                    if(student.role === 'admin') return;
+                    if(student.blocked) blocksSum++;
 
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td><b>${u.fullName}</b><br><small style="color:var(--text-secondary);">${u.email}</small></td>
-                        <td><code>${u.phone}</code></td>
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><b>${student.fullName}</b><br><small style="color:var(--text-muted);">${student.email}</small></td>
+                        <td><code>${student.phone}</code></td>
+                        <td><input type="text" value="${student.password}" class="form-control" style="width:120px; padding:6px 12px; margin:0; border-radius:8px;" onchange="adminUpdateUserPasswordDirectly('${doc.id}', this.value)"></td>
+                        <td>${student.blocked ? '<span class="status-pill pill-locked">محظور مقفل</span>' : '<span class="status-pill pill-unlocked">نشط آمن</span>'}</td>
                         <td>
-                            <input type="text" value="${u.password}" style="width:110px; padding:6px 12px; margin:0; border-radius:10px;" onchange="adminUpdateUserPassword('${doc.id}', this.value)">
-                        </td>
-                        <td>${u.blocked ? '<span class="badge badge-lock">محظور مقفل</span>' : '<span class="badge badge-active">نشط آمن</span>'}</td>
-                        <td>
-                            ${u.blocked ? `<button class="btn btn-primary btn-sm" onclick="toggleUserStatus('${doc.id}', false)">🔓 إلغاء الحظر</button>` : 
-                            `<button class="btn btn-danger btn-sm" onclick="toggleUserStatus('${doc.id}', true)">⛔ قفل وحظر</button>`}
+                            ${student.blocked ? `<button class="master-btn btn-neon-primary" style="padding:6px 14px; font-size:0.75rem; border-radius:8px;" onclick="updateStudentBlockStatus('${doc.id}', false)">🔓 إلغاء الحظر</button>` : 
+                            `<button class="master-btn" style="background:var(--alert-red); padding:6px 14px; font-size:0.75rem; border-radius:8px;" onclick="updateStudentBlockStatus('${doc.id}', true)">⛔ قفل وحظر</button>`}
                         </td>
                     `;
-                    uTable.appendChild(tr);
+                    uGridTable.appendChild(row);
                 });
-                document.getElementById('stBlocks').textContent = blockCount;
+                document.getElementById('countBlocks').textContent = blocksSum;
             });
         }
 
-        async function adminPublishVideo() {
-            const title = document.getElementById('admTitle').value.trim();
-            const type = document.getElementById('admType').value;
-            const url = document.getElementById('admUrl').value.trim();
+        async function adminPublishNewVideo() {
+            const title = document.getElementById('admVideoTitle').value.trim();
+            const type = document.getElementById('admVideoType').value;
+            const url = document.getElementById('admVideoUrl').value.trim();
 
-            if(!title || !url) return showCenterAlert('بيانات ناقصة', 'الرجاء إدخال اسم المحاضرة مع الرابط لتثبيتها بالسيرفر.', 'warning');
+            if(!title || !url) return spawnCentralPopup('مفقودات', 'الرجاء كتابة اسم المادة مع مسار البث بشكل صحيح قبل الإطلاق.', 'warning');
 
             try {
-                await db.collection('videos').add({
-                    title: title, 
-                    type: type, 
-                    storageURL: url, 
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                document.getElementById('admTitle').value = '';
-                document.getElementById('admUrl').value = '';
-                showCenterAlert('تم النشر', 'تم بث المحاضرة بنجاح تام بالموقع دون أدنى مشكلة.', 'success');
-            } catch(e) { showCenterAlert('خطأ رفيع', e.message, 'error'); }
+                await db.collection('videos').add({ title: title, type: type, storageURL: url, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                document.getElementById('admVideoTitle').value = '';
+                document.getElementById('admVideoUrl').value = '';
+                spawnCentralPopup('تم النشر والتعميم', 'تم حفظ المادة بالسيرفر ورفع جاهزيتها للعرض بالأرشيف العام للطالب.', 'success');
+            } catch(e) { spawnCentralPopup('خطأ نشر', e.message, 'error'); }
         }
 
-        async function adminDeleteVideo(id) {
-            if(confirm('هل تود بالتأكيد التام مسح درس المحاضرة نهائياً من أرشيف الطلاب؟')) {
+        async function adminDeleteVideoRecord(id) {
+            if(confirm('هل تود بالتأكيد القاطع حذف المحاضرة وملفاتها وأكوادها المرتبطة نهائياً من السيستم؟')) {
                 await db.collection('videos').doc(id).delete();
-                showCenterAlert('تم المسح', 'تم حذف المحاضرة وملفاتها بنجاح كلي.', 'success');
-                document.getElementById('codesSectionBlock').style.display = 'none';
+                spawnCentralPopup('تم الإقصاء', 'حُذفت المحاضرة بنجاح تام من قواعد البيانات.', 'success');
+                document.getElementById('adminCodeModuleShell').style.display = 'none';
             }
         }
 
-        async function toggleUserStatus(id, isBlock) {
-            await db.collection('users').doc(id).update({ blocked: isBlock, deviceFingerprint: isBlock ? "blocked" : "" });
-            showCenterAlert('حالة الحساب', 'تم تطبيق تحديث حظر وقفل الحساب على السيرفر بنجاح.', 'success');
+        async function updateStudentBlockStatus(id, shouldBlock) {
+            await db.collection('users').doc(id).update({ blocked: shouldBlock, deviceFingerprint: shouldBlock ? "blocked" : "" });
+            spawnCentralPopup('المزامنة الأمنية', 'تم تحديث أذونات الحساب وتعديل حالته على السيرفر بنجاح.', 'success');
         }
 
-        async function adminUpdateUserPassword(id, newPass) {
-            if(!newPass.trim()) return showCenterAlert('خطأ رمز', 'لا يمكن جعل كلمة المرور الخاصة بالطالب فارغة.', 'warning');
-            await db.collection('users').doc(id).update({ password: newPass.trim() });
-            showCenterAlert('تم التغيير', 'تم تغيير كلمة مرور حساب الطالب بنجاح ومزامنتها فوياً.', 'success');
+        async function adminUpdateUserPasswordDirectly(id, val) {
+            if(!val.trim()) return spawnCentralPopup('بيان خاطئ', 'لا يمكن تعيين كلمة مرور فارغة لملفات الطلاب.', 'warning');
+            await db.collection('users').doc(id).update({ password: val.trim() });
+            spawnCentralPopup('تم التبديل للرمز', 'تغيرت كلمة المرور الخاصة بالطالب بنجاح ومزامنتها فوياً.', 'success');
         }
 
-        async function adminResetAllDevices() {
-            if(confirm('هل أنت متأكد من مسح وإعادة تصفير بصمة أجهزة كل الطلاب حالياً بالمنصة؟')) {
+        async function adminResetAllStudentDevices() {
+            if(confirm('هل تود إعادة ضبط وبدء بصمة أجهزة كافة الطلاب لمساعدتهم على تحديث هواتفهم؟')) {
                 try {
                     const snap = await db.collection('users').where('role', '==', 'user').get();
                     const batch = db.batch();
                     snap.forEach(doc => { batch.update(db.collection('users').doc(doc.id), { deviceFingerprint: "" }); });
                     await batch.commit();
-                    showCenterAlert('اكتمل التصفير', 'تم تصفير وبدء حماية كافة أجهزة الطلاب بنجاح مطلق!', 'success');
-                } catch(e) { showCenterAlert('خطأ سيرفر', e.message, 'error'); }
+                    spawnCentralPopup('اكتملت العملية', 'تم تصفير وبدء حماية كافة أجهزة الطلاب بنجاح مطلق وبدقة كاملة!', 'success');
+                } catch(e) { spawnCentralPopup('خطأ تعيين', e.message, 'error'); }
             }
         }
 
-        function selectVideoForCodesTracking(id, title) {
-            adminSelectedVideoIdForCodes = id; 
-            document.getElementById('codesSectionBlock').style.display = 'block';
-            document.getElementById('targetCodeTitle').textContent = title;
+        function loadCodesModuleForTargetVideo(id, title) {
+            adminFocusedVideoIdForCodes = id;
+            document.getElementById('adminCodeModuleShell').style.display = 'block';
+            document.getElementById('lblSelectedCodeTitle').textContent = title;
 
             db.collection('videos').doc(id).collection('codes').orderBy('createdAt', 'desc').onSnapshot(snap => {
-                const grid = document.getElementById('admCodesGrid'); grid.innerHTML = '';
-                if(snap.empty) { grid.innerHTML = '<p style="color:var(--text-secondary); padding:10px;">لا يوجد أكواد مخصصة لهذه المادة حالياً.</p>'; return; }
+                const targetBox = document.getElementById('divAdminCodesGrid'); targetBox.innerHTML = '';
+                if(snap.empty) { targetBox.innerHTML = '<p style="color:var(--text-muted); padding:10px;">لا يوجد حالياً أي أكواد شحن نشطة لهذا الدرس.</p>'; return; }
 
                 snap.forEach(doc => {
-                    const c = doc.data();
-                    const d = document.createElement('div');
-                    if(c.usedBy) {
-                        d.className = 'live-code-badge code-used-up';
-                        d.innerHTML = `${c.code}<br><small style="font-size:0.65rem; display:block; text-overflow:ellipsis; overflow:hidden;">${c.usedByName}</small>`;
+                    const data = doc.data();
+                    const item = document.createElement('div');
+                    if(data.usedBy) {
+                        item.className = 'code-pill-item code-consumed';
+                        item.innerHTML = `${data.code}<br><small style="font-size:0.65rem; display:block; overflow:hidden; text-overflow:ellipsis;">${data.usedByName}</small>`;
                     } else {
-                        d.className = 'live-code-badge code-avail';
-                        d.innerHTML = `${c.code}`;
+                        item.className = 'code-pill-item code-ready';
+                        item.innerHTML = `${data.code}`;
                     }
-                    grid.appendChild(d);
+                    targetBox.appendChild(item);
                 });
             });
         }
 
-        async function adminGenerateMassCodes() {
-            if(!adminSelectedVideoIdForCodes) return;
+        async function adminGenerateMassCodesBatch() {
+            if(!adminFocusedVideoIdForCodes) return;
             const batch = db.batch();
-            const ref = db.collection('videos').doc(adminSelectedVideoIdForCodes).collection('codes');
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            const ref = db.collection('videos').doc(adminFocusedVideoIdForCodes).collection('codes');
+            const pool = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             
             for(let i=0; i<50; i++) {
-                let code = ''; for(let c=0; c<8; c++) code += chars.charAt(Math.floor(Math.random() * chars.length));
-                batch.set(ref.doc(), { code: code, usedBy: null, usedByName: null, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                let codeStr = ''; for(let c=0; c<8; c++) codeStr += pool.charAt(Math.floor(Math.random() * pool.length));
+                batch.set(ref.doc(), { code: codeStr, usedBy: null, usedByName: null, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
             }
-            await batch.commit(); 
-            showCenterAlert('توليد ناجح', 'تم توليد ورفع 50 كود شحن حماية جديدة بنجاح تام للمحاضرة.', 'success');
+            await batch.commit();
+            spawnCentralPopup('توليد أكواد', 'تم بنجاح صياغة ورفع 50 كود تفعيل فوري ومحمي لقاعدة البيانات الخاصة بالدرس.', 'success');
         }
 
-        async function adminGenerateCustomCode() {
-            if(!adminSelectedVideoIdForCodes) return;
-            const text = prompt('اكتب نص أو اسم كود التفعيل المخصص الذي تريده:');
+        async function adminCreateSingleCustomCode() {
+            if(!adminFocusedVideoIdForCodes) return;
+            const text = prompt('ضع الاسم أو العبارة الفريدة التي تريد جعلها كوداً مخصصاً:');
             if(!text) return;
-            const formatted = text.trim().toUpperCase();
+            const clean = text.trim().toUpperCase();
 
-            await db.collection('videos').doc(adminSelectedVideoIdForCodes).collection('codes').add({
-                code: formatted, usedBy: null, usedByName: null, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            await db.collection('videos').doc(adminFocusedVideoIdForCodes).collection('codes').add({
+                code: clean, usedBy: null, usedByName: null, createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            showCenterAlert('كود مخصص جديد', `تم إطلاق كود خاص بنجاح بالمستندات باسم: ${formatted}`, 'success');
+            spawnCentralPopup('كود يدوي مخصص', `تم إدراج الكود المخصص بنجاح تحت مسمى: ${clean}`, 'success');
         }
 
-        // تشغيل المنصة والتحقق من حفظ الحسابات وجلسات الكاش بالجهاز فورياً
+        // بدء الإقلاع البرمجي وتحميل الجلسات المخزنة محلياً عند جهوزية المتصفح
         window.addEventListener('DOMContentLoaded', () => {
-            setupKeyboardEngine();
-            const cached = localStorage.getItem('refaiSession');
-            if(cached) { sessionUser = JSON.parse(cached); initSession(); }
-            else { document.getElementById('authPage').style.display = 'flex'; switchAuth('login'); }
+            runKeyboardNavigationEngine();
+            const storedToken = localStorage.getItem('refaiSecureSessionToken');
+            if(storedToken) { activeUserSession = JSON.parse(storedToken); bootstrapSession(); }
+            else { document.getElementById('authGateway').style.display = 'flex'; toggleGatewayView('login'); }
 
             db.collection('settings').doc('site').onSnapshot(snap => {
-                if(snap.exists && snap.data().whatsappLink) document.getElementById('waLink').href = snap.data().whatsappLink;
-                else document.getElementById('waLink').href = "https://wa.me/963930000000";
+                if(snap.exists && snap.data().whatsappLink) document.getElementById('floatingWa').href = snap.data().whatsappLink;
+                else document.getElementById('floatingWa').href = "https://wa.me/963930000000";
             });
         });
     </script>
