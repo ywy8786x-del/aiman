@@ -3,749 +3,778 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">INFINITY MATH SYSTEM PRO</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <title>منصة الأستاذ أيمن الرفاعي التعليمية - الإمبراطورية v3.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-        // التصحيح الأهم: استيراد Firestore من المسار الصحيح
-        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5a4bd1;
+            --accent: #00cec9;
+            --bg: #07070c;
+            --surface: #111122;
+            --surface-light: #1a1a30;
+            --text: #ffffff;
+            --text-secondary: #a2a2bd;
+            --danger: #ff4757;
+            --success: #2ed573;
+            --warning: #ffa502;
+            --radius: 16px;
+            --shadow: 0 10px 40px rgba(0,0,0,0.6);
+            --border: rgba(255,255,255,0.07);
+            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 5% 5%, rgba(108,92,231,0.12) 0%, transparent 50%),
+                              radial-gradient(circle at 95% 95%, rgba(0,206,201,0.08) 0%, transparent 50%);
+        }
 
+        input, select, textarea {
+            width: 100%; padding: 14px 20px; border-radius: 25px; margin: 8px 0;
+            border: 1px solid var(--border); background: var(--surface-light);
+            color: white; font-family: 'Tajawal'; font-size: 0.95rem; transition: var(--transition);
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 10px rgba(0,206,201,0.2); }
+        textarea { border-radius: 15px; resize: none; }
+
+        .btn {
+            padding: 12px 25px; border-radius: 25px; font-weight: 600; border: none;
+            cursor: pointer; transition: var(--transition); font-family: 'Tajawal';
+            display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; justify-content: center;
+        }
+        .btn-primary { background: linear-gradient(45deg, var(--primary), var(--accent)); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(108,92,231,0.4); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-outline:hover { background: var(--surface-light); border-color: var(--text-secondary); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { box-shadow: 0 5px 15px rgba(255,71,87,0.3); }
+        .btn-sm { padding: 6px 14px; font-size: 0.8rem; border-radius: 20px; }
+
+        /* ================== الـ Auth ================== */
+        .auth-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        .auth-card {
+            background: rgba(17, 17, 34, 0.85); backdrop-filter: blur(20px);
+            padding: 45px 40px; border-radius: 24px; width: 100%; max-width: 480px;
+            border: 1px solid rgba(255,255,255,0.08); box-shadow: var(--shadow);
+        }
+        .auth-card h2 {
+            text-align: center; margin-bottom: 10px; font-size: 2rem; font-weight: 900;
+            background: linear-gradient(45deg, #ffffff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .auth-subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 30px; font-size: 0.9rem; }
+
+        /* ================== هيكلية التطبيق الرئيسي ================== */
+        .sidebar {
+            position: fixed; top: 0; right: 0; width: 280px; height: 100vh;
+            background: var(--surface); border-left: 1px solid var(--border);
+            padding: 30px 20px; display: flex; flex-direction: column; z-index: 1000;
+        }
+        .sidebar-logo {
+            font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 40px;
+            background: linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-nav a {
+            display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: var(--radius);
+            color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: var(--transition);
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(108,92,231,0.3); }
+        .whatsapp-btn { background: #25D366; color: white; width: 100%; text-decoration: none; border-radius: var(--radius); padding: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+        .main-content { margin-right: 280px; padding: 40px; min-height: 100vh; }
+        
+        .header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;
+            background: var(--surface); padding: 20px 30px; border-radius: var(--radius); border: 1px solid var(--border);
+        }
+        .search-container { position: relative; flex: 1; max-width: 400px; }
+        .search-container input { margin: 0; padding: 12px 45px 12px 20px; border-radius: 25px; }
+        .search-container i { position: absolute; top: 50%; right: 18px; transform: translateY(-50%); color: var(--text-secondary); }
+        .user-panel { display: flex; align-items: center; gap: 15px; }
+        .avatar { width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+        /* الكروت والشبكات */
+        .lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-top: 20px; }
+        .lesson-card {
+            background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); transition: var(--transition); cursor: pointer;
+        }
+        .lesson-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: var(--shadow); }
+        .lesson-card .thumb {
+            height: 160px; background: linear-gradient(135deg, #1a1a30, #111122); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--accent); position: relative;
+        }
+        .lesson-card .info { padding: 20px; }
+        .lesson-card .title { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
+        .lesson-card .meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-secondary); }
+        
+        .badge { padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
+        .badge-active { background: rgba(46,213,115,0.15); color: var(--success); }
+        .badge-lock { background: rgba(255,71,87,0.15); color: var(--danger); }
+
+        /* ================== لوحة الإدارة الضخمة جداً ================== */
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--surface); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); text-align: center; }
+        .stat-card h3 { font-size: 2rem; color: var(--accent); margin-top: 5px; }
+        .admin-sections { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .admin-block { background: var(--surface); padding: 30px; border-radius: var(--radius); border: 1px solid var(--border); }
+        .admin-block h3 { margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+        
+        .table-responsive { overflow-x: auto; margin-top: 15px; border-radius: 10px; border: 1px solid var(--border); }
+        .admin-table { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.9rem; }
+        .admin-table th, .admin-table td { padding: 14px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        .admin-table th { background: var(--surface-light); color: var(--text); }
+
+        /* عرض الأكواد التفاعلي داخل لوحة التحكم */
+        .live-codes-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 15px; max-height: 250px; overflow-y: auto; padding-left: 5px; }
+        .live-code-badge { padding: 8px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.05); }
+        .code-avail { background: rgba(46,213,115,0.1); color: var(--success); border-color: rgba(46,213,115,0.2); }
+        .code-used-up { background: rgba(255,71,87,0.1); color: var(--danger); border-color: rgba(255,71,87,0.2); text-decoration: line-through; }
+
+        /* النوافذ المنبثقة والمشغل */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal { background: var(--surface); border-radius: var(--radius); padding: 35px; width: 90%; max-width: 550px; border: 1px solid var(--border); position: relative; }
+        .close-modal { position: absolute; top: 20px; left: 20px; background: none; border: none; color: white; font-size: 1.3rem; cursor: pointer; }
+
+        .video-player-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #000; z-index: 3000; display: flex; align-items: center; justify-content: center; }
+        .video-wrap { width: 90%; max-width: 950px; position: relative; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+        .video-wrap video, .video-wrap iframe { width: 100%; height: 530px; border: none; display: block; background: #000; }
+        
+        /* نظام العلامة المائية الجديد المطور */
+        .video-watermark { 
+            position: absolute; 
+            color: rgba(255, 255, 255, 0.18); 
+            font-size: 0.85rem; 
+            pointer-events: none; 
+            background: rgba(0, 0, 0, 0.4); 
+            padding: 5px 12px; 
+            border-radius: 6px; 
+            z-index: 3100; 
+            font-weight: 600; 
+            direction: ltr;
+            bottom: 15px;
+            left: 15px;
+            border: 1px solid rgba(255,255,255,0.03);
+            transition: all 0.5s ease-in-out;
+        }
+        .video-watermark.hint-center {
+            bottom: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, 50%) scale(1.3);
+            color: rgba(255, 255, 255, 0.45);
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 20px rgba(0,0,0,0.6);
+        }
+
+        .toast-msg { position: fixed; bottom: 30px; left: 30px; padding: 14px 28px; border-radius: 30px; color: white; font-weight: 600; z-index: 9999; display: none; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div id="toast" class="toast-msg"></div>
+
+    <!-- ================== واجهات الحسابات والدخول ================== -->
+    <div id="authPage" class="auth-wrapper">
+        <div class="auth-card" id="loginBox">
+            <h2>مرحباً بك مجدداً</h2>
+            <div class="auth-subtitle">المنصة التعليمية الرسمية للأستاذ أيمن الرفاعي</div>
+            <input type="text" id="loginUser" placeholder="البريد الإلكتروني أو رقم الهاتف">
+            <input type="password" id="loginPass" placeholder="كلمة المرور">
+            <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="handleLogin()">تسجيل دخول آمن <i class="fas fa-shield-alt"></i></button>
+            <p style="text-align:center; margin-top:20px; color:var(--text-secondary); font-size:0.9rem;">طالب جديد؟ <span style="color:var(--accent); cursor:pointer; font-weight:700;" onclick="switchAuth('reg')">إنشاء حساب فوري</span></p>
+        </div>
+
+        <div class="auth-card" id="regBox" style="display:none;">
+            <h2>توثيق حساب طالب</h2>
+            <div class="auth-subtitle">يرجى إدخال البيانات الشخصية بدقة كاملة</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <input type="text" id="rFirst" placeholder="الاسم الأول">
+                <input type="text" id="rFather" placeholder="اسم الأب">
+                <input type="text" id="rGrand" placeholder="اسم الجد">
+                <input type="text" id="rFamily" placeholder="العائلة">
+            </div>
+            <select id="rCountry">
+                <option value="+963" selected>سوريا 🇸🇾 (+963)</option>
+                <option value="+20">مصر 🇪🇬 (+20)</option>
+                <option value="+966">السعودية 🇸🇦 (+966)</option>
+                <option value="+962">الأردن 🇯🇴 (+962)</option>
+            </select>
+            <input type="tel" id="rPhone" placeholder="رقم الهاتف">
+            <input type="email" id="rEmail" placeholder="البريد الإلكتروني (Gmail)">
+            <input type="text" id="rCity" placeholder="المحافظة / المدينة">
+            <input type="password" id="rPass" placeholder="كلمة مرور قوية">
+            <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="handleRegister()">توثيق وإنشاء الحساب</button>
+            <p style="text-align:center; margin-top:20px; color:var(--text-secondary); font-size:0.9rem;">لديك حساب بالفعل؟ <span style="color:var(--accent); cursor:pointer; font-weight:700;" onclick="switchAuth('login')">تسجيل دخول</span></p>
+        </div>
+    </div>
+
+    <!-- ================== واجهة المنصة والتطبيق الرئيسي ================== -->
+    <div id="appPage" style="display:none;">
+        <div class="sidebar">
+            <div class="sidebar-logo">📘 منصة الرفاعي</div>
+            <div class="sidebar-nav">
+                <a href="#" class="active" id="navHome" onclick="changePage('home')"><i class="fas fa-graduation-cap"></i> أرشيف المحاضرات</a>
+                <a href="#" id="navMyLessons" onclick="changePage('mylessons')"><i class="fas fa-play-circle"></i> محاضراتي المفتوحة</a>
+                <a href="#" id="navAdmin" style="display:none;" onclick="changePage('admin')"><i class="fas fa-tools"></i> لوحة الإمبراطور الإدارية</a>
+            </div>
+            <div class="sidebar-footer">
+                <a id="waLink" class="whatsapp-btn" href="#" target="_blank"><i class="fab fa-whatsapp"></i> طلب أكواد تفعيل</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchBar" placeholder="ابحث عن محاضرة معينة..." oninput="triggerSearch()">
+                </div>
+                <div class="user-panel">
+                    <div class="avatar" id="userInitial">أ</div>
+                    <div>
+                        <div id="uNameDisplay" style="font-weight:700;">...</div>
+                        <div id="uRoleDisplay" style="font-size:0.75rem; color:var(--accent);">طالب</div>
+                    </div>
+                    <button class="btn btn-outline btn-sm" style="margin-right:15px;" onclick="userLogout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
+                </div>
+            </div>
+
+            <div id="pageContent"></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+    <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCFHLZgG6-SBhYh5gq83WmZJktDDngKoRU",
             authDomain: "aiman-6f132.firebaseapp.com",
             projectId: "aiman-6f132",
-            // اسم الحاوية كما هو موجود في مشروعك على Firebase (لا تغيّره)
             storageBucket: "aiman-6f132.firebasestorage.app",
             messagingSenderId: "1089902227369",
             appId: "1:1089902227369:web:9d2bbc7663381b1acf9eb8",
             measurementId: "G-NBWCHGZ5FK"
         };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-        const app = initializeApp(firebaseConfig);
-        const storage = getStorage(app);
-        const db = getFirestore(app);
+        let sessionUser = null;
+        let globalVideos = [];
+        let userUnlockedIds = [];
+        let currentActiveView = 'home';
+        let adminSelectedVideoIdForCodes = ''; 
 
-        window.firebaseStorage = storage;
-        window.firebaseDB = db;
-        window.storageRef = ref;
-        window.uploadBytes = uploadBytes;
-        window.getDownloadURL = getDownloadURL;
-        window.deleteObject = deleteObject;
-        window.firestoreCollection = collection;
-        window.firestoreGetDocs = getDocs;
-        window.firestoreAddDoc = addDoc;
-        window.firestoreDeleteDoc = deleteDoc;
-        window.firestoreDoc = doc;
-        window.firestoreSetDoc = setDoc;
-        window.firestoreGetDoc = getDoc;
-        window.firestoreUpdateDoc = updateDoc;
-    </script>
-    <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%);
-            color: #f8fafc;
-            overflow-x: hidden;
+        function msgToast(text, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = text;
+            toast.style.background = type === 'error' ? 'var(--danger)' : type === 'warning' ? 'var(--warning)' : 'var(--success)';
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 4000);
         }
-        .cyber-panel {
-            background: rgba(15, 23, 42, 0.85);
-            border: 2px solid var(--theme-color, rgba(56, 189, 248, 0.25));
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+
+        function switchAuth(target) {
+            document.getElementById('loginBox').style.display = target === 'login' ? 'block' : 'none';
+            document.getElementById('regBox').style.display = target === 'reg' ? 'block' : 'none';
         }
-        .cyber-modal { background: #0b1329; border: 2px solid #a855f7; box-shadow: 0 0 30px rgba(168, 85, 247, 0.5); }
-        .cyber-modal-danger { background: #0f0507; border: 2px solid #f43f5e; box-shadow: 0 0 30px rgba(244, 63, 94, 0.4); }
-        .cyber-modal-success { background: #04120c; border: 2px solid #10b981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); }
-        .cyber-modal-info { background: #021124; border: 2px solid #38bdf8; box-shadow: 0 0 30px rgba(56, 189, 248, 0.4); }
-        .neon-text { text-shadow: 0 0 8px var(--theme-color, rgba(56, 189, 248, 0.5)); }
-        video { border-radius: 16px; background: #000; width: 100%; height: 100%; }
-        @keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .animate-scale-up { animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        .search-suggestions { background: #0f172a; border: 1px solid rgba(56, 189, 248, 0.3); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .error-msg { color: #f43f5e; font-size: 11px; margin-top: 4px; display: none; }
-    </style>
-</head>
-<body class="min-h-screen pb-12">
 
-    <div class="fixed inset-0 pointer-events-none opacity-10 bg-[linear-gradient(to_right,#38bdf8_1px,transparent_1px),linear-gradient(to_bottom,#38bdf8_1px,transparent_1px)] bg-[size:30px_30px]"></div>
-    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity"></div>
+        function buildFingerprint() {
+            return btoa(navigator.userAgent + screen.width).substring(0, 25);
+        }
 
-    <!-- نافذة الإشعارات -->
-    <div id="cyberToastModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[100] p-4">
-        <div id="cyberToastCard" class="w-full max-w-md p-6 rounded-3xl text-center animate-scale-up">
-            <div id="cyberToastIconContainer" class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i id="cyberToastIcon" class="text-xl"></i>
-            </div>
-            <h3 id="cyberToastTitle" class="text-lg font-bold text-white mb-2">إشعار النظام</h3>
-            <p id="cyberToastMsg" class="text-xs text-slate-300 mb-6 leading-relaxed"></p>
-            <button onclick="closeCyberToast()" class="w-full py-2.5 rounded-xl text-xs font-bold text-white transition-all" id="cyberToastBtn">تأكيد وقبول</button>
-        </div>
-    </div>
+        // ======================= نظام الأمان والدخول الفوري =======================
+        async function handleLogin() {
+            const userInp = document.getElementById('loginUser').value.trim();
+            const passInp = document.getElementById('loginPass').value;
 
-    <!-- واجهة تسجيل الدخول -->
-    <div id="loginOverlay" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4 overflow-y-auto hidden">
-        <div class="cyber-panel w-full max-w-md p-6 my-8 rounded-3xl text-center animate-scale-up">
-            <div class="flex border-b border-slate-800 mb-6 gap-2">
-                <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 pb-3 text-sm font-bold text-sky-400 border-b-2 border-sky-400 transition-all">تسجيل الدخول</button>
-                <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 pb-3 text-sm font-bold text-slate-400 border-b-2 border-transparent transition-all">إنشاء حساب جديد</button>
-            </div>
-            <div class="w-14 h-14 bg-sky-500/10 border border-sky-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i id="authIcon" class="fas fa-user-lock text-sky-400 text-xl"></i>
-            </div>
-            <h2 id="authTitle" class="text-lg font-bold text-white mb-1">مرحباً بك في المنصة الرقمية</h2>
-            <p id="authDesc" class="text-xs text-slate-400 mb-6">الرجاء إدخال بيانات الاعتماد الموثوقة للوصول للمحاضرات</p>
-            <div id="loginFormSection" class="space-y-4 text-right">
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">البريد الإلكتروني أو رقم الهاتف</label>
-                    <input type="text" id="loginUserKey" placeholder="اكتب البريد أو رقم الهاتف هنا" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white font-mono">
-                    <div id="err_loginUserKey" class="error-msg"><i class="fas fa-exclamation-circle ml-1"></i>هذا الحقل مطلوب.</div>
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">كلمة المرور</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white font-mono">
-                    <div id="err_loginPassword" class="error-msg"><i class="fas fa-exclamation-circle ml-1"></i>كلمة المرور غير صحيحة أو الحقل فارغ.</div>
-                </div>
-                <button onclick="handleStudentLogin()" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-600 to-blue-600 text-white font-bold rounded-xl text-sm hover:from-sky-500 hover:to-blue-500 transition shadow-lg shadow-sky-600/20">اتصال آمن وضبط الهوية</button>
-            </div>
-            <div id="registerFormSection" class="space-y-3 text-right hidden">
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">الاسم الرباعي الحقيقي (باللغة العربية)</label>
-                    <input type="text" id="studentFullName" placeholder="اكتب اسمك الرباعي الصريح هنا" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white">
-                    <div id="err_studentFullName" class="error-msg"><i class="fas fa-exclamation-circle ml-1"></i>يجب كتابة الاسم الرباعي كاملاً باللغة العربية.</div>
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">الدولة ورقم الهاتف</label>
-                    <div class="flex gap-2" dir="ltr">
-                        <select id="countryCode" class="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
-                            <option value="+963">🇸🇾 SY (+963)</option>
-                            <option value="+966">🇸🇦 SA (+966)</option>
-                            <option value="+971">🇦🇪 AE (+971)</option>
-                            <option value="+962">🇯🇴 JO (+962)</option>
-                            <option value="+20">🇪🇬 EG (+20)</option>
-                        </select>
-                        <input type="tel" id="studentPhone" placeholder="09xxxxxxxx" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white text-left font-mono">
+            if (!userInp || !passInp) return msgToast('الرجاء تعبئة كافة الحقول', 'error');
+
+            if (userInp === 'admin12344321@1x' && passInp === 'admin12344321@1x') {
+                sessionUser = { uid: 'SUPER_ADMIN', fullName: 'الأستاذ أيمن الرفاعي', firstName: 'أيمن', phone: 'الإدارة العامة', role: 'admin' };
+                localStorage.setItem('refaiSession', JSON.stringify(sessionUser));
+                initSession();
+                return;
+            }
+
+            try {
+                let snap = await db.collection('users').where('email', '==', userInp).limit(1).get();
+                if (snap.empty) snap = await db.collection('users').where('phone', '==', userInp).limit(1).get();
+                if (snap.empty) return msgToast('بيانات الحساب غير مسجلة بالمنصة', 'error');
+
+                const docRef = snap.docs[0];
+                const data = docRef.data();
+
+                if (data.password !== passInp) return msgToast('كلمة المرور غير صحيحة', 'error');
+                if (data.blocked) return msgToast('هذا الحساب محظور حالياً لمخالفة شروط المنصة الحماية', 'error');
+
+                const print = buildFingerprint();
+                if (data.deviceFingerprint && data.deviceFingerprint !== print && data.role !== 'admin') {
+                    await db.collection('users').doc(docRef.id).update({ blocked: true, securityAlert: "تغيير بصمة الجهاز المعتمدة" });
+                    return msgToast('🔴 تم قفل الحساب تلقائياً لحمايته من التوزيع والمشاركة!', 'error');
+                }
+
+                await db.collection('users').doc(docRef.id).update({ deviceFingerprint: print, lastLogin: firebase.firestore.FieldValue.serverTimestamp() });
+                sessionUser = { uid: docRef.id, ...data, deviceFingerprint: print };
+                localStorage.setItem('refaiSession', JSON.stringify(sessionUser));
+                initSession();
+            } catch (err) { msgToast(err.message, 'error'); }
+        }
+
+        async function handleRegister() {
+            const first = document.getElementById('rFirst').value.trim();
+            const father = document.getElementById('rFather').value.trim();
+            const grand = document.getElementById('rGrand').value.trim();
+            const family = document.getElementById('rFamily').value.trim();
+            const phone = document.getElementById('rCountry').value + document.getElementById('rPhone').value.trim();
+            const email = document.getElementById('rEmail').value.trim();
+            const city = document.getElementById('rCity').value.trim();
+            const pass = document.getElementById('rPass').value;
+
+            if(!first || !phone || !email || !pass) return msgToast('يرجى ملء الحقول الأساسية لتوثيق الطالب', 'error');
+
+            try {
+                const check = await db.collection('users').where('email', '==', email).get();
+                if(!check.empty) return msgToast('البريد الإلكتروني مسجل مسبقاً', 'error');
+                
+                const checkPhone = await db.collection('users').where('phone', '==', phone).get();
+                if(!checkPhone.empty) return msgToast('رقم الهاتف هذا مسجل بحساب آخر مسبقاً', 'error');
+
+                const print = buildFingerprint();
+                const newUser = {
+                    firstName: first, 
+                    fullName: `${first} ${father} ${grand} ${family}`, 
+                    email: email, 
+                    phone: phone,
+                    city: city, 
+                    password: pass, 
+                    role: 'user', 
+                    deviceFingerprint: print, 
+                    blocked: false, 
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                const docRef = await db.collection('users').add(newUser);
+                
+                // تسجيل الدخول الفوري والمباشر دون الحاجة لكتابة البيانات مرة أخرى
+                sessionUser = { uid: docRef.id, ...newUser };
+                localStorage.setItem('refaiSession', JSON.stringify(sessionUser));
+                
+                msgToast('تم توثيق الحساب وتسجيل الدخول تلقائياً بنجاح!', 'success');
+                initSession();
+            } catch(e) { msgToast(e.message, 'error'); }
+        }
+
+        function userLogout() { localStorage.removeItem('refaiSession'); location.reload(); }
+
+        function initSession() {
+            document.getElementById('authPage').style.display = 'none';
+            document.getElementById('appPage').style.display = 'block';
+            document.getElementById('userInitial').textContent = sessionUser.firstName ? sessionUser.firstName.charAt(0) : 'أ';
+            document.getElementById('uNameDisplay').textContent = sessionUser.fullName;
+            document.getElementById('uRoleDisplay').textContent = sessionUser.role === 'admin' ? 'الإمبراطور المشرف المالك' : 'طالب رسمي مفعّل';
+            if(sessionUser.role === 'admin') document.getElementById('navAdmin').style.display = 'block';
+            startRealtimeListeners();
+            changePage('home');
+        }
+
+        function startRealtimeListeners() {
+            // تم إصلاح الترتيب لضمان ثبات الفيديوهات المرفوعة حديثاً فوراً دون حدوث فجوة زمنية تسبب اختفائها
+            db.collection('videos').onSnapshot(snap => {
+                globalVideos = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                // ترتيب مصفوفة البيانات محلياً لتجنب مشاكل فجوات التوقيت على السيرفر
+                globalVideos.sort((a, b) => {
+                    const timeA = a.createdAt ? a.createdAt.toMillis() : Date.now();
+                    const timeB = b.createdAt ? b.createdAt.toMillis() : Date.now();
+                    return timeB - timeA;
+                });
+
+                if(sessionUser.role === 'admin') userUnlockedIds = globalVideos.map(v => v.id);
+                refreshCurrentView();
+            }, err => { console.error("Video stream error:", err); });
+
+            if(sessionUser.role !== 'admin') {
+                db.collection('activations').where('userId', '==', sessionUser.uid).onSnapshot(snap => {
+                    userUnlockedIds = snap.docs.map(doc => doc.data().videoId);
+                    refreshCurrentView();
+                });
+            }
+        }
+
+        function refreshCurrentView() {
+            if(currentActiveView === 'home') buildHomeView();
+            else if(currentActiveView === 'mylessons') buildMyLessonsView();
+            else if(currentActiveView === 'admin') buildAdminDashboard();
+        }
+
+        function changePage(target) {
+            currentActiveView = target;
+            document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+            if(target === 'home') { document.getElementById('navHome').classList.add('active'); buildHomeView(); }
+            else if(target === 'mylessons') { document.getElementById('navMyLessons').classList.add('active'); buildMyLessonsView(); }
+            else if(target === 'admin') { document.getElementById('navAdmin').classList.add('active'); buildAdminDashboard(); }
+        }
+
+        function buildHomeView() {
+            document.getElementById('pageContent').innerHTML = `<h2 style="margin-bottom:20px; font-weight:800;">📚 أرشيف المحاضرات العامة</h2><div class="lessons-grid" id="mainGrid"></div>`;
+            renderCards(globalVideos, 'mainGrid');
+        }
+
+        function buildMyLessonsView() {
+            const list = globalVideos.filter(v => userUnlockedIds.includes(v.id));
+            document.getElementById('pageContent').innerHTML = `<h2 style="margin-bottom:20px; font-weight:800;">🎥 محاضراتي التي قمت بتفعيلها للكود (${list.length})</h2><div class="lessons-grid" id="myGrid"></div>`;
+            if(list.length === 0) document.getElementById('myGrid').innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--text-secondary); padding:40px;">لا يوجد دروس مفعّلة حالياً بحسابك.</p>`;
+            else renderCards(list, 'myGrid');
+        }
+
+        function renderCards(list, elementId) {
+            const target = document.getElementById(elementId);
+            if(!target) return; target.innerHTML = '';
+            list.forEach(v => {
+                const opened = userUnlockedIds.includes(v.id);
+                const el = document.createElement('div');
+                el.className = 'lesson-card';
+                el.innerHTML = `
+                    <div class="thumb"><i class="fas ${opened ? 'fa-play-circle' : 'fa-lock'}" style="${opened ? 'color:var(--accent)' : 'color:var(--danger)'}"></i></div>
+                    <div class="info">
+                        <div class="title">${v.title}</div>
+                        <div class="meta"><span><i class="far fa-play-circle"></i> بث محمي</span><span class="badge ${opened ? 'badge-active' : 'badge-lock'}">${opened ? 'مفتوح للدراسة' : 'مغلق'}</span></div>
                     </div>
-                    <div id="err_studentPhone" class="error-msg text-right" dir="rtl"><i class="fas fa-exclamation-circle ml-1"></i>رقم الهاتف غير صحيح أو غير متطابق.</div>
+                `;
+                el.onclick = () => { if(opened) launchSecureStream(v); else displayActivationModal(v); };
+                target.appendChild(el);
+            });
+        }
+
+        function triggerSearch() {
+            const q = document.getElementById('searchBar').value.toLowerCase().trim();
+            const fil = globalVideos.filter(v => v.title.toLowerCase().includes(q));
+            renderCards(fil, currentActiveView === 'home' ? 'mainGrid' : 'myGrid');
+        }
+
+        function displayActivationModal(video) {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay active';
+            overlay.innerHTML = `
+                <div class="modal">
+                    <button class="close-modal" onclick="this.parentElement.parentElement.remove()">✖</button>
+                    <h2>🔑 تفعيل كود المحاضرة</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:15px;">اكتب كود التفعيل المخصص لـ: <b>${video.title}</b></p>
+                    <input type="text" id="cdInp" placeholder="أدخل الكود هنا بشكل صحيح..." style="text-transform:uppercase;">
+                    <button class="btn btn-primary" style="width:100%; margin-top:10px;" id="actBtn">تأكيد التفعيل الفوري</button>
                 </div>
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">البريد الإلكتروني</label>
-                    <input type="email" id="studentEmail" placeholder="username@example.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white text-left font-mono">
-                    <div id="err_studentEmail" class="error-msg"><i class="fas fa-exclamation-circle ml-1"></i>يرجى إدخال بريد إلكتروني صالح ومميز.</div>
+            `;
+            document.body.appendChild(overlay);
+            overlay.querySelector('#actBtn').onclick = async () => {
+                const code = overlay.querySelector('#cdInp').value.trim().toUpperCase();
+                if(!code) return msgToast('الرجاء كتابة الكود', 'warning');
+                try {
+                    const snap = await db.collection('videos').doc(video.id).collection('codes').where('code', '==', code).limit(1).get();
+                    if(snap.empty) return msgToast('كود التفعيل خاطئ أو مخصص لمادة أخرى!', 'error');
+                    
+                    const cDoc = snap.docs[0];
+                    if(cDoc.data().usedBy) return msgToast('هذا الكود تم استهلاكه سابقاً من طالب آخر!', 'error');
+
+                    await db.collection('videos').doc(video.id).collection('codes').doc(cDoc.id).update({
+                        usedBy: sessionUser.uid, usedByName: sessionUser.fullName, usedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    await db.collection('activations').add({ userId: sessionUser.uid, videoId: video.id, code: code });
+                    overlay.remove();
+                    msgToast('تم تفعيل المحاضرة بنجاح مطلق!', 'success');
+                } catch(e) { msgToast(e.message, 'error'); }
+            };
+        }
+
+        function launchSecureStream(video) {
+            const p = document.createElement('div');
+            p.className = 'video-player-overlay';
+            
+            let playerHtml = '';
+            if(video.type === 'embed') {
+                playerHtml = `<iframe src="${video.storageURL}" allowfullscreen allow="autoplay; encrypted-media" sandbox="allow-scripts allow-same-origin" oncontextmenu="return false;"></iframe>`;
+            } else {
+                playerHtml = `<video src="${video.storageURL}" controls autoplay controlsList="nodownload" oncontextmenu="return false;" disablePictureInPicture></video>`;
+            }
+
+            p.innerHTML = `
+                <div style="position:absolute; top:20px; left:20px; z-index:3200;"><button class="btn btn-danger btn-sm" onclick="clearInterval(window.wmInterval); this.parentElement.parentElement.remove()">✖ إغلاق البث</button></div>
+                <div class="video-wrap" oncontextmenu="return false;">
+                    ${playerHtml}
+                    <div class="video-watermark" id="vWm">ID: ${sessionUser.fullName} | ${sessionUser.phone}</div>
                 </div>
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">كلمة المرور المحمية</label>
-                    <input type="password" id="studentPassword" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white text-left font-mono">
-                    <div id="err_studentPassword" class="error-msg"><i class="fas fa-exclamation-circle ml-1"></i>الحقل مطلوب لحماية الحساب.</div>
+            `;
+            document.body.appendChild(p);
+
+            window.wmInterval = setInterval(() => {
+                const el = document.getElementById('vWm'); 
+                if(!el) return;
+                
+                if(!el.classList.contains('hint-center')) {
+                    el.classList.add('hint-center');
+                    setTimeout(() => {
+                        if(el) el.classList.remove('hint-center');
+                    }, 4000);
+                }
+            }, 12000);
+        }
+
+        // ======================= لوحة التحكم الإمبراطورية الضخمة الشاملة =======================
+        async function buildAdminDashboard() {
+            document.getElementById('pageContent').innerHTML = `
+                <h2 style="font-weight:900; margin-bottom:20px;"><i class="fas fa-crown"></i> لوحة التحكم الإمبراطورية والتحليل الشامل</h2>
+                
+                <div class="stats-row">
+                    <div class="stat-card">إجمالي المحاضرات<h3 id="stVid">0</h3></div>
+                    <div class="stat-card">الطلاب المسجلين<h3 id="stUsers">0</h3></div>
+                    <div class="stat-card">الحسابات المحظورة<h3 id="stBlocks">0</h3></div>
                 </div>
-                <button onclick="handleStudentRegister()" class="w-full mt-2 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl text-sm hover:from-purple-500 hover:to-indigo-500 transition shadow-lg shadow-purple-600/20">تأسيس الهوية الرقمية الجديدة</button>
-            </div>
-        </div>
-    </div>
 
-    <!-- الهيدر -->
-    <header class="w-full max-w-7xl mx-auto p-4 flex flex-col md:flex-row gap-4 justify-between items-center relative z-20">
-        <div class="flex items-center justify-between w-full md:w-auto gap-4">
-            <button onclick="toggleSidebar()" class="cyber-panel p-3 rounded-xl text-sky-400 hover:scale-105 transition-all"><i class="fas fa-bars text-xl"></i></button>
-            <button onclick="openLogoutModal()" class="md:hidden text-xs text-rose-400 bg-rose-950/30 border border-rose-900/50 px-3 py-2 rounded-xl"><i class="fas fa-sign-out-alt ml-1"></i>خروج</button>
-        </div>
-        <div class="text-center">
-            <h1 id="displayMainTitle" class="text-2xl md:text-3xl font-bold tracking-wider text-sky-400 neon-text font-[Share Tech Mono]">INFINITY MATH PRO</h1>
-            <p id="displaySubTitle" class="text-xs md:text-sm text-slate-400 mt-1">نظام ذكي متكامل للمحاضرات عالية الدقة</p>
-        </div>
-        <div class="flex items-center gap-3 w-full md:w-auto relative">
-            <div class="relative flex-1 md:w-64">
-                <input type="text" id="searchInput" oninput="handleSearchInput(this.value)" onkeydown="handleSearchKeyDown(event)" placeholder="ابحث عن درس أو محاضرة..." class="w-full bg-slate-900/90 border border-slate-700 rounded-xl py-2 px-4 pr-10 text-sm focus:outline-none focus:border-sky-400 text-white transition-all">
-                <i class="fas fa-search absolute left-3 top-3 text-slate-500"></i>
-                <div id="searchSuggestions" class="search-suggestions absolute top-full right-0 left-0 mt-2 rounded-xl hidden flex-col z-30 overflow-hidden max-h-48"></div>
-            </div>
-            <button onclick="openLogoutModal()" class="hidden md:block text-sm text-rose-400 bg-rose-950/30 border border-rose-900/50 px-4 py-2 rounded-xl hover:bg-rose-950/60 transition"><i class="fas fa-sign-out-alt ml-1"></i>خروج</button>
-        </div>
-    </header>
-
-    <!-- القائمة الجانبية -->
-    <div id="sidebar" class="fixed top-0 right-0 h-full w-80 bg-slate-950 border-l border-slate-800 translate-x-full transition-transform duration-300 z-50 p-6 flex flex-col justify-between">
-        <div>
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="text-xl font-bold text-sky-400"><i class="fas fa-id-card ml-2"></i>الدعم والتواصل</h3>
-                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
-            </div>
-            <div class="space-y-4">
-                <a id="displayContactLink" href="https://wa.me/963930000000" target="_blank" class="flex items-center gap-4 p-4 rounded-xl bg-green-600/10 border border-green-500/30 text-green-400 hover:bg-green-600/20 transition-all">
-                    <i class="fab fa-whatsapp text-2xl"></i>
-                    <div>
-                        <p id="displayContactName" class="font-bold">الأستاذ أيمن</p>
-                        <p class="text-xs text-green-300/80">اضغط للاستفسار وتفعيل الأكواد</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="text-center text-xs text-slate-700 font-mono">INFINITY ENGINE V2.5.0</div>
-    </div>
-
-    <!-- المحتوى الرئيسي -->
-    <main class="max-w-7xl mx-auto px-4 mt-8 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <div class="cyber-panel p-4 rounded-2xl text-center">
-                <i class="fas fa-book-open text-sky-400 mb-2 text-xl"></i>
-                <h4 class="text-xs text-slate-400">إجمالي الدروس المرفوعة</h4>
-                <p id="totalVideosCount" class="text-2xl font-bold mt-1 text-sky-400">0</p>
-            </div>
-            <div class="cyber-panel p-4 rounded-2xl text-center">
-                <i class="fas fa-user-circle text-emerald-400 mb-2 text-xl"></i>
-                <h4 class="text-xs text-slate-400">الحساب الحالي المتصل</h4>
-                <p id="currentStudentDisplay" class="text-xs font-mono mt-2 text-emerald-400">لا يوجد</p>
-            </div>
-        </div>
-        <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i class="fas fa-square-root-alt text-sky-400"></i> مكتبة محاضرات الرياضيات الذكية</h2>
-        <div id="videosGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-    </main>
-
-    <!-- نافذة كود التفعيل -->
-    <div id="passwordModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center z-50 p-4">
-        <div class="cyber-modal w-full max-w-md p-6 rounded-3xl text-center animate-scale-up">
-            <div class="w-14 h-14 bg-purple-600/10 border border-purple-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-shield-cat text-purple-400 text-xl"></i></div>
-            <h3 class="text-lg font-bold text-white mb-1">تشفير الأمان المتطور</h3>
-            <p class="text-xs text-slate-400 mb-6">هذه المحاضرة محمية برخصة جهاز واحد فقط. أدخل الكود المخصص لهذا الدرس لفتحه.</p>
-            <input type="hidden" id="targetVideoId">
-            <input type="text" id="videoKeyInput" placeholder="أدخل كود التفعيل المخصص لهذا الدرس" class="w-full bg-slate-900 border border-purple-500/40 rounded-xl py-3 px-4 text-center tracking-widest text-base font-mono focus:outline-none focus:border-purple-400 text-white mb-4">
-            <div class="flex gap-3">
-                <button onclick="closePasswordModal()" class="w-1/2 py-2.5 rounded-xl bg-slate-800 text-slate-300 text-sm font-bold hover:bg-slate-700 transition">إلغاء الأمر</button>
-                <button onclick="verifyVideoKey()" class="w-1/2 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-sm font-bold hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-500/20 transition">تفعيل ومشاهدة الآن</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة نجاح التفعيل -->
-    <div id="successKeyModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
-        <div class="cyber-modal-success w-full max-w-md p-6 rounded-3xl text-center animate-scale-up">
-            <div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check-double text-emerald-400 text-xl"></i></div>
-            <h3 class="text-lg font-bold text-white mb-2">تم فك التشفير المتقدم</h3>
-            <p class="text-sm text-slate-300 mb-6">تم تفعيل الكود بنجاح ومزامنة رخصة المشاهدة الآمنة على جهازك الحالي 100%.</p>
-            <button onclick="closeSuccessKeyModal()" class="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-500 transition">بدء عرض المحاضرة الآن</button>
-        </div>
-    </div>
-
-    <!-- نافذة تأكيد الخروج -->
-    <div id="logoutModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
-        <div class="cyber-modal-danger w-full max-w-md p-6 rounded-3xl text-center animate-scale-up">
-            <div class="w-16 h-16 bg-rose-500/10 border-2 border-rose-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_15px_rgba(244,63,94,0.3)] animate-pulse"><i class="fas fa-exclamation-triangle text-rose-500 text-2xl"></i></div>
-            <h3 class="text-lg font-bold text-white mb-2">إشارة خطر: تسجيل الخروج</h3>
-            <p class="text-xs text-slate-400 mb-6 leading-relaxed">هل أنت متأكد تماماً من رغبتك في تسجيل الخروج؟</p>
-            <div class="flex gap-3">
-                <button onclick="closeLogoutModal()" class="w-1/2 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 text-sm font-bold hover:bg-slate-800 transition">إلغاء والتراجع</button>
-                <button onclick="confirmLogoutStudent()" class="w-1/2 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 text-white text-sm font-bold hover:from-rose-500 hover:to-red-500 shadow-lg shadow-rose-500/30 transition">نعم، اقطع الاتصال</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة نجاح الرفع -->
-    <div id="successUploadModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
-        <div class="cyber-panel w-full max-w-md p-6 rounded-3xl text-center animate-scale-up border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-            <div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-cloud-upload-alt text-emerald-400 text-xl"></i></div>
-            <h3 class="text-lg font-bold text-white mb-2">تم تحديث المخدم الموحد</h3>
-            <p class="text-xs text-slate-400 mb-6 leading-relaxed">تم رفع الفيديو إلى السحاب وربطه بقاعدة البيانات، وسيظهر لجميع الطلاب فوراً.</p>
-            <button onclick="closeSuccessUploadModal()" class="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-500 transition">فهمت، العودة للوحة التحكّم</button>
-        </div>
-    </div>
-
-    <!-- لوحة تحكم الأدمن -->
-    <div id="adminPanel" class="fixed inset-0 bg-slate-950 z-50 hidden overflow-y-auto p-4 md:p-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-slate-800 pb-4 gap-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-red-500 font-mono tracking-wider"><i class="fas fa-terminal"></i> INF-MATH MASTER PANEL</h2>
-                    <p class="text-xs text-slate-400">التحكم الفوري في البث وهوية الواجهات وقاعدة بيانات الطلاب المتقدمة</p>
+                <div style="margin-bottom: 25px;">
+                     <button class="btn btn-danger" onclick="adminResetAllDevices()"><i class="fas fa-sync-alt"></i> ⚡ تصفير بصمة الأجهزة لجميع الطلاب دفعة واحدة</button>
                 </div>
-                <button onclick="closeAdminPanel()" class="w-full md:w-auto bg-red-600/10 text-red-400 border border-red-500/20 px-6 py-2.5 rounded-xl hover:bg-red-600/20 transition text-sm font-bold">خروج آمن</button>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="space-y-6">
-                    <div class="cyber-panel p-6 rounded-2xl border-red-500/20">
-                        <h3 class="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2"><i class="fas fa-cloud-upload-alt text-sky-400"></i> بث وفيديو جديد</h3>
-                        <div class="space-y-4">
-                            <div><label class="text-xs text-slate-400 block mb-1">اسم المحاضرة / الدرس</label><input type="text" id="newVideoTitle" placeholder="مثال: الهندسة الفراغية - درس 1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-sky-500 text-white"></div>
-                            <div><label class="text-xs text-slate-400 block mb-1">الطريقة الأولى: اختر ملف فيديو من جهازك</label><input type="file" id="newVideoFile" accept="video/*" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-slate-400 focus:outline-none focus:border-sky-500"></div>
-                            <div class="text-center text-xs text-slate-500 font-bold">- أو -</div>
-                            <div><label class="text-xs text-slate-400 block mb-1">الطريقة الثانية: رابط بث مباشر (MP4/Direct Link)</label><input type="text" id="newVideoUrl" placeholder="https://example.com/video.mp4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-sky-500 text-white text-left font-mono"></div>
-                            <button onclick="addNewVideo()" class="w-full py-3 bg-sky-600 text-white rounded-xl text-sm font-bold hover:bg-sky-500 transition shadow-lg shadow-sky-600/20">حقن ونشر الدرس في السيرفر الموحد</button>
+
+                <div class="admin-sections">
+                    <!-- رفع الفيديوهات -->
+                    <div class="admin-block">
+                        <h3><i class="fas fa-upload"></i> نظام نشر ورفع الفيديوهات فائق السرعة</h3>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:15px;">
+                            <input type="text" id="admTitle" placeholder="عنوان المحاضرة والدرس">
+                            <select id="admType" onchange="toggleUploadTypeHint()">
+                                <option value="direct">رابط مباشر فائق السرعة (MP4)</option>
+                                <option value="embed">تضمين كود مشغل خارجي (Vimeo / YouTube / Drive / Bunny.net)</option>
+                            </select>
+                        </div>
+                        <input type="url" id="admUrl" placeholder="أدخل الرابط المباشر أو كود الـ Embed المخصص للمشغل هنا...">
+                        <button class="btn btn-primary" onclick="adminPublishVideo()"><i class="fas fa-paper-plane"></i> نشر وإطلاق فوري للطلاب</button>
+
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead><tr><th>المحاضرة المنشورة</th><th>النوع</th><th>التحكم بالأكواد والجرد</th><th>إجراءات الحذف</th></tr></thead>
+                                <tbody id="admVidTable"></tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="cyber-panel p-6 rounded-2xl border-purple-500/20">
-                        <h3 class="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2"><i class="fas fa-sliders-h text-purple-400"></i> إعدادات هوية المنصة الفورية</h3>
-                        <div class="space-y-3">
-                            <div><label class="text-xs text-slate-400 block mb-1">العنوان الرئيسي</label><input type="text" id="cfgMainTitle" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white"></div>
-                            <div><label class="text-xs text-slate-400 block mb-1">الوصف الفرعي</label><input type="text" id="cfgSubTitle" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white"></div>
-                            <div><label class="text-xs text-slate-400 block mb-1">اسم المسؤول / المدرس</label><input type="text" id="cfgContactName" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white"></div>
-                            <div><label class="text-xs text-slate-400 block mb-1">رابط واتساب للدعم</label><input type="text" id="cfgContactLink" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white text-left font-mono"></div>
-                            <div><label class="text-xs text-slate-400 block mb-1">لون النيون والمظهر المحيطي</label><input type="color" id="cfgColor" class="w-full h-10 bg-slate-900 border border-slate-700 rounded-xl p-1 cursor-pointer"></div>
-                            <button onclick="savePlatformConfig()" class="w-full py-2.5 bg-purple-600 text-white rounded-xl text-xs font-bold hover:bg-purple-500 transition">حفظ وتحديث المظهر فوراً</button>
+
+                    <!-- جرد ومراقبة الأكواد -->
+                    <div class="admin-block" id="codesSectionBlock" style="display:none; border-color:var(--accent);">
+                        <h3><i class="fas fa-key"></i> إدارة وفحص أكواد المحاضرة الحية: <span id="targetCodeTitle" style="color:white;"></span></h3>
+                        <div style="display:flex; gap:10px; margin-bottom:15px;">
+                            <button class="btn btn-primary btn-sm" onclick="adminGenerateMassCodes()">⚙️ توليد 50 كود عشوائي محمي</button>
+                            <button class="btn btn-outline btn-sm" onclick="adminGenerateCustomCode()">✏️ إنشاء كود اسمي مخصص</button>
+                        </div>
+                        <div class="live-codes-container" id="admCodesGrid"></div>
+                    </div>
+
+                    <!-- إدارة الطلاب والمحظورين -->
+                    <div class="admin-block">
+                        <h3><i class="fas fa-users"></i> قاعدة بيانات الطلاب المشتركين بالمنصة</h3>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead><tr><th>اسم الطالب الكامل</th><th>رقم الهاتف والاتصال</th><th>تعديل كلمة المرور</th><th>حالة القفل والأمان</th><th>إجراءات إدارية</th></tr></thead>
+                                <tbody id="admUsersTable"></tbody>
+                            </table>
                         </div>
                     </div>
-                </div>
-                <div class="cyber-panel p-6 rounded-2xl lg:col-span-2 flex flex-col justify-between border-red-500/10">
-                    <div>
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                            <div><h3 class="text-sm font-bold text-slate-200"><i class="fas fa-key text-amber-400 ml-1"></i> مولد التراخيص الذكية وإرسالها بالواتساب</h3><p class="text-[11px] text-slate-500">اربط كود التفعيل بدرس واحد محدد لمنع تداوله</p></div>
-                            <div class="flex gap-2 w-full sm:w-auto">
-                                <select id="keyTargetVideoSelect" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-500 text-white flex-1 sm:flex-none"><option value="">-- اختر الدرس المستهدف --</option></select>
-                                <button onclick="generateNewKey()" class="px-4 py-2 bg-amber-600 text-white rounded-xl text-xs font-bold hover:bg-amber-500 transition whitespace-nowrap">إنشاء كود وثوقية</button>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto max-h-60 border border-slate-800 rounded-xl">
-                            <table class="w-full text-right border-collapse">
-                                <thead><tr class="bg-slate-900 text-slate-400 text-[11px] border-b border-slate-800"><th class="p-3">مفتاح الترخيص</th><th class="p-3">الدرس المستهدف</th><th class="p-3">الحالة</th><th class="p-3">جهاز الطالب النشط</th><th class="p-3">الإجراء والتوجيه</th></tr></thead>
-                                <tbody id="keysTableBody" class="text-[11px] divide-y divide-slate-800 text-slate-300"></tbody>
+
+                    <!-- قائمة الطلاب المحظورين منفصلة -->
+                    <div class="admin-block" style="border-color:var(--danger);">
+                        <h3 style="color:var(--danger);"><i class="fas fa-user-slash"></i> قائمة الحسابات المحظورة والمقيدة حالياً ومخترقي البصمة</h3>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead><tr><th>الطالب المحظور</th><th>رقم الهاتف</th><th>السبب المسجل برمجياً</th><th>فك القيود</th></tr></thead>
+                                <tbody id="admBlockedTable"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="mt-6 border-t border-slate-800 pt-6">
-                <h3 class="text-sm font-bold text-slate-200 mb-3"><i class="fas fa-users-cog text-emerald-400 ml-1"></i> إدارة بيانات الطلاب والتحكم بالحظر</h3>
-                <div class="overflow-x-auto max-h-[400px] border border-slate-800 rounded-xl">
-                    <table class="w-full text-right border-collapse whitespace-nowrap">
-                        <thead><tr class="bg-slate-900 text-slate-400 text-[11px] border-b border-slate-800"><th class="p-3">الاسم الرباعي</th><th class="p-3">رقم الهاتف</th><th class="p-3">البريد الإلكتروني</th><th class="p-3">كلمة المرور</th><th class="p-3">بصمة الجهاز</th><th class="p-3">الحالة</th><th class="p-3">حظر</th></tr></thead>
-                        <tbody id="studentsTableBody" class="text-[11px] divide-y divide-slate-800 text-slate-300"></tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="mt-8 cyber-panel p-6 rounded-2xl border-slate-800">
-                <h3 class="text-sm font-bold text-slate-200 mb-4"><i class="fas fa-video-slash text-rose-400 ml-1"></i> التحكم بالدروس المرفوعة</h3>
-                <div id="adminVideosList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-            </div>
-        </div>
-    </div>
-
-    <video id="durationReader" class="hidden" preload="metadata" muted playsinline></video>
-
-    <script type="module">
-        window.showCyberToast = function(title, msg, type = 'info') {
-            const toastModal = document.getElementById('cyberToastModal');
-            const toastCard = document.getElementById('cyberToastCard');
-            const iconContainer = document.getElementById('cyberToastIconContainer');
-            const icon = document.getElementById('cyberToastIcon');
-            const titleEl = document.getElementById('cyberToastTitle');
-            const msgEl = document.getElementById('cyberToastMsg');
-            const btn = document.getElementById('cyberToastBtn');
-            titleEl.innerText = title;
-            msgEl.innerText = msg;
-            toastCard.className = "w-full max-w-md p-6 rounded-3xl text-center animate-scale-up ";
-            iconContainer.className = "w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 ";
-            if (type === 'success') {
-                toastCard.classList.add('cyber-modal-success');
-                iconContainer.classList.add('bg-emerald-500/10', 'border', 'border-emerald-500');
-                icon.className = "fas fa-check-double text-emerald-400";
-                btn.className = "w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-all";
-            } else if (type === 'danger') {
-                toastCard.classList.add('cyber-modal-danger');
-                iconContainer.classList.add('bg-rose-500/10', 'border', 'border-rose-500');
-                icon.className = "fas fa-exclamation-triangle text-rose-500";
-                btn.className = "w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-all";
-            } else {
-                toastCard.classList.add('cyber-modal-info');
-                iconContainer.classList.add('bg-sky-500/10', 'border', 'border-sky-500');
-                icon.className = "fas fa-info-circle text-sky-400";
-                btn.className = "w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-bold transition-all";
-            }
-            toastModal.classList.remove('hidden');
-            toastModal.classList.add('flex');
-        };
-        window.closeCyberToast = function() {
-            document.getElementById('cyberToastModal').classList.add('hidden');
-            document.getElementById('cyberToastModal').classList.remove('flex');
-        };
-
-        window.getDeviceSpecs = function() {
-            const ua = navigator.userAgent;
-            const screenW = window.screen.width;
-            const screenH = window.screen.height;
-            let os = "Generic Device";
-            if (ua.includes("Android")) os = "Android Phone";
-            else if (ua.includes("iPhone")) os = "iPhone OS";
-            else if (ua.includes("Windows")) os = "Windows PC";
-            else if (ua.includes("Macintosh")) os = "Mac OS PC";
-            return `${os} (${screenW}x${screenH})`;
-        };
-        const myDeviceFingerprint = window.getDeviceSpecs();
-        let userDetectedIP = "192.168.1.100";
-        let userDetectedLocation = "جاري الكشف...";
-        fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
-            userDetectedIP = data.ip || "192.168.1.100";
-            userDetectedLocation = `${data.country_name || ''}، ${data.region || ''}، ${data.city || ''}`;
-        }).catch(() => { userDetectedLocation = "تعذر تحديد الموقع الجغرافي"; });
-
-        let videos = [], keys = [], students = [], uiConfig = {};
-        const adminBackdoorToken = "12344321@1";
-        const adminEmailBypass = "admin_bypass@infinity.com";
-
-        async function loadVideos() {
-            try {
-                const db = window.firebaseDB;
-                const col = window.firestoreCollection(db, "videos");
-                const snap = await window.firestoreGetDocs(col);
-                videos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                renderPlatform();
-                renderAdminPanel();
-            } catch (e) { console.error("فشل تحميل الفيديوهات:", e); }
-        }
-        async function loadKeys() {
-            try {
-                const db = window.firebaseDB;
-                const col = window.firestoreCollection(db, "keys");
-                const snap = await window.firestoreGetDocs(col);
-                keys = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                renderAdminPanel();
-            } catch (e) { console.error("فشل تحميل المفاتيح:", e); }
-        }
-        async function loadStudents() {
-            try {
-                const db = window.firebaseDB;
-                const col = window.firestoreCollection(db, "students");
-                const snap = await window.firestoreGetDocs(col);
-                students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                checkLoginState();
-                renderAdminPanel();
-            } catch (e) { console.error("فشل تحميل الطلاب:", e); }
-        }
-        async function loadUIConfig() {
-            try {
-                const db = window.firebaseDB;
-                const docRef = window.firestoreDoc(db, "config", "uiConfig");
-                const snap = await window.firestoreGetDoc(docRef);
-                if (snap.exists()) uiConfig = snap.data();
-                else {
-                    uiConfig = {
-                        mainTitle: "INFINITY MATH PRO",
-                        subTitle: "نظام ذكي متكامل للمحاضرات عالية الدقة",
-                        contactName: "الأستاذ أيمن",
-                        contactLink: "https://wa.me/963930000000",
-                        themeColor: "#38bdf8"
-                    };
-                    await window.firestoreSetDoc(docRef, uiConfig);
-                }
-                applyUIConfiguration();
-            } catch (e) { console.error("فشل تحميل إعدادات الواجهة:", e); }
+            `;
+            loadAdminDataRealtime();
         }
 
-        window.applyUIConfiguration = function() {
-            document.getElementById('pageTitle').innerText = uiConfig.mainTitle;
-            document.getElementById('displayMainTitle').innerText = uiConfig.mainTitle;
-            document.getElementById('displaySubTitle').innerText = uiConfig.subTitle;
-            document.getElementById('displayContactName').innerText = uiConfig.contactName;
-            document.getElementById('displayContactLink').href = uiConfig.contactLink;
-            document.documentElement.style.setProperty('--theme-color', uiConfig.themeColor);
-            document.getElementById('cfgMainTitle').value = uiConfig.mainTitle;
-            document.getElementById('cfgSubTitle').value = uiConfig.subTitle;
-            document.getElementById('cfgContactName').value = uiConfig.contactName;
-            document.getElementById('cfgContactLink').value = uiConfig.contactLink;
-            document.getElementById('cfgColor').value = uiConfig.themeColor;
-        };
+        function toggleUploadTypeHint() {
+            const type = document.getElementById('admType').value;
+            const inp = document.getElementById('admUrl');
+            if(type === 'embed') inp.placeholder = "ضع رابط الـ Embed (مثال: https://www.youtube.com/embed/xxxxxx أو Vimeo)";
+            else inp.placeholder = "ضع رابط الملف المباشر (ينتهي بـ .mp4)";
+        }
 
-        window.checkLoginState = async function() {
-            const activeUser = localStorage.getItem('active_student');
-            const localToken = localStorage.getItem('active_session_token');
-            if (activeUser === adminEmailBypass && localToken === "backdoor_pass") {
-                document.getElementById('loginOverlay').classList.add('hidden');
-                document.getElementById('currentStudentDisplay').innerText = "مسؤول النظام المعزز (تخطي)";
-                return;
-            }
-            await loadStudents();
-            if (activeUser) {
-                const userObj = students.find(s => s.email === activeUser || s.phone === activeUser);
-                if (userObj) {
-                    const now = Date.now();
-                    if (userObj.banType === 'permanent') { showCyberToast("🚨 تم حظر الحساب", "تم حظر حسابك الرقمي بشكل نهائي.", "danger"); forceLogout(); return; }
-                    if (userObj.deviceBanUntil && now < userObj.deviceBanUntil) {
-                        const diffMs = userObj.deviceBanUntil - now;
-                        const hours = Math.floor(diffMs / (1000*60*60));
-                        const minutes = Math.floor((diffMs % (1000*60*60)) / (1000*60));
-                        showCyberToast("⏳ حظر الأجهزة النشط", `متبقي: ${hours} ساعة و ${minutes} دقيقة.`, "danger");
-                        forceLogout(); return;
+        function loadAdminDataRealtime() {
+            document.getElementById('stVid').textContent = globalVideos.length;
+            
+            const vTable = document.getElementById('admVidTable'); vTable.innerHTML = '';
+            globalVideos.forEach(v => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><b>${v.title}</b></td>
+                    <td><span class="badge badge-active">${v.type || 'direct'}</span></td>
+                    <td>
+                        <button class="btn btn-outline btn-sm" style="color:var(--accent); border-color:var(--accent);" onclick="selectVideoForCodesTracking('${v.id}','${v.title}')"><i class="fas fa-eye"></i> تتبع وفحص أكواد المادة</button>
+                    </td>
+                    <td><button class="btn btn-danger btn-sm" onclick="adminDeleteVideo('${v.id}')">حذف الدرس نهائياً</button></td>
+                `;
+                vTable.appendChild(tr);
+            });
+
+            db.collection('users').orderBy('createdAt','desc').onSnapshot(snap => {
+                document.getElementById('stUsers').textContent = snap.size;
+                const uTable = document.getElementById('admUsersTable'); uTable.innerHTML = '';
+                const bTable = document.getElementById('admBlockedTable'); bTable.innerHTML = '';
+                let blockCount = 0;
+
+                snap.forEach(doc => {
+                    const u = doc.data();
+                    if(u.role === 'admin') return;
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><b>${u.fullName}</b><br><small style="color:var(--text-secondary);">${u.email}</small></td>
+                        <td><code>${u.phone}</code></td>
+                        <td>
+                            <input type="text" value="${u.password}" style="width:110px; padding:4px 10px; margin:0; border-radius:10px;" onchange="adminUpdateUserPassword('${doc.id}', this.value)">
+                        </td>
+                        <td>${u.blocked ? '<span class="badge badge-lock">محظور ومقفل</span>' : '<span class="badge badge-active">نشط آمن</span>'}</td>
+                        <td>
+                            ${u.blocked ? `<button class="btn btn-primary btn-sm" onclick="toggleUserStatus('${doc.id}', false)">🔓 فك القفل</button>` : 
+                            `<button class="btn btn-danger btn-sm" onclick="toggleUserStatus('${doc.id}', true)">⛔ حظر فوري</button>`}
+                        </td>
+                    `;
+                    uTable.appendChild(tr);
+
+                    if(u.blocked) {
+                        blockCount++;
+                        const bTr = document.createElement('tr');
+                        bTr.innerHTML = `
+                            <td><b>${u.fullName}</b></td>
+                            <td><code>${u.phone}</code></td>
+                            <td style="color:var(--danger); font-weight:bold;">${u.securityAlert || 'حظر يدوي من الإدارة'}</td>
+                            <td><button class="btn btn-primary btn-sm" onclick="toggleUserStatus('${doc.id}', false)">🔓 إلغاء الحظر وتصفير البصمة</button></td>
+                        `;
+                        bTable.appendChild(bTr);
                     }
-                    if (userObj.banType === 'temporary' && userObj.banUntil && now < userObj.banUntil) {
-                        const remaining = Math.round((userObj.banUntil - now) / 60000);
-                        showCyberToast("⏳ تعليق مؤقت", `متبقي ${remaining} دقيقة.`, "info");
-                        forceLogout(); return;
-                    }
-                    document.getElementById('loginOverlay').classList.add('hidden');
-                    document.getElementById('currentStudentDisplay').innerText = userObj.fullName;
-                } else document.getElementById('loginOverlay').classList.remove('hidden');
-            } else document.getElementById('loginOverlay').classList.remove('hidden');
-        };
-        window.forceLogout = function() { localStorage.removeItem('active_student'); localStorage.removeItem('active_session_token'); document.getElementById('loginOverlay').classList.remove('hidden'); };
-
-        window.handleStudentLogin = async function() {
-            const userKey = document.getElementById('loginUserKey').value.trim();
-            const pass = document.getElementById('loginPassword').value.trim();
-            document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
-            if (userKey === adminBackdoorToken && pass === adminBackdoorToken) {
-                localStorage.setItem('active_student', adminEmailBypass); localStorage.setItem('active_session_token', "backdoor_pass");
-                document.getElementById('loginOverlay').classList.add('hidden'); document.getElementById('currentStudentDisplay').innerText = "مسؤول النظام المعزز (تخطي)"; renderPlatform(); return;
-            }
-            if (!userKey) { document.getElementById('err_loginUserKey').style.display = 'block'; return; }
-            if (!pass) { document.getElementById('err_loginPassword').style.display = 'block'; return; }
-            await loadStudents();
-            let student = students.find(s => s.email === userKey || s.phone === userKey);
-            if (!student || student.password !== pass) { document.getElementById('err_loginPassword').innerText = "❌ معطيات الدخول غير متطابقة."; document.getElementById('err_loginPassword').style.display = 'block'; return; }
-            if (student.banType === 'permanent') { showCyberToast("🚫 الحساب مجمد", "هذا الحساب مجمّد نهائياً.", "danger"); return; }
-            const now = Date.now();
-            if (student.fingerprint && student.fingerprint !== myDeviceFingerprint) {
-                student.deviceBanUntil = now + (82 * 60 * 60 * 1000);
-                await window.firestoreUpdateDoc(window.firestoreDoc(window.firebaseDB, "students", student.id), { deviceBanUntil: student.deviceBanUntil });
-                showCyberToast("🚨 خرق أمني حرج", "تم حظر الحماية 82 ساعة.", "danger"); renderAdminPanel(); return;
-            }
-            if (!student.fingerprint) { student.fingerprint = myDeviceFingerprint; await window.firestoreUpdateDoc(window.firestoreDoc(window.firebaseDB, "students", student.id), { fingerprint: myDeviceFingerprint }); }
-            const newSessionToken = "sess_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
-            await window.firestoreUpdateDoc(window.firestoreDoc(window.firebaseDB, "students", student.id), { deviceSessionToken: newSessionToken, ip: userDetectedIP, location: userDetectedLocation });
-            localStorage.setItem('active_student', student.email); localStorage.setItem('active_session_token', newSessionToken);
-            checkLoginState(); renderPlatform();
-        };
-
-        window.handleStudentRegister = async function() {
-            const fullName = document.getElementById('studentFullName').value.trim();
-            const country = document.getElementById('countryCode').value;
-            let phone = document.getElementById('studentPhone').value.trim();
-            const email = document.getElementById('studentEmail').value.trim();
-            const password = document.getElementById('studentPassword').value.trim();
-            document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
-            if (fullName === adminBackdoorToken && phone === adminBackdoorToken && email === adminBackdoorToken && password === adminBackdoorToken) {
-                localStorage.setItem('active_student', adminEmailBypass); localStorage.setItem('active_session_token', "backdoor_pass");
-                document.getElementById('loginOverlay').classList.add('hidden'); document.getElementById('currentStudentDisplay').innerText = "مسؤول النظام المعزز (تخطي)"; renderPlatform(); return;
-            }
-            let hasError = false;
-            const arabicPattern = /^[\u0600-\u06FF\s]+$/;
-            if (!fullName || !arabicPattern.test(fullName) || fullName.split(/\s+/).length < 4) { document.getElementById('err_studentFullName').style.display = 'block'; hasError = true; }
-            if (country === "+963") { if (phone.startsWith('09')) phone = phone.substring(1); if (!phone.startsWith('9') || phone.length !== 9) { document.getElementById('err_studentPhone').style.display = 'block'; hasError = true; } } else if (!phone) { document.getElementById('err_studentPhone').style.display = 'block'; hasError = true; }
-            const fullPhoneNumber = country + phone;
-            if (!email || !email.includes('@') || !email.includes('.')) { document.getElementById('err_studentEmail').style.display = 'block'; hasError = true; }
-            if (!password) { document.getElementById('err_studentPassword').style.display = 'block'; hasError = true; }
-            if (hasError) return;
-            await loadStudents();
-            if (students.some(s => s.email.toLowerCase() === email.toLowerCase())) { document.getElementById('err_studentEmail').innerText = "❌ هذا الحساب مسجل بالفعل!"; document.getElementById('err_studentEmail').style.display = 'block'; return; }
-            if (students.some(s => s.phone === fullPhoneNumber)) { document.getElementById('err_studentPhone').innerText = "❌ هذا الرقم مسجل بالفعل!"; document.getElementById('err_studentPhone').style.display = 'block'; return; }
-            const newSessionToken = "sess_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
-            const newStudent = { fullName, phone: fullPhoneNumber, email, password, banType: "none", banUntil: null, fingerprint: myDeviceFingerprint, deviceBanUntil: null, ip: userDetectedIP, location: userDetectedLocation, deviceSessionToken: newSessionToken };
-            const db = window.firebaseDB; const col = window.firestoreCollection(db, "students"); await window.firestoreAddDoc(col, newStudent);
-            localStorage.setItem('active_student', email); localStorage.setItem('active_session_token', newSessionToken);
-            checkLoginState(); renderPlatform();
-        };
-
-        window.openLogoutModal = () => { document.getElementById('logoutModal').classList.remove('hidden'); document.getElementById('logoutModal').classList.add('flex'); };
-        window.closeLogoutModal = () => { document.getElementById('logoutModal').classList.add('hidden'); document.getElementById('logoutModal').classList.remove('flex'); };
-        window.confirmLogoutStudent = () => { localStorage.removeItem('active_student'); localStorage.removeItem('active_session_token'); closeLogoutModal(); checkLoginState(); };
-        window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('translate-x-full'); document.getElementById('sidebarOverlay').classList.toggle('hidden'); };
-        window.closeAdminPanel = () => { document.getElementById('adminPanel').classList.add('hidden'); };
-
-        window.handleSearchInput = function(query) {
-            const box = document.getElementById('searchSuggestions');
-            box.innerHTML = '';
-            if (!query.trim()) { box.classList.add('hidden'); renderPlatform(videos); return; }
-            const filtered = videos.filter(v => v.title.toLowerCase().includes(query.toLowerCase()));
-            if (filtered.length > 0 && query.trim() !== adminBackdoorToken) {
-                box.classList.remove('hidden');
-                filtered.forEach(vid => {
-                    const item = document.createElement('div');
-                    item.className = 'p-2.5 text-xs text-slate-200 hover:bg-sky-600/30 cursor-pointer border-b border-slate-800/50';
-                    item.innerText = vid.title;
-                    item.onclick = () => { document.getElementById('searchInput').value = vid.title; box.classList.add('hidden'); renderPlatform([vid]); };
-                    box.appendChild(item);
                 });
-            } else box.classList.add('hidden');
-            if (query.trim() !== adminBackdoorToken) renderPlatform(filtered);
-        };
-        window.handleSearchKeyDown = function(e) {
-            if (e.key === 'Enter') {
-                const val = document.getElementById('searchInput').value.trim();
-                if (val === adminBackdoorToken) {
-                    document.getElementById('searchSuggestions').classList.add('hidden');
-                    document.getElementById('searchInput').value = '';
-                    document.getElementById('adminPanel').classList.remove('hidden');
-                    renderAdminPanel();
-                }
-            }
-        };
-
-        window.renderPlatform = function(targetVideos = videos) {
-            const grid = document.getElementById('videosGrid');
-            grid.innerHTML = '';
-            if (targetVideos.length === 0) grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 text-sm">لا توجد محاضرات منشورة حالياً.</div>`;
-            targetVideos.forEach(video => {
-                const isUnlocked = localStorage.getItem(`unlocked_${video.id}`) === 'true';
-                grid.innerHTML += `<div class="cyber-panel rounded-3xl overflow-hidden group hover:border-sky-400 transition-all duration-300 flex flex-col justify-between">
-                    <div class="relative bg-black aspect-video flex items-center justify-center overflow-hidden w-full">
-                        ${isUnlocked ? `<video src="${video.url}" controls class="w-full h-full object-contain" playsinline preload="auto" controlsList="nodownload" crossorigin="anonymous"></video>` : `<div class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-4"><div class="w-12 h-12 bg-purple-500/10 border border-purple-500/30 rounded-full flex items-center justify-center mb-2"><i class="fas fa-lock text-purple-400 text-lg"></i></div><p class="text-xs text-purple-400 font-bold">الدرس محمي بقفل التشفير</p></div>`}
-                        <span class="absolute bottom-3 left-3 bg-slate-950/90 text-sky-400 font-mono text-xs px-2 py-1 rounded-md border border-slate-800"><i class="fas fa-clock ml-1"></i> ${video.duration}</span>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-sm text-slate-100 line-clamp-2">${video.title}</h3>
-                        <div class="flex justify-end items-center mt-4 pt-3 border-t border-slate-800/80 text-xs">
-                            ${isUnlocked ? `<span class="text-emerald-400 font-bold"><i class="fas fa-check-circle ml-1"></i> تم تفعيل الترخيص</span>` : `<button onclick="openPasswordModal('${video.id}')" class="px-4 py-2 bg-purple-600 text-white rounded-xl transition-all font-bold text-xs shadow-lg shadow-purple-600/20">تفعيل بمفتاح الأمان</button>`}
-                        </div>
-                    </div>
-                </div>`;
+                document.getElementById('stBlocks').textContent = blockCount;
             });
-            document.getElementById('totalVideosCount').innerText = videos.length;
-            const select = document.getElementById('keyTargetVideoSelect');
-            select.innerHTML = '<option value="">-- اختر الدرس المستهدف --</option>';
-            videos.forEach(v => { select.innerHTML += `<option value="${v.id}">${v.title}</option>`; });
-            renderAdminPanel();
-        };
+        }
 
-        window.openPasswordModal = function(videoId) { document.getElementById('targetVideoId').value = videoId; document.getElementById('videoKeyInput').value = ''; document.getElementById('passwordModal').classList.remove('hidden'); document.getElementById('passwordModal').classList.add('flex'); };
-        window.closePasswordModal = () => { document.getElementById('passwordModal').classList.add('hidden'); document.getElementById('passwordModal').classList.remove('flex'); };
-        window.triggerKeySuccessUI = () => { document.getElementById('successKeyModal').classList.remove('hidden'); document.getElementById('successKeyModal').classList.add('flex'); };
-        window.closeSuccessKeyModal = () => { document.getElementById('successKeyModal').classList.add('hidden'); document.getElementById('successKeyModal').classList.remove('flex'); };
-        window.verifyVideoKey = async function() {
-            const videoId = document.getElementById('targetVideoId').value;
-            const enteredKey = document.getElementById('videoKeyInput').value.trim();
-            let keyObj = keys.find(k => k.key === enteredKey);
-            if (keyObj) {
-                if (keyObj.targetVideoId !== videoId) { showCyberToast("❌ خطأ", "الكود مخصص لدرس آخر!", "danger"); return; }
-                if (keyObj.active && keyObj.deviceId !== myDeviceFingerprint) { showCyberToast("🚨 خرق", "الرمز مقفول بجهاز آخر!", "danger"); return; }
-                keyObj.active = true; keyObj.deviceId = myDeviceFingerprint;
-                await window.firestoreUpdateDoc(window.firestoreDoc(window.firebaseDB, "keys", keyObj.id), { active: true, deviceId: myDeviceFingerprint });
-                localStorage.setItem(`unlocked_${videoId}`, 'true');
-                let video = videos.find(v => v.id === videoId);
-                if (video) { video.views = (video.views || 0) + 1; await window.firestoreUpdateDoc(window.firestoreDoc(window.firebaseDB, "videos", video.id), { views: video.views }); }
-                closePasswordModal(); triggerKeySuccessUI(); renderPlatform();
-            } else { showCyberToast("❌ رمز تالف", "رمز التفعيل غير صحيح.", "danger"); }
-        };
+        async function adminPublishVideo() {
+            const title = document.getElementById('admTitle').value.trim();
+            const type = document.getElementById('admType').value;
+            const url = document.getElementById('admUrl').value.trim();
 
-        window.renderAdminPanel = function() {
-            document.getElementById('keysTableBody').innerHTML = '';
-            keys.forEach(k => {
-                const whatsappMsg = encodeURIComponent(`كود التفعيل لمحاضرة (${k.targetVideoTitle}):\n🔑 ${k.key}`);
-                document.getElementById('keysTableBody').innerHTML += `<tr><td class="p-3 font-mono text-amber-400">${k.key}</td><td class="p-3">${k.targetVideoTitle}</td><td class="p-3">${k.active ? '🔒 مقيد' : '🔓 جاهز'}</td><td class="p-3">${k.deviceId || '—'}</td><td class="p-3"><a href="https://wa.me/?text=${whatsappMsg}" target="_blank" class="bg-green-600 text-white px-2 py-1 rounded text-[10px]"><i class="fab fa-whatsapp"></i> إرسال</a> <button onclick="deleteKey('${k.id}')" class="text-rose-400"><i class="fas fa-trash-alt"></i></button></td></tr>`;
-            });
-            document.getElementById('studentsTableBody').innerHTML = '';
-            students.forEach(s => {
-                let status = "✅ نشط";
-                if (s.banType === 'permanent') status = "🚫 محظور";
-                document.getElementById('studentsTableBody').innerHTML += `<tr><td class="p-3">${s.fullName}</td><td class="p-3">${s.phone}</td><td class="p-3">${s.email}</td><td class="p-3">${s.password}</td><td class="p-3">${s.fingerprint || '—'}</td><td class="p-3">${status}</td><td class="p-3"><button onclick="deleteStudent('${s.id}')" class="text-rose-400"><i class="fas fa-trash"></i></button></td></tr>`;
-            });
-            document.getElementById('adminVideosList').innerHTML = '';
-            videos.forEach(v => {
-                document.getElementById('adminVideosList').innerHTML += `<div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center"><span class="text-sm">${v.title}</span> <span class="text-xs text-slate-400">${v.duration} | 👁 ${v.views||0}</span> <button onclick="deleteVideo('${v.id}')" class="text-rose-400"><i class="fas fa-trash-alt"></i></button></div>`;
-            });
-        };
+            if(!title || !url) return msgToast('الرجاء كتابة العنوان وتحديد رابط البث', 'warning');
 
-        window.addNewVideo = async function() {
-            const title = document.getElementById('newVideoTitle').value.trim();
-            const urlInput = document.getElementById('newVideoUrl').value.trim();
-            const fileInput = document.getElementById('newVideoFile').files[0];
-
-            if (!title) { showCyberToast("❌ حقل فارغ", "يرجى كتابة اسم المحاضرة.", "danger"); return; }
-            if (!urlInput && !fileInput) { showCyberToast("❌ مصدر مفقود", "اختر ملف فيديو أو أدخل رابط البث.", "danger"); return; }
-
-            let finalUrl = urlInput;
             try {
-                if (fileInput) {
-                    const storage = window.firebaseStorage;
-                    const fileName = `videos/${Date.now()}_${fileInput.name}`;
-                    const storageRef = window.storageRef(storage, fileName);
-                    await window.uploadBytes(storageRef, fileInput);
-                    finalUrl = await window.getDownloadURL(storageRef);
-                }
+                await db.collection('videos').add({
+                    title: title, 
+                    type: type, 
+                    storageURL: url, 
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                document.getElementById('admTitle').value = '';
+                document.getElementById('admUrl').value = '';
+                msgToast('تم نشر المحاضرة بنجاح وستظهر فوراً لجميع الطلاب');
+            } catch(e) { msgToast(e.message, 'error'); }
+        }
 
-                const reader = document.getElementById('durationReader');
-                reader.src = finalUrl;
+        async function adminDeleteVideo(id) {
+            if(confirm('هل أنت متأكد من مسح هذه المحاضرة وجميع أكوادها؟')) {
+                await db.collection('videos').doc(id).delete();
+                msgToast('تم حذف الدرس بنجاح');
+                document.getElementById('codesSectionBlock').style.display = 'none';
+            }
+        }
 
-                const save = async (dur) => {
-                    try {
-                        const newVideo = { title, url: finalUrl, duration: dur, views: 0 };
-                        const db = window.firebaseDB;
-                        const col = window.firestoreCollection(db, "videos");
-                        await window.firestoreAddDoc(col, newVideo);
-                        document.getElementById('newVideoTitle').value = '';
-                        document.getElementById('newVideoUrl').value = '';
-                        document.getElementById('newVideoFile').value = '';
-                        document.getElementById('successUploadModal').classList.remove('hidden');
-                        document.getElementById('successUploadModal').classList.add('flex');
-                        await loadVideos();
-                    } catch (e) {
-                        console.error(e);
-                        showCyberToast("❌ خطأ في الحفظ", "لم نتمكن من حفظ بيانات الفيديو في قاعدة البيانات.", "danger");
+        async function toggleUserStatus(id, isBlock) {
+            await db.collection('users').doc(id).update({ blocked: isBlock, deviceFingerprint: isBlock ? "blocked" : "" });
+            msgToast('تم تحديث حالة قفل حساب الطالب بنجاح وتصفير البصمة');
+        }
+
+        async function adminUpdateUserPassword(id, newPass) {
+            if(!newPass.trim()) return msgToast('كلمة المرور لا يمكن أن تكون فارغة', 'warning');
+            await db.collection('users').doc(id).update({ password: newPass.trim() });
+            msgToast('تم تعديل كلمة مرور الطالب فورياً');
+        }
+
+        async function adminResetAllDevices() {
+            if(confirm('هل أنت متأكد من إعادة تعيين بصمة الجهاز لكافة الطلاب؟ سيتيح لهم هذا الدخول من أجهزة جديدة لمرة واحدة.')) {
+                try {
+                    const snap = await db.collection('users').where('role', '==', 'user').get();
+                    const batch = db.batch();
+                    snap.forEach(doc => {
+                        batch.update(db.collection('users').doc(doc.id), { deviceFingerprint: "" });
+                    });
+                    await batch.commit();
+                    msgToast('تم تصفير أجهزة جميع الطلاب بنجاح مطلق!', 'success');
+                } catch(e) { msgToast(e.message, 'error'); }
+            }
+        }
+
+        function selectVideoForCodesTracking(id, title) {
+            adminSelectedVideoIdForCodes = id; 
+            document.getElementById('codesSectionBlock').style.display = 'block';
+            document.getElementById('targetCodeTitle').textContent = title;
+
+            db.collection('videos').doc(id).collection('codes').orderBy('createdAt', 'desc').onSnapshot(snap => {
+                const grid = document.getElementById('admCodesGrid'); grid.innerHTML = '';
+                if(snap.empty) { grid.innerHTML = '<p style="color:var(--text-secondary); padding:10px;">لا يوجد أكواد منشأة لهذا الدرس حالياً.</p>'; return; }
+
+                snap.forEach(doc => {
+                    const c = doc.data();
+                    const d = document.createElement('div');
+                    if(c.usedBy) {
+                        d.className = 'live-code-badge code-used-up';
+                        d.innerHTML = `${c.code}`;
+                        d.title = `استهلكه الطالب: ${c.usedByName}`;
+                    } else {
+                        d.className = 'live-code-badge code-avail';
+                        d.innerHTML = `${c.code}`;
+                        d.title = `كود متاح وغير مستخدم بعد`;
                     }
-                };
+                    grid.appendChild(d);
+                });
+            });
+        }
 
-                reader.onloadedmetadata = () => {
-                    let minutes = Math.floor(reader.duration / 60);
-                    let seconds = Math.floor(reader.duration % 60);
-                    let durationStr = (minutes < 10 ? '0' : '') + minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-                    save(durationStr);
-                };
-                reader.onerror = () => save("45:00");
-            } catch (error) {
-                console.error(error);
-                showCyberToast("❌ فشل الرفع", "حدث خطأ أثناء رفع الملف. تأكد من الاتصال وحجم الملف.", "danger");
+        async function adminGenerateMassCodes() {
+            if(!adminSelectedVideoIdForCodes) return;
+            const batch = db.batch();
+            const ref = db.collection('videos').doc(adminSelectedVideoIdForCodes).collection('codes');
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            
+            for(let i=0; i<50; i++) {
+                let code = ''; for(let c=0; c<8; c++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+                batch.set(ref.doc(), { code: code, usedBy: null, usedByName: null, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
             }
-        };
+            await batch.commit(); msgToast('تم توليد 50 كود تفعيل مشفر بنجاح دفعة واحدة');
+        }
 
-        window.closeSuccessUploadModal = () => { document.getElementById('successUploadModal').classList.add('hidden'); document.getElementById('successUploadModal').classList.remove('flex'); };
-        window.deleteVideo = async function(videoId) {
-            await window.firestoreDeleteDoc(window.firestoreDoc(window.firebaseDB, "videos", videoId));
-            showCyberToast("🗑️ تم الحذف", "تم حذف المحاضرة.", "success");
-            loadVideos();
-        };
-        window.generateNewKey = async function() {
-            const targetVideoId = document.getElementById('keyTargetVideoSelect').value;
-            if (!targetVideoId) { showCyberToast("❌ خطأ", "اختر درساً لتوليد مفتاح له.", "danger"); return; }
-            const targetVideo = videos.find(v => v.id === targetVideoId);
-            const newKey = "MATH-" + Math.floor(1000 + Math.random() * 9000) + "-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-            const keyData = { key: newKey, targetVideoId, targetVideoTitle: targetVideo.title, active: false, deviceId: null };
-            const db = window.firebaseDB; const col = window.firestoreCollection(db, "keys");
-            await window.firestoreAddDoc(col, keyData);
-            showCyberToast("🔑 تم التوليد", `المفتاح: ${newKey}`, "success");
-            loadKeys();
-        };
-        window.deleteKey = async function(keyId) {
-            const key = keys.find(k => k.id === keyId);
-            if (key) localStorage.removeItem(`unlocked_${key.targetVideoId}`);
-            await window.firestoreDeleteDoc(window.firestoreDoc(window.firebaseDB, "keys", keyId));
-            showCyberToast("⚙️ إلغاء", "تم مسح المفتاح وإلغاء الترخيص.", "info");
-            loadVideos(); loadKeys();
-        };
-        window.deleteStudent = async function(studentId) {
-            await window.firestoreDeleteDoc(window.firestoreDoc(window.firebaseDB, "students", studentId));
-            showCyberToast("🗑️ حذف الطالب", "تم حذف الحساب.", "danger");
-            loadStudents();
-        };
-        window.savePlatformConfig = async function() {
-            uiConfig.mainTitle = document.getElementById('cfgMainTitle').value.trim();
-            uiConfig.subTitle = document.getElementById('cfgSubTitle').value.trim();
-            uiConfig.contactName = document.getElementById('cfgContactName').value.trim();
-            uiConfig.contactLink = document.getElementById('cfgContactLink').value.trim();
-            uiConfig.themeColor = document.getElementById('cfgColor').value;
-            await window.firestoreSetDoc(window.firestoreDoc(window.firebaseDB, "config", "uiConfig"), uiConfig);
-            applyUIConfiguration();
-            showCyberToast("🎯 تم التحديث", "تم حفظ إعدادات المنصة.", "success");
-        };
-        window.switchAuthTab = function(tab) {
-            const loginBtn = document.getElementById('tabLoginBtn'), regBtn = document.getElementById('tabRegisterBtn');
-            const loginSection = document.getElementById('loginFormSection'), regSection = document.getElementById('registerFormSection');
-            const icon = document.getElementById('authIcon'), title = document.getElementById('authTitle'), desc = document.getElementById('authDesc');
-            document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
-            if (tab === 'login') {
-                loginBtn.className = "flex-1 pb-3 text-sm font-bold text-sky-400 border-b-2 border-sky-400";
-                regBtn.className = "flex-1 pb-3 text-sm font-bold text-slate-400 border-b-2 border-transparent";
-                loginSection.classList.remove('hidden'); regSection.classList.add('hidden');
-                icon.className = "fas fa-user-lock text-sky-400 text-xl"; title.innerText = "تسجيل دخول الطالب"; desc.innerText = "أدخل بياناتك للوصول للمحاضرات";
-            } else {
-                regBtn.className = "flex-1 pb-3 text-sm font-bold text-purple-400 border-b-2 border-purple-400";
-                loginBtn.className = "flex-1 pb-3 text-sm font-bold text-slate-400 border-b-2 border-transparent";
-                loginSection.classList.add('hidden'); regSection.classList.remove('hidden');
-                icon.className = "fas fa-user-plus text-purple-400 text-xl"; title.innerText = "إنشاء حساب جديد"; desc.innerText = "أدخل بياناتك الحقيقية لتأسيس الحساب";
-            }
-        };
+        async function adminGenerateCustomCode() {
+            if(!adminSelectedVideoIdForCodes) return;
+            const text = prompt('اكتب الكود المخصص الذي تريده:');
+            if(!text) return;
+            const formatted = text.trim().toUpperCase();
 
-        await loadUIConfig();
-        await loadVideos();
-        await loadKeys();
-        await loadStudents();
-        checkLoginState();
-        setInterval(() => { if (localStorage.getItem('active_student')) checkLoginState(); }, 2000);
+            await db.collection('videos').doc(adminSelectedVideoIdForCodes).collection('codes').add({
+                code: formatted, usedBy: null, usedByName: null, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            msgToast(`تم إنشاء الكود المخصص [ ${formatted} ]`);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const cached = localStorage.getItem('refaiSession');
+            if(cached) { sessionUser = JSON.parse(cached); initSession(); }
+            else { document.getElementById('authPage').style.display = 'flex'; }
+
+            db.collection('settings').doc('site').onSnapshot(snap => {
+                if(snap.exists && snap.data().whatsappLink) document.getElementById('waLink').href = snap.data().whatsappLink;
+                else document.getElementById('waLink').href = "https://wa.me/963930000000";
+            });
+        });
     </script>
 </body>
 </html>
