@@ -3,373 +3,1089 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">INFINITY MATH SYSTEM PRO</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <title>منصة الأستاذ أيمن الرفاعي التعليمية</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5a4bd1;
+            --accent: #00cec9;
+            --bg: #0f0f1a;
+            --surface: #1a1a2e;
+            --surface-light: #252540;
+            --text: #ffffff;
+            --text-secondary: #b0b0c0;
+            --danger: #ff6b6b;
+            --success: #2ed573;
+            --warning: #feca57;
+            --radius: 20px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.3);
+            --glass: rgba(255,255,255,0.05);
+            --border: rgba(255,255,255,0.08);
+            --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 20% 20%, rgba(108,92,231,0.15) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 80%, rgba(0,206,201,0.1) 0%, transparent 50%);
+        }
+        /* شريط جانبي */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            transform: translateX(0);
+            transition: var(--transition);
+        }
+        .sidebar-logo {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            background: transparent;
+            border: 1px solid transparent;
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 15px rgba(108,92,231,0.4);
+        }
+        .sidebar-nav a i { font-size: 1.3rem; width: 24px; text-align: center; }
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        .whatsapp-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px;
+            background: #25D366;
+            color: white;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .whatsapp-btn:hover { background: #20b858; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,211,102,0.4); }
+        .whatsapp-btn i { font-size: 1.4rem; }
+        /* المحتوى الرئيسي */
+        .main-content {
+            margin-right: 280px;
+            padding: 30px 40px;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+        /* الهيدر */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            background: var(--surface);
+            padding: 20px 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 500px;
+            margin: 0 30px;
+        }
+        .search-container input {
+            width: 100%;
+            padding: 15px 50px 15px 25px;
+            border-radius: 30px;
+            border: 2px solid var(--border);
+            background: var(--surface-light);
+            color: var(--text);
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        .search-container input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108,92,231,0.3);
+        }
+        .search-container i {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+        /* شبكة الدروس */
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        .lesson-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+            border-color: var(--primary);
+        }
+        .lesson-card .thumb {
+            height: 180px;
+            background: linear-gradient(135deg, #2d3561, #1a1a2e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--accent);
+        }
+        .lesson-card .info {
+            padding: 20px;
+        }
+        .lesson-card .title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .lesson-card .meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .badge {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .badge-free { background: rgba(46,213,115,0.2); color: var(--success); }
+        .badge-locked { background: rgba(255,107,107,0.2); color: var(--danger); }
+        /* أزرار عامة */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); box-shadow: 0 6px 20px rgba(108,92,231,0.5); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-danger { background: var(--danger); color: white; }
+        /* مودال */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            text-align: center;
+            position: relative;
+        }
+        .modal h2 { margin-bottom: 20px; color: var(--accent); }
+        .modal input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 30px;
+            border: 2px solid var(--border);
+            background: var(--surface-light);
+            color: var(--text);
+            font-family: 'Tajawal', sans-serif;
+            margin: 15px 0;
+            font-size: 1rem;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        /* فيديو بلاير */
+        .video-player-overlay {
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background: #000;
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .video-container {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+        }
+        .video-container video {
+            width: 100%;
+            border-radius: 20px;
+            pointer-events: auto;
+        }
+        .watermark {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(255,255,255,0.5);
+            font-size: 1rem;
+            background: rgba(0,0,0,0.4);
+            padding: 5px 10px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+        /* نماذج الدخول */
+        .auth-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--bg);
+        }
+        .auth-box {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .auth-box h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .auth-box input, .auth-box select {
+            width: 100%;
+            padding: 14px 20px;
+            margin: 12px 0;
+            border-radius: 30px;
+            border: 2px solid var(--border);
+            background: var(--surface-light);
+            color: var(--text);
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+        }
+        .auth-box select { background: var(--surface-light); color: var(--text); }
+        .auth-box .btn { width: 100%; margin-top: 20px; }
+        .toggle-auth { color: var(--accent); cursor: pointer; margin-top: 15px; text-align: center; }
+        .error-msg { color: var(--danger); font-size: 0.9rem; margin-top: 5px; display: none; }
+        /* تنسيقات المشرف */
+        .admin-tabs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .admin-tab {
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: var(--surface-light);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .admin-tab.active { background: var(--primary); color: white; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: var(--surface); border-radius: var(--radius); overflow: hidden; }
+        .data-table th, .data-table td { padding: 15px; border-bottom: 1px solid var(--border); text-align: right; }
+        .data-table th { background: var(--surface-light); color: var(--accent); }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { transform: translateX(100px); opacity:0; } to { transform: translateX(0); opacity:1; } }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { width: 0; padding: 0; overflow: hidden; }
+            .main-content { margin-right: 0; }
+            .header { flex-direction: column; gap: 20px; }
+            .lessons-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast container -->
+    <div id="toast" class="toast" style="display: none;"></div>
 
+    <!-- ========== صفحة المصادقة ========== -->
+    <div id="authPage" class="auth-container">
+        <div class="auth-box" id="loginBox">
+            <h2>تسجيل الدخول</h2>
+            <input type="text" id="loginIdentifier" placeholder="البريد الإلكتروني أو رقم الهاتف" autocomplete="username">
+            <input type="password" id="loginPassword" placeholder="كلمة المرور">
+            <div id="loginError" class="error-msg"></div>
+            <button class="btn btn-primary" onclick="login()">دخول</button>
+            <p class="toggle-auth" onclick="toggleAuth('register')">إنشاء حساب جديد</p>
+        </div>
+
+        <div class="auth-box" id="registerBox" style="display: none;">
+            <h2>إنشاء حساب</h2>
+            <input type="text" id="regFirstName" placeholder="الاسم الأول">
+            <input type="text" id="regFatherName" placeholder="اسم الأب">
+            <input type="text" id="regGrandName" placeholder="اسم الجد">
+            <input type="text" id="regFamilyName" placeholder="اسم العائلة">
+            <select id="regCountry">
+                <option value="+963" selected>🇸🇾 سوريا (+963)</option>
+                <option value="+20">🇪🇬 مصر (+20)</option>
+                <option value="+966">🇸🇦 السعودية (+966)</option>
+                <option value="+971">🇦🇪 الإمارات (+971)</option>
+                <option value="+962">🇯🇴 الأردن (+962)</option>
+                <option value="+961">🇱🇧 لبنان (+961)</option>
+                <option value="+964">🇮🇶 العراق (+964)</option>
+                <option value="+970">🇵🇸 فلسطين (+970)</option>
+                <option value="+974">🇶🇦 قطر (+974)</option>
+                <option value="+965">🇰🇼 الكويت (+965)</option>
+                <option value="+973">🇧🇭 البحرين (+973)</option>
+                <option value="+968">🇴🇲 عُمان (+968)</option>
+                <option value="+967">🇾🇪 اليمن (+967)</option>
+                <option value="+218">🇱🇾 ليبيا (+218)</option>
+                <option value="+213">🇩🇿 الجزائر (+213)</option>
+                <option value="+212">🇲🇦 المغرب (+212)</option>
+                <option value="+216">🇹🇳 تونس (+216)</option>
+                <option value="+249">🇸🇩 السودان (+249)</option>
+                <option value="+252">🇸🇴 الصومال (+252)</option>
+                <option value="+222">🇲🇷 موريتانيا (+222)</option>
+                <option value="+1">🇺🇸 الولايات المتحدة (+1)</option>
+            </select>
+            <input type="tel" id="regPhone" placeholder="رقم الهاتف">
+            <input type="email" id="regEmail" placeholder="البريد الإلكتروني (Gmail فقط)">
+            <input type="text" id="regCity" placeholder="المدينة">
+            <input type="password" id="regPassword" placeholder="كلمة المرور">
+            <div id="regError" class="error-msg"></div>
+            <button class="btn btn-primary" onclick="register()">إنشاء الحساب</button>
+            <p class="toggle-auth" onclick="toggleAuth('login')">لديك حساب؟ تسجيل الدخول</p>
+        </div>
+    </div>
+
+    <!-- ========== التطبيق الرئيسي ========== -->
+    <div id="appPage" style="display: none;">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-logo">📘 منصة الرفاعي</div>
+            <div class="sidebar-nav">
+                <a href="#" class="active" data-page="home"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="#" data-page="my-lessons"><i class="fas fa-play-circle"></i> دروسي المفعلة</a>
+                <a href="#" data-page="admin" id="adminLink" style="display:none;"><i class="fas fa-crown"></i> لوحة التحكم</a>
+                <a href="#" data-page="settings" id="settingsLink" style="display:none;"><i class="fas fa-cog"></i> الإعدادات</a>
+            </div>
+            <div class="sidebar-footer">
+                <a id="whatsappLink" class="whatsapp-btn" href="https://wa.me/qr/RDK2GTVS6Z3GC1" target="_blank">
+                    <i class="fab fa-whatsapp"></i> تواصل مع الأستاذ
+                </a>
+                <p style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin-top:10px;">اضغط للاستفسار وتفعيل الأكواد</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Header -->
+            <div class="header">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="ابحث عن درس...">
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">ع</div>
+                    <div>
+                        <div id="userDisplayName" style="font-weight:700;"></div>
+                        <div id="userDisplayEmail" style="font-size:0.8rem;color:var(--text-secondary);"></div>
+                    </div>
+                    <button class="btn btn-outline" onclick="logout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
+                </div>
+            </div>
+            <!-- Dynamic content area -->
+            <div id="dynamicContent"></div>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+
+    <script>
+        // ======================= Firebase Configuration =======================
         const firebaseConfig = {
             apiKey: "AIzaSyCFHLZgG6-SBhYh5gq83WmZJktDDngKoRU",
             authDomain: "aiman-6f132.firebaseapp.com",
             projectId: "aiman-6f132",
             storageBucket: "aiman-6f132.firebasestorage.app",
             messagingSenderId: "1089902227369",
-            appId: "1:1089902227369:web:9d2bbc7663381b1acf9eb8"
+            appId: "1:1089902227369:web:9d2bbc7663381b1acf9eb8",
+            measurementId: "G-NBWCHGZ5FK"
         };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
 
-        const app = initializeApp(firebaseConfig);
-        const storage = getStorage(app);
-        const db = getFirestore(app);
+        // ======================= Global State =======================
+        let currentUser = null; // { userId, fullName, email, phone, role, ... }
+        let allVideos = [];
+        let activatedVideoIds = [];
 
-        window.firebaseStorage = storage;
-        window.firebaseDB = db;
-        window.storageRef = ref;
-        window.uploadBytes = uploadBytes;
-        window.getDownloadURL = getDownloadURL;
-        window.firestoreCollection = collection;
-        window.firestoreGetDocs = getDocs;
-        window.firestoreAddDoc = addDoc;
-        window.firestoreDeleteDoc = deleteDoc;
-        window.firestoreDoc = doc;
-        window.firestoreSetDoc = setDoc;
-        window.firestoreGetDoc = getDoc;
-        window.firestoreUpdateDoc = updateDoc;
-    </script>
-    <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%);
-            color: #f8fafc;
-            overflow-x: hidden;
+        // ======================= Helper Functions =======================
+        function showToast(msg, type='info') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.background = type==='error' ? 'var(--danger)' : type==='success' ? 'var(--success)' : 'var(--primary)';
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
         }
-        .cyber-panel {
-            background: rgba(15, 23, 42, 0.85);
-            border: 2px solid var(--theme-color, rgba(56, 189, 248, 0.25));
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.1);
+
+        function getDeviceFingerprint() {
+            const data = navigator.userAgent + screen.width + 'x' + screen.height + screen.colorDepth + Intl.DateTimeFormat().resolvedOptions().timeZone;
+            return btoa(data).substring(0, 32);
         }
-        .cyber-modal { background: #0b1329; border: 2px solid #a855f7; box-shadow: 0 0 30px rgba(168,85,247,0.5); }
-        .cyber-modal-danger { background: #0f0507; border: 2px solid #f43f5e; box-shadow: 0 0 30px rgba(244,63,94,0.4); }
-        .cyber-modal-success { background: #04120c; border: 2px solid #10b981; box-shadow: 0 0 30px rgba(16,185,129,0.4); }
-        .cyber-modal-info { background: #021124; border: 2px solid #38bdf8; box-shadow: 0 0 30px rgba(56,189,248,0.4); }
-        .neon-text { text-shadow: 0 0 8px var(--theme-color, rgba(56,189,248,0.5)); }
-        video { border-radius: 16px; background: #000; width: 100%; height: 100%; }
-        @keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .animate-scale-up { animation: scaleUp 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-        .search-suggestions { background: #0f172a; border: 1px solid rgba(56,189,248,0.3); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .error-msg { color: #f43f5e; font-size: 11px; margin-top: 4px; display: none; }
-    </style>
-</head>
-<body class="min-h-screen pb-12">
 
-    <div class="fixed inset-0 pointer-events-none opacity-10 bg-[linear-gradient(to_right,#38bdf8_1px,transparent_1px),linear-gradient(to_bottom,#38bdf8_1px,transparent_1px)] bg-[size:30px_30px]"></div>
-    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity"></div>
+        async function getIPInfo() {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                return { ip: data.ip, city: data.city + ', ' + data.country_name };
+            } catch(e) { return { ip: 'unknown', city: 'unknown' }; }
+        }
 
-    <!-- نافذة الإشعارات -->
-    <div id="cyberToastModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[100] p-4">
-        <div id="cyberToastCard" class="w-full max-w-md p-6 rounded-3xl text-center animate-scale-up">
-            <div id="cyberToastIconContainer" class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i id="cyberToastIcon" class="text-xl"></i>
-            </div>
-            <h3 id="cyberToastTitle" class="text-lg font-bold text-white mb-2">إشعار النظام</h3>
-            <p id="cyberToastMsg" class="text-xs text-slate-300 mb-6 leading-relaxed"></p>
-            <button onclick="closeCyberToast()" class="w-full py-2.5 rounded-xl text-xs font-bold text-white transition-all" id="cyberToastBtn">تأكيد</button>
-        </div>
-    </div>
+        function generateCode(length=8) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for(let i=0; i<length; i++) result += chars.charAt(Math.floor(Math.random()*chars.length));
+            return result;
+        }
 
-    <!-- واجهة تسجيل الدخول -->
-    <div id="loginOverlay" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4 overflow-y-auto hidden">
-        <div class="cyber-panel w-full max-w-md p-6 my-8 rounded-3xl text-center animate-scale-up">
-            <div class="flex border-b border-slate-800 mb-6 gap-2">
-                <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 pb-3 text-sm font-bold text-sky-400 border-b-2 border-sky-400">تسجيل الدخول</button>
-                <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 pb-3 text-sm font-bold text-slate-400 border-b-2 border-transparent">إنشاء حساب جديد</button>
-            </div>
-            <div class="w-14 h-14 bg-sky-500/10 border border-sky-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i id="authIcon" class="fas fa-user-lock text-sky-400 text-xl"></i>
-            </div>
-            <h2 id="authTitle" class="text-lg font-bold text-white mb-1">مرحباً بك في المنصة الرقمية</h2>
-            <p id="authDesc" class="text-xs text-slate-400 mb-6">الرجاء إدخال بيانات الاعتماد للوصول للمحاضرات</p>
-            <div id="loginFormSection" class="space-y-4 text-right">
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">البريد الإلكتروني أو رقم الهاتف</label>
-                    <input type="text" id="loginUserKey" placeholder="اكتب البريد أو رقم الهاتف هنا" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white font-mono">
-                    <div id="err_loginUserKey" class="error-msg"><i class="fas fa-exclamation-circle ml-1"></i>هذا الحقل مطلوب.</div>
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">كلمة المرور</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white font-mono">
-                    <div id="err_loginPassword" class="error-msg"><i class="fas fa-exclamation-circle ml-1"></i>كلمة المرور غير صحيحة أو الحقل فارغ.</div>
-                </div>
-                <button onclick="handleStudentLogin()" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-600 to-blue-600 text-white font-bold rounded-xl text-sm hover:from-sky-500 hover:to-blue-500 transition shadow-lg shadow-sky-600/20">اتصال آمن وضبط الهوية</button>
-            </div>
-            <div id="registerFormSection" class="space-y-3 text-right hidden">
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">الاسم الرباعي الحقيقي (باللغة العربية)</label>
-                    <input type="text" id="studentFullName" placeholder="اكتب اسمك الرباعي الصريح هنا" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white">
-                    <div id="err_studentFullName" class="error-msg"><i class="fas fa-exclamation-circle ml-1"></i>يجب كتابة الاسم الرباعي كاملاً باللغة العربية.</div>
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">الدولة ورقم الهاتف</label>
-                    <div class="flex gap-2" dir="ltr">
-                        <select id="countryCode" class="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
-                            <option value="+963">🇸🇾 SY (+963)</option>
-                            <option value="+966">🇸🇦 SA (+966)</option>
-                            <option value="+971">🇦🇪 AE (+971)</option>
-                            <option value="+962">🇯🇴 JO (+962)</option>
-                            <option value="+20">🇪🇬 EG (+20)</option>
-                        </select>
-                        <input type="tel" id="studentPhone" placeholder="09xxxxxxxx" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white text-left font-mono">
-                    </div>
-                    <div id="err_studentPhone" class="error-msg text-right" dir="rtl"><i class="fas fa-exclamation-circle ml-1"></i>رقم الهاتف غير صحيح.</div>
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">البريد الإلكتروني</label>
-                    <input type="email" id="studentEmail" placeholder="username@example.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white text-left font-mono">
-                    <div id="err_studentEmail" class="error-msg"><i class="fas fa-exclamation-circle ml-1"></i>يرجى إدخال بريد إلكتروني صالح.</div>
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400 block mb-1 mr-1">كلمة المرور</label>
-                    <input type="password" id="studentPassword" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500 text-white text-left font-mono">
-                    <div id="err_studentPassword" class="error-msg"><i class="fas fa-exclamation-circle ml-1"></i>كلمة المرور مطلوبة.</div>
-                </div>
-                <button onclick="handleStudentRegister()" class="w-full mt-2 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl text-sm hover:from-purple-500 hover:to-indigo-500 transition shadow-lg shadow-purple-600/20">تأسيس الهوية الرقمية الجديدة</button>
-            </div>
-        </div>
-    </div>
+        // ======================= Authentication =======================
+        function toggleAuth(type) {
+            document.getElementById('loginBox').style.display = type==='login' ? 'block' : 'none';
+            document.getElementById('registerBox').style.display = type==='register' ? 'block' : 'none';
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('regError').style.display = 'none';
+        }
 
-    <!-- الهيدر -->
-    <header class="w-full max-w-7xl mx-auto p-4 flex flex-col md:flex-row gap-4 justify-between items-center relative z-20">
-        <div class="flex items-center justify-between w-full md:w-auto gap-4">
-            <button onclick="toggleSidebar()" class="cyber-panel p-3 rounded-xl text-sky-400 hover:scale-105 transition-all"><i class="fas fa-bars text-xl"></i></button>
-            <button onclick="openLogoutModal()" class="md:hidden text-xs text-rose-400 bg-rose-950/30 border border-rose-900/50 px-3 py-2 rounded-xl"><i class="fas fa-sign-out-alt ml-1"></i>خروج</button>
-        </div>
-        <div class="text-center">
-            <h1 id="displayMainTitle" class="text-2xl md:text-3xl font-bold tracking-wider text-sky-400 neon-text font-[Share Tech Mono]">INFINITY MATH PRO</h1>
-            <p id="displaySubTitle" class="text-xs md:text-sm text-slate-400 mt-1">نظام ذكي متكامل للمحاضرات عالية الدقة</p>
-        </div>
-        <div class="flex items-center gap-3 w-full md:w-auto relative">
-            <div class="relative flex-1 md:w-64">
-                <input type="text" id="searchInput" oninput="handleSearchInput(this.value)" onkeydown="handleSearchKeyDown(event)" placeholder="ابحث عن درس..." class="w-full bg-slate-900/90 border border-slate-700 rounded-xl py-2 px-4 pr-10 text-sm focus:outline-none focus:border-sky-400 text-white transition-all">
-                <i class="fas fa-search absolute left-3 top-3 text-slate-500"></i>
-                <div id="searchSuggestions" class="search-suggestions absolute top-full right-0 left-0 mt-2 rounded-xl hidden flex-col z-30 overflow-hidden max-h-48"></div>
-            </div>
-            <button onclick="openLogoutModal()" class="hidden md:block text-sm text-rose-400 bg-rose-950/30 border border-rose-900/50 px-4 py-2 rounded-xl hover:bg-rose-950/60 transition"><i class="fas fa-sign-out-alt ml-1"></i>خروج</button>
-        </div>
-    </header>
+        async function login() {
+            const identifier = document.getElementById('loginIdentifier').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            errorDiv.style.display = 'none';
 
-    <!-- القائمة الجانبية -->
-    <div id="sidebar" class="fixed top-0 right-0 h-full w-80 bg-slate-950 border-l border-slate-800 translate-x-full transition-transform duration-300 z-50 p-6 flex flex-col justify-between">
-        <div>
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="text-xl font-bold text-sky-400"><i class="fas fa-id-card ml-2"></i>الدعم والتواصل</h3>
-                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
-            </div>
-            <div class="space-y-4">
-                <a id="displayContactLink" href="https://wa.me/963930000000" target="_blank" class="flex items-center gap-4 p-4 rounded-xl bg-green-600/10 border border-green-500/30 text-green-400 hover:bg-green-600/20 transition-all">
-                    <i class="fab fa-whatsapp text-2xl"></i>
-                    <div>
-                        <p id="displayContactName" class="font-bold">الأستاذ أيمن</p>
-                        <p class="text-xs text-green-300/80">اضغط للاستفسار وتفعيل الأكواد</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="text-center text-xs text-slate-700 font-mono">INFINITY ENGINE V2.5.0</div>
-    </div>
+            if(!identifier || !password) {
+                errorDiv.textContent = 'الرجاء ملء جميع الحقول';
+                errorDiv.style.display = 'block'; return;
+            }
 
-    <!-- المحتوى الرئيسي -->
-    <main class="max-w-7xl mx-auto px-4 mt-8 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <div class="cyber-panel p-4 rounded-2xl text-center">
-                <i class="fas fa-book-open text-sky-400 mb-2 text-xl"></i>
-                <h4 class="text-xs text-slate-400">إجمالي الدروس المرفوعة</h4>
-                <p id="totalVideosCount" class="text-2xl font-bold mt-1 text-sky-400">0</p>
-            </div>
-            <div class="cyber-panel p-4 rounded-2xl text-center">
-                <i class="fas fa-user-circle text-emerald-400 mb-2 text-xl"></i>
-                <h4 class="text-xs text-slate-400">الحساب الحالي المتصل</h4>
-                <p id="currentStudentDisplay" class="text-xs font-mono mt-2 text-emerald-400">لا يوجد</p>
-            </div>
-        </div>
-        <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i class="fas fa-square-root-alt text-sky-400"></i> مكتبة المحاضرات</h2>
-        <div id="videosGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-    </main>
+            // Admin backdoor
+            if(identifier === 'admin12344321@1x' && password === 'admin12344321@1x') {
+                const ipInfo = await getIPInfo();
+                currentUser = {
+                    userId: 'admin',
+                    fullName: 'مدير النظام',
+                    firstName: 'مدير',
+                    fatherName: '',
+                    grandFatherName: '',
+                    familyName: '',
+                    email: identifier,
+                    phone: '',
+                    role: 'admin',
+                    deviceFingerprint: getDeviceFingerprint(),
+                    ip: ipInfo.ip,
+                    city: ipInfo.city,
+                    blocked: false
+                };
+                localStorage.setItem('eduUser', JSON.stringify(currentUser));
+                showApp();
+                return;
+            }
 
-    <!-- نوافذ التفعيل والنجاح والخروج والإدارة -->
-    <!-- (مطابقة للكود السابق، غير مكررة هنا للاختصار، لكنها موجودة في الملف الكامل) -->
-    <!-- ... -->
-    
-    <div id="adminPanel" class="fixed inset-0 bg-slate-950 z-50 hidden overflow-y-auto p-4 md:p-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-slate-800 pb-4 gap-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-red-500 font-mono tracking-wider"><i class="fas fa-terminal"></i> INF-MATH MASTER PANEL</h2>
-                    <p class="text-xs text-slate-400">التحكم الفوري في البث وهوية الواجهات والطلاب</p>
-                </div>
-                <button onclick="closeAdminPanel()" class="w-full md:w-auto bg-red-600/10 text-red-400 border border-red-500/20 px-6 py-2.5 rounded-xl hover:bg-red-600/20 transition text-sm font-bold">خروج آمن</button>
-            </div>
-            
-            <!-- قسم الرفع مع زر فحص الاتصال -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                <div class="space-y-6">
-                    <div class="cyber-panel p-6 rounded-2xl border-red-500/20">
-                        <h3 class="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2"><i class="fas fa-cloud-upload-alt text-sky-400"></i> بث وفيديو جديد</h3>
-                        <div class="space-y-4">
-                            <div><label class="text-xs text-slate-400 block mb-1">اسم المحاضرة</label><input type="text" id="newVideoTitle" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white"></div>
-                            <div><label class="text-xs text-slate-400 block mb-1">اختر ملف فيديو</label><input type="file" id="newVideoFile" accept="video/*" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-slate-400"></div>
-                            <div class="text-center text-xs text-slate-500 font-bold">- أو -</div>
-                            <div><label class="text-xs text-slate-400 block mb-1">رابط مباشر</label><input type="text" id="newVideoUrl" placeholder="https://example.com/video.mp4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white text-left font-mono"></div>
-                            <button onclick="addNewVideo()" class="w-full py-3 bg-sky-600 text-white rounded-xl text-sm font-bold hover:bg-sky-500 transition shadow-lg shadow-sky-600/20">حقن ونشر الدرس</button>
-                            <button onclick="testFirebaseConnection()" class="w-full py-2 bg-amber-600/20 text-amber-400 border border-amber-500/30 rounded-xl text-xs font-bold hover:bg-amber-600/30 transition"><i class="fas fa-plug"></i> فحص اتصال Firebase</button>
+            // Normal user login
+            const isEmail = identifier.includes('@');
+            let userDoc = null;
+            try {
+                if(isEmail) {
+                    const snap = await db.collection('users').where('email','==',identifier).limit(1).get();
+                    if(!snap.empty) userDoc = snap.docs[0];
+                } else {
+                    const snap = await db.collection('users').where('phone','==',identifier).limit(1).get();
+                    if(!snap.empty) userDoc = snap.docs[0];
+                }
+                if(!userDoc) {
+                    errorDiv.textContent = 'هذا الحساب غير مسجل في الموقع';
+                    errorDiv.style.display = 'block'; return;
+                }
+                const userData = userDoc.data();
+                if(userData.password !== password) {
+                    errorDiv.textContent = 'كلمة المرور غير صحيحة';
+                    errorDiv.style.display = 'block'; return;
+                }
+                // Block check
+                if(userData.blocked && userData.blockUntil && userData.blockUntil.toMillis() > Date.now()) {
+                    const remaining = Math.ceil((userData.blockUntil.toMillis() - Date.now()) / (1000*60*60*24));
+                    errorDiv.textContent = `الحساب محظور لمدة ${remaining} يوم. تواصل مع الإدارة.`;
+                    errorDiv.style.display = 'block'; return;
+                }
+                // Device fingerprint
+                const currentFingerprint = getDeviceFingerprint();
+                if(userData.deviceFingerprint && userData.deviceFingerprint !== currentFingerprint && userData.role !== 'admin') {
+                    // Auto block
+                    await db.collection('users').doc(userDoc.id).update({
+                        blocked: true,
+                        blockUntil: firebase.firestore.Timestamp.fromMillis(Date.now() + 7*24*60*60*1000)
+                    });
+                    errorDiv.textContent = 'تم حظر الحساب 7 أيام بسبب تغيير الجهاز.';
+                    errorDiv.style.display = 'block'; return;
+                }
+                // Update fingerprint and IP
+                const ipInfo = await getIPInfo();
+                await db.collection('users').doc(userDoc.id).update({
+                    deviceFingerprint: currentFingerprint,
+                    ip: ipInfo.ip,
+                    city: ipInfo.city,
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                currentUser = {
+                    userId: userDoc.id,
+                    ...userData,
+                    deviceFingerprint: currentFingerprint,
+                };
+                localStorage.setItem('eduUser', JSON.stringify(currentUser));
+                showApp();
+            } catch(e) {
+                errorDiv.textContent = 'حدث خطأ: ' + e.message;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        async function register() {
+            const firstName = document.getElementById('regFirstName').value.trim();
+            const fatherName = document.getElementById('regFatherName').value.trim();
+            const grandName = document.getElementById('regGrandName').value.trim();
+            const familyName = document.getElementById('regFamilyName').value.trim();
+            const countryCode = document.getElementById('regCountry').value;
+            const phone = document.getElementById('regPhone').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const city = document.getElementById('regCity').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const errorDiv = document.getElementById('regError');
+            errorDiv.style.display = 'none';
+
+            if(!firstName || !fatherName || !grandName || !familyName || !phone || !email || !city || !password) {
+                errorDiv.textContent = 'جميع الحقول مطلوبة'; errorDiv.style.display = 'block'; return;
+            }
+            if(!email.endsWith('@gmail.com')) {
+                errorDiv.textContent = 'يجب أن يكون البريد الإلكتروني من Gmail (@gmail.com)'; errorDiv.style.display = 'block'; return;
+            }
+            const fullPhone = countryCode + phone;
+            // Check uniqueness
+            const fullName = `${firstName} ${fatherName} ${grandName} ${familyName}`;
+            try {
+                const emailSnap = await db.collection('users').where('email','==',email).get();
+                if(!emailSnap.empty) { errorDiv.textContent = 'البريد الإلكتروني مستخدم مسبقاً'; errorDiv.style.display = 'block'; return; }
+                const phoneSnap = await db.collection('users').where('phone','==',fullPhone).get();
+                if(!phoneSnap.empty) { errorDiv.textContent = 'رقم الهاتف مستخدم مسبقاً'; errorDiv.style.display = 'block'; return; }
+                const nameSnap = await db.collection('users').where('fullName','==',fullName).get();
+                if(!nameSnap.empty) { errorDiv.textContent = 'الاسم الرباعي مستخدم مسبقاً'; errorDiv.style.display = 'block'; return; }
+
+                const ipInfo = await getIPInfo();
+                const userRef = await db.collection('users').add({
+                    firstName, fatherName, grandFatherName, familyName,
+                    fullName, email, phone: fullPhone, countryCode,
+                    city, password, role: 'user',
+                    deviceFingerprint: getDeviceFingerprint(),
+                    ip: ipInfo.ip, cityFromIP: ipInfo.city,
+                    blocked: false, blockUntil: null,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                showToast('تم إنشاء الحساب بنجاح', 'success');
+                toggleAuth('login');
+            } catch(e) {
+                errorDiv.textContent = 'خطأ: ' + e.message; errorDiv.style.display = 'block';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('eduUser');
+            location.reload();
+        }
+
+        // ======================= Show App =======================
+        function showApp() {
+            document.getElementById('authPage').style.display = 'none';
+            document.getElementById('appPage').style.display = 'block';
+            document.getElementById('userAvatar').textContent = currentUser.firstName.charAt(0);
+            document.getElementById('userDisplayName').textContent = `${currentUser.firstName} ${currentUser.fatherName} ${currentUser.grandFatherName}`;
+            document.getElementById('userDisplayEmail').textContent = currentUser.email || currentUser.phone;
+            if(currentUser.role === 'admin') {
+                document.getElementById('adminLink').style.display = 'block';
+                document.getElementById('settingsLink').style.display = 'block';
+            }
+            loadHome();
+            setupNav();
+            listenVideos();
+        }
+
+        // ======================= Navigation =======================
+        function setupNav() {
+            document.querySelectorAll('.sidebar-nav a').forEach(a => {
+                a.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.sidebar-nav a').forEach(l=>l.classList.remove('active'));
+                    this.classList.add('active');
+                    const page = this.dataset.page;
+                    if(page === 'home') loadHome();
+                    else if(page === 'my-lessons') loadMyLessons();
+                    else if(page === 'admin') loadAdminPanel();
+                    else if(page === 'settings') loadSettings();
+                });
+            });
+        }
+
+        function loadHome() {
+            document.getElementById('dynamicContent').innerHTML = `
+                <h2 style="margin-bottom:30px;">📚 جميع الدروس المنشورة</h2>
+                <div class="lessons-grid" id="lessonsContainer"></div>
+            `;
+            renderLessons();
+        }
+
+        async function renderLessons(filter = '') {
+            const container = document.getElementById('lessonsContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            let videos = allVideos;
+            if(filter) {
+                const term = filter.toLowerCase();
+                videos = videos.filter(v => v.title.toLowerCase().includes(term) || (v.description && v.description.includes(term)));
+            }
+            if(videos.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">لا توجد دروس متاحة حالياً.</p>';
+                return;
+            }
+            videos.forEach(video => {
+                const isActivated = activatedVideoIds.includes(video.id);
+                const card = document.createElement('div');
+                card.className = 'lesson-card';
+                card.innerHTML = `
+                    <div class="thumb"><i class="fas fa-play-circle"></i></div>
+                    <div class="info">
+                        <div class="title">${video.title}</div>
+                        <div class="meta">
+                            <span>${new Date(video.createdAt?.toDate?.() || Date.now()).toLocaleDateString('ar')}</span>
+                            <span class="badge ${isActivated ? 'badge-free' : 'badge-locked'}">${isActivated ? 'مفعل' : 'مقفل'}</span>
                         </div>
                     </div>
+                `;
+                card.addEventListener('click', () => openVideo(video));
+                container.appendChild(card);
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderLessons(e.target.value);
+        });
+
+        // ======================= Video Logic =======================
+        function openVideo(video) {
+            if(activatedVideoIds.includes(video.id)) {
+                playVideo(video);
+            } else {
+                showCodeModal(video);
+            }
+        }
+
+        function showCodeModal(video) {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay active';
+            overlay.innerHTML = `
+                <div class="modal">
+                    <button class="close-modal" onclick="this.parentElement.parentElement.remove()">✖</button>
+                    <h2>🔑 أدخل كود التفعيل</h2>
+                    <input type="text" id="codeInput" placeholder="الكود">
+                    <button class="btn btn-primary" id="submitCode">تفعيل</button>
+                    <div id="codeError" class="error-msg"></div>
                 </div>
-                <!-- باقي لوحة الأدمن (المفاتيح، الطلاب) بنفس التصميم السابق -->
-            </div>
-        </div>
-    </div>
+            `;
+            document.body.appendChild(overlay);
+            const input = overlay.querySelector('#codeInput');
+            overlay.querySelector('#submitCode').addEventListener('click', () => verifyCode(video, input.value, overlay));
+            input.addEventListener('keypress', (e) => { if(e.key==='Enter') verifyCode(video, input.value, overlay); });
+        }
 
-    <video id="durationReader" class="hidden" preload="metadata" muted playsinline></video>
-
-    <script type="module">
-        // ========== دوال مساعدة ==========
-        window.showCyberToast = (title, msg, type = 'info') => {
-            const modal = document.getElementById('cyberToastModal');
-            const card = document.getElementById('cyberToastCard');
-            const icon = document.getElementById('cyberToastIcon');
-            card.className = "w-full max-w-md p-6 rounded-3xl text-center animate-scale-up ";
-            if (type === 'success') { card.classList.add('cyber-modal-success'); icon.className = "fas fa-check-double text-emerald-400"; }
-            else if (type === 'danger') { card.classList.add('cyber-modal-danger'); icon.className = "fas fa-exclamation-triangle text-rose-500"; }
-            else { card.classList.add('cyber-modal-info'); icon.className = "fas fa-info-circle text-sky-400"; }
-            document.getElementById('cyberToastTitle').innerText = title;
-            document.getElementById('cyberToastMsg').innerText = msg;
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-        };
-        window.closeCyberToast = () => {
-            document.getElementById('cyberToastModal').classList.add('hidden');
-            document.getElementById('cyberToastModal').classList.remove('flex');
-        };
-
-        // ========== المتغيرات العامة ==========
-        let videos = [], keys = [], students = [], uiConfig = {};
-        const adminToken = "12344321@1";
-        const adminEmail = "admin_bypass@infinity.com";
-
-        // ========== دوال Firebase الأساسية ==========
-        async function loadVideos() {
+        async function verifyCode(video, code, overlay) {
+            const errorDiv = overlay.querySelector('#codeError');
+            errorDiv.style.display = 'none';
+            if(!code.trim()) { errorDiv.textContent = 'أدخل الكود'; errorDiv.style.display='block'; return; }
             try {
-                const snap = await window.firestoreGetDocs(window.firestoreCollection(window.firebaseDB, "videos"));
-                videos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                renderPlatform();
-            } catch (e) {
-                console.error("فشل تحميل الفيديوهات:", e);
-                window.showCyberToast("❌ خطأ في الاتصال", "تعذر تحميل الدروس. تأكد من اتصالك وقواعد Firebase.", "danger");
-            }
-        }
-        async function loadKeys() {
-            const snap = await window.firestoreGetDocs(window.firestoreCollection(window.firebaseDB, "keys"));
-            keys = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        }
-        async function loadStudents() {
-            const snap = await window.firestoreGetDocs(window.firestoreCollection(window.firebaseDB, "students"));
-            students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        }
-
-        // ========== فحص الاتصال (زر جديد) ==========
-        window.testFirebaseConnection = async () => {
-            try {
-                // محاولة كتابة مستند اختبار
-                const testRef = window.firestoreDoc(window.firebaseDB, "test", "connection");
-                await window.firestoreSetDoc(testRef, { timestamp: Date.now() });
-                // قراءة المستند
-                const docSnap = await window.firestoreGetDoc(testRef);
-                if (docSnap.exists()) {
-                    window.showCyberToast("✅ الاتصال ناجح", "Firebase يعمل بشكل سليم! القواعد مضبوطة.", "success");
-                } else {
-                    window.showCyberToast("⚠️ فشل جزئي", "تمت الكتابة ولكن لم نتمكن من القراءة. راجع القواعد.", "danger");
+                const codesSnap = await db.collection('videos').doc(video.id).collection('codes').where('code','==',code.trim().toUpperCase()).limit(1).get();
+                if(codesSnap.empty) { errorDiv.textContent = 'كود غير صحيح'; errorDiv.style.display='block'; return; }
+                const codeDoc = codesSnap.docs[0];
+                const codeData = codeDoc.data();
+                if(codeData.usedBy && codeData.usedBy !== currentUser.userId) {
+                    errorDiv.textContent = 'هذا الكود مستخدم من قبل حساب آخر'; errorDiv.style.display='block'; return;
                 }
-            } catch (error) {
-                console.error("فشل الاتصال:", error);
-                window.showCyberToast("❌ فشل الاتصال", "تأكد من اتصالك بالإنترنت وأن قواعد Firebase تسمح بالقراءة والكتابة.", "danger");
-            }
-        };
-
-        // ========== دالة رفع الفيديو (الزر الرئيسي) ==========
-        window.addNewVideo = async () => {
-            const title = document.getElementById('newVideoTitle').value.trim();
-            const urlInput = document.getElementById('newVideoUrl').value.trim();
-            const fileInput = document.getElementById('newVideoFile').files[0];
-
-            if (!title) { window.showCyberToast("❌ حقل فارغ", "اكتب اسم المحاضرة.", "danger"); return; }
-            if (!urlInput && !fileInput) { window.showCyberToast("❌ مصدر مفقود", "اختر ملفاً أو أدخل رابطاً.", "danger"); return; }
-
-            let finalUrl = urlInput;
-            try {
-                if (fileInput) {
-                    const storage = window.firebaseStorage;
-                    const storageRef = window.storageRef(storage, `videos/${Date.now()}_${fileInput.name}`);
-                    await window.uploadBytes(storageRef, fileInput);
-                    finalUrl = await window.getDownloadURL(storageRef);
+                if(!codeData.usedBy) {
+                    // First use, assign to user
+                    await db.collection('videos').doc(video.id).collection('codes').doc(codeDoc.id).update({
+                        usedBy: currentUser.userId,
+                        usedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    // Add to activations
+                    await db.collection('activations').add({
+                        userId: currentUser.userId,
+                        videoId: video.id,
+                        code: code.trim().toUpperCase(),
+                        activatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    activatedVideoIds.push(video.id);
                 }
-
-                // حفظ في Firestore
-                const newVideo = {
-                    title,
-                    url: finalUrl,
-                    duration: "45:00",
-                    views: 0
-                };
-                await window.firestoreAddDoc(window.firestoreCollection(window.firebaseDB, "videos"), newVideo);
-                
-                // تنظيف الحقول وإظهار النجاح
-                document.getElementById('newVideoTitle').value = '';
-                document.getElementById('newVideoUrl').value = '';
-                document.getElementById('newVideoFile').value = '';
-                window.showCyberToast("✅ تم النشر", "تم رفع المحاضرة بنجاح وستظهر فوراً.", "success");
-                await loadVideos();
-            } catch (error) {
-                console.error("فشل الرفع:", error);
-                window.showCyberToast("❌ فشل الرفع", "تأكد من اتصالك وقواعد Firebase. راجع console (F12).", "danger");
+                overlay.remove();
+                playVideo(video);
+            } catch(e) {
+                errorDiv.textContent = 'خطأ: ' + e.message; errorDiv.style.display='block';
             }
-        };
+        }
 
-        // ========== واجهة المستخدم ==========
-        window.renderPlatform = (targetVideos = videos) => {
-            const grid = document.getElementById('videosGrid');
-            grid.innerHTML = targetVideos.length === 0 ? '<div class="col-span-full text-center py-12 text-slate-500">لا توجد محاضرات منشورة.</div>' : '';
-            targetVideos.forEach(v => {
-                const unlocked = localStorage.getItem(`unlocked_${v.id}`) === 'true';
-                grid.innerHTML += `<div class="cyber-panel rounded-3xl overflow-hidden group hover:border-sky-400 transition-all duration-300 flex flex-col justify-between">
-                    <div class="relative bg-black aspect-video flex items-center justify-center overflow-hidden w-full">
-                        ${unlocked ? `<video src="${v.url}" controls class="w-full h-full object-contain" playsinline controlsList="nodownload"></video>` : `<div class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-4"><i class="fas fa-lock text-purple-400 text-2xl"></i><p class="text-xs text-purple-400 mt-2">محمي بقفل التشفير</p></div>`}
-                        <span class="absolute bottom-3 left-3 bg-slate-950/90 text-sky-400 font-mono text-xs px-2 py-1 rounded-md"><i class="fas fa-clock ml-1"></i> ${v.duration}</span>
-                    </div>
-                    <div class="p-5"><h3 class="font-bold text-sm text-slate-100">${v.title}</h3></div>
+        function playVideo(video) {
+            // Record watch
+            db.collection('watchHistory').add({
+                userId: currentUser.userId,
+                videoId: video.id,
+                watchedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                ip: currentUser.ip,
+                device: getDeviceFingerprint()
+            }).catch(()=>{});
+            const overlay = document.createElement('div');
+            overlay.className = 'video-player-overlay';
+            overlay.innerHTML = `
+                <button style="position:absolute;top:20px;right:20px;background:var(--danger);color:white;border:none;padding:10px 20px;border-radius:20px;font-size:1rem;cursor:pointer;z-index:3100;" onclick="this.parentElement.remove()">✖ إغلاق</button>
+                <div class="video-container">
+                    <video controls autoplay controlsList="nodownload" oncontextmenu="return false;" disablePictureInPicture>
+                        <source src="${video.storageURL}" type="video/mp4">
+                        متصفحك لا يدعم الفيديو.
+                    </video>
+                    <div class="watermark">© منصة الرفاعي</div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            // Prevent screenshot shortcuts
+            overlay.addEventListener('keydown', (e) => {
+                if(e.key === 'PrintScreen' || (e.ctrlKey && e.key === 's')) e.preventDefault();
+            });
+        }
+
+        // ======================= Firestore Listeners =======================
+        function listenVideos() {
+            // الاستماع لكل الفيديوهات وتحديثها فورياً للجميع
+            db.collection('videos').orderBy('createdAt','desc').onSnapshot(snap => {
+                allVideos = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderLessons();
+            });
+            
+            // الاستماع لتفعيلات المستخدم الخاص
+            if(currentUser.role !== 'admin') {
+                db.collection('activations').where('userId','==',currentUser.userId).onSnapshot(snap => {
+                    activatedVideoIds = snap.docs.map(d => d.data().videoId);
+                    renderLessons();
+                });
+            } else {
+                // الأدمن يرى كل شيء مفعل
+                db.collection('videos').onSnapshot(snap => {
+                    activatedVideoIds = snap.docs.map(d => d.id);
+                    renderLessons();
+                });
+            }
+        }
+
+        function loadMyLessons() {
+            document.getElementById('dynamicContent').innerHTML = `
+                <h2>📖 دروسي المفعلة (${activatedVideoIds.length})</h2>
+                <div class="lessons-grid" id="myLessonsGrid"></div>
+            `;
+            const grid = document.getElementById('myLessonsGrid');
+            const myVideos = allVideos.filter(v => activatedVideoIds.includes(v.id));
+            if(myVideos.length ===0) grid.innerHTML = '<p>لم تقم بتفعيل أي درس بعد.</p>';
+            else myVideos.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'lesson-card';
+                card.innerHTML = `<div class="thumb"><i class="fas fa-play-circle"></i></div><div class="info"><div class="title">${v.title}</div></div>`;
+                card.addEventListener('click', ()=> playVideo(v));
+                grid.appendChild(card);
+            });
+        }
+
+        // ======================= Admin Panel =======================
+        async function loadAdminPanel() {
+            if(currentUser.role !== 'admin') return;
+            document.getElementById('dynamicContent').innerHTML = `
+                <h2>⚙️ لوحة تحكم الأدمن</h2>
+                <div class="admin-tabs">
+                    <span class="admin-tab active" data-tab="users">👥 المستخدمون</span>
+                    <span class="admin-tab" data-tab="videos">🎥 الدروس</span>
+                    <span class="admin-tab" data-tab="blocked">🚫 المحظورون</span>
+                </div>
+                <div id="adminTabContent"></div>
+            `;
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+                    this.classList.add('active');
+                    const tabName = this.dataset.tab;
+                    if(tabName==='users') loadUsersTab();
+                    else if(tabName==='videos') loadVideosTab();
+                    else if(tabName==='blocked') loadBlockedTab();
+                });
+            });
+            loadUsersTab();
+        }
+
+        async function loadUsersTab() {
+            const container = document.getElementById('adminTabContent');
+            container.innerHTML = '<p>جاري التحميل...</p>';
+            const snap = await db.collection('users').get();
+            const users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            let html = `<table class="data-table"><tr><th>الاسم</th><th>الإيميل</th><th>الهاتف</th><th>المدينة</th><th>IP</th><th>كلمة المرور</th><th>إجراءات</th></tr>`;
+            users.forEach(u => {
+                html += `<tr>
+                    <td>${u.fullName}</td><td>${u.email}</td><td>${u.phone}</td><td>${u.cityFromIP || u.city}</td><td>${u.ip}</td>
+                    <td>${u.password}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="blockUser('${u.id}', 'perm')">حظر دائم</button>
+                        <button class="btn btn-outline" onclick="blockUser('${u.id}', '7d')">حظر 7 أيام</button>
+                        ${u.blocked ? `<button class="btn btn-primary" onclick="unblockUser('${u.id}')">فك الحظر</button>` : ''}
+                    </td>
+                </tr>`;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        async function blockUser(userId, duration) {
+            let blockUntil = null;
+            if(duration === 'perm') blockUntil = firebase.firestore.Timestamp.fromMillis(Date.now() + 100*365*24*60*60*1000);
+            else if(duration === '7d') blockUntil = firebase.firestore.Timestamp.fromMillis(Date.now() + 7*24*60*60*1000);
+            await db.collection('users').doc(userId).update({ blocked: true, blockUntil });
+            showToast('تم حظر المستخدم', 'success');
+            loadUsersTab();
+        }
+
+        async function unblockUser(userId) {
+            await db.collection('users').doc(userId).update({ blocked: false, blockUntil: null });
+            showToast('تم فك الحظر', 'success');
+            loadUsersTab();
+        }
+
+        async function loadBlockedTab() {
+            const snap = await db.collection('users').where('blocked','==',true).get();
+            const blocked = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            let html = '<table class="data-table"><tr><th>الاسم</th><th>تاريخ انتهاء الحظر</th><th>إجراء</th></tr>';
+            blocked.forEach(u => {
+                const until = u.blockUntil?.toDate().toLocaleDateString('ar') || 'دائم';
+                html += `<tr><td>${u.fullName}</td><td>${until}</td><td><button class="btn btn-primary" onclick="unblockUser('${u.id}')">فك الحظر</button></td></tr>`;
+            });
+            document.getElementById('adminTabContent').innerHTML = html;
+        }
+
+        async function loadVideosTab() {
+            const container = document.getElementById('adminTabContent');
+            container.innerHTML = `<button class="btn btn-primary" onclick="showUploadModal()"><i class="fas fa-upload"></i> رفع فيديو جديد</button>`;
+            const snap = await db.collection('videos').orderBy('createdAt','desc').get();
+            allVideos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            let html = '';
+            allVideos.forEach(v => {
+                html += `<div style="background:var(--surface);border-radius:20px;padding:20px;margin-top:20px;">
+                    <h3>${v.title}</h3>
+                    <button class="btn btn-outline" onclick="generateCodes('${v.id}')">توليد أكواد</button>
+                    <button class="btn btn-outline" onclick="viewWatchers('${v.id}')">المشاهدات</button>
                 </div>`;
             });
-            document.getElementById('totalVideosCount').innerText = videos.length;
-        };
-
-        // ========== التهيئة ==========
-        async function init() {
-            await loadVideos();
-            await loadKeys();
-            await loadStudents();
-            // تسجيل دخول تلقائي كأدمن إذا كان مخزناً
-            const activeUser = localStorage.getItem('active_student');
-            if (activeUser === adminEmail) {
-                document.getElementById('loginOverlay').classList.add('hidden');
-                document.getElementById('currentStudentDisplay').innerText = "مسؤول النظام";
-            } else {
-                document.getElementById('loginOverlay').classList.remove('hidden');
-            }
+            container.innerHTML += html;
         }
-        init();
 
-        // اختصارات الوظائف الأخرى (تسجيل الدخول، الخروج، إلخ) موجودة في الرد الكامل السابق ولم تتغير
+        function showUploadModal() {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay active';
+            overlay.innerHTML = `
+                <div class="modal">
+                    <button class="close-modal" onclick="this.parentElement.parentElement.remove()">✖</button>
+                    <h2>رفع درس جديد</h2>
+                    <input type="text" id="videoTitle" placeholder="عنوان الدرس">
+                    <input type="file" id="videoFile" accept="video/*">
+                    <button class="btn btn-primary" id="uploadBtn">رفع</button>
+                    <progress id="uploadProgress" value="0" max="100" style="width:100%;margin-top:10px;"></progress>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            overlay.querySelector('#uploadBtn').addEventListener('click', async () => {
+                const title = overlay.querySelector('#videoTitle').value.trim();
+                const file = overlay.querySelector('#videoFile').files[0];
+                if(!title || !file) { showToast('املأ الحقول', 'error'); return; }
+                const storageRef = storage.ref('videos/' + Date.now() + '_' + file.name);
+                const task = storageRef.put(file);
+                task.on('state_changed', snap => {
+                    const progress = (snap.bytesTransferred / snap.totalBytes) * 100;
+                    overlay.querySelector('#uploadProgress').value = progress;
+                });
+                await task;
+                const url = await storageRef.getDownloadURL();
+                await db.collection('videos').add({
+                    title, storageURL: url, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                overlay.remove();
+                showToast('تم الرفع', 'success');
+                loadVideosTab();
+            });
+        }
+
+        async function generateCodes(videoId) {
+            const num = prompt('كم كود تريد توليده؟');
+            if(!num || isNaN(num)) return;
+            const batch = db.batch();
+            const codesRef = db.collection('videos').doc(videoId).collection('codes');
+            for(let i=0; i<parseInt(num); i++) {
+                const code = generateCode();
+                const docRef = codesRef.doc();
+                batch.set(docRef, { code, usedBy: null, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+            }
+            await batch.commit();
+            showToast(`تم توليد ${num} كود`, 'success');
+        }
+
+        async function viewWatchers(videoId) {
+            const snap = await db.collection('watchHistory').where('videoId','==',videoId).get();
+            const watchers = snap.docs.map(d => d.data());
+            alert('عدد المشاهدات: ' + watchers.length + '\n' + JSON.stringify(watchers.slice(0,5)));
+        }
+
+        function loadSettings() {
+            document.getElementById('dynamicContent').innerHTML = `
+                <h2>إعدادات الموقع</h2>
+                <input type="text" id="whatsappInput" placeholder="رابط الواتساب الجديد">
+                <button class="btn btn-primary" onclick="updateWhatsApp()">حفظ</button>
+            `;
+        }
+
+        async function updateWhatsApp() {
+            const link = document.getElementById('whatsappInput').value.trim();
+            if(!link) return;
+            await db.collection('settings').doc('site').set({ whatsappLink: link }, { merge: true });
+            document.getElementById('whatsappLink').href = link;
+            showToast('تم التحديث', 'success');
+        }
+
+        // ======================= Init =======================
+        window.addEventListener('DOMContentLoaded', async () => {
+            const saved = localStorage.getItem('eduUser');
+            if(saved) {
+                currentUser = JSON.parse(saved);
+                showApp();
+            } else {
+                document.getElementById('authPage').style.display = 'flex';
+                document.getElementById('appPage').style.display = 'none';
+            }
+            // Load whatsapp link from settings
+            const settingsSnap = await db.collection('settings').doc('site').get();
+            if(settingsSnap.exists && settingsSnap.data().whatsappLink) {
+                document.getElementById('whatsappLink').href = settingsSnap.data().whatsappLink;
+            }
+        });
+
+        // Global keyboard enter for forms
+        document.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                if(document.getElementById('loginBox').style.display !== 'none') login();
+                else if(document.getElementById('registerBox').style.display !== 'none') register();
+            }
+        });
     </script>
 </body>
 </html>
